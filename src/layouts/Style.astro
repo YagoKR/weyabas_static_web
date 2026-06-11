@@ -1,0 +1,763 @@
+<!-- En Astro, parece que los estilos se aplican a los componentes individuales. Esto permite más modularidad. 
+ Los estilos de este archivo se deben mover al componente correspondiente.  -->
+
+<style>
+
+  /* ── SCANLINE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+
+  /* LOGO */
+  .logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .logo-w { color: var(--text); }
+  .logo-accent {
+    color: var(--neon);
+    text-shadow: var(--neon-glow-strong);
+    position: relative;
+  }
+  .logo-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* NAV */
+  nav { display: flex; gap: 4px; align-items: center; }
+  .nav-link {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 4px;
+    color: var(--text-muted);
+    transition: color 0.2s, background 0.2s;
+    position: relative;
+  }
+  .nav-link:hover { color: var(--text); background: var(--bg3); }
+  .nav-link.active { color: var(--neon); }
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 14px; right: 14px;
+    height: 2px;
+    background: var(--neon);
+    box-shadow: var(--neon-glow);
+    border-radius: 2px;
+  }
+  .nav-deals {
+    background: var(--neon);
+    color: var(--bg) !important;
+    font-weight: 700;
+    margin-left: 8px;
+  }
+  .nav-deals:hover { background: #33bbff !important; color: var(--bg) !important; }
+
+  .header-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    transition: border-color 0.2s;
+  }
+  .header-search:focus-within { border-color: var(--neon); box-shadow: var(--neon-glow); }
+  .header-search input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 13px;
+    width: 180px;
+    font-family: 'Inter', sans-serif;
+  }
+  .header-search input::placeholder { color: var(--text-dim); }
+  .search-icon { color: var(--text-muted); font-size: 14px; }
+
+  /* ── BREAKING TICKER ── */
+  .breaking-bar {
+    background: var(--neon);
+    padding: 8px 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .breaking-label {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--red);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #fff;
+    z-index: 2;
+  }
+  .breaking-scroll {
+    display: flex;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+    padding-left: 120px;
+  }
+  .breaking-scroll span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--bg);
+    padding: 0 40px;
+  }
+  .breaking-scroll span::before {
+    content: '◆';
+    margin-right: 40px;
+    opacity: 0.5;
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── HERO GRID ── */
+  .hero {
+    padding: 32px 0 0;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    grid-template-rows: auto auto;
+    gap: 2px;
+    background: var(--border);
+  }
+  .hero-main {
+    grid-row: 1 / 3;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .hero-main-img {
+    width: 100%;
+    height: 520px;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.55);
+    transition: filter 0.3s, transform 0.4s;
+  }
+  .hero-main:hover .hero-main-img { filter: brightness(0.65); transform: scale(1.02); }
+  .hero-main-content {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 32px;
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
+  }
+  .hero-secondary {
+    background: var(--bg2);
+    padding: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-secondary:hover { background: var(--bg3); }
+  .hero-secondary-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    margin-bottom: 14px;
+    filter: brightness(0.7);
+  }
+
+  /* ── CARDS & TAGS ── */
+  .tag {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+  }
+  .tag-series  { background: var(--red);    color: #fff; }
+  .tag-anime   { background: var(--purple); color: #fff; }
+  .tag-tech    { background: var(--neon);   color: var(--bg); }
+  .tag-deals   { background: var(--orange); color: #fff; }
+  .tag-movies  { background: var(--green);  color: var(--bg); }
+
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 38px;
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+    color: #fff;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+  }
+  .hero-title:hover { color: var(--neon); }
+
+  .hero-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .hero-meta .dot { color: var(--neon); }
+
+  .secondary-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 8px;
+    transition: color 0.2s;
+  }
+  .hero-secondary:hover .secondary-title { color: var(--neon); }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 40px 0 20px;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--neon), transparent);
+  }
+  .section-neon-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--neon);
+    box-shadow: var(--neon-glow-strong);
+    flex-shrink: 0;
+  }
+  .section-more {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--neon);
+    letter-spacing: 1px;
+    border: 1px solid var(--neon-dim);
+    padding: 4px 12px;
+    border-radius: 3px;
+    transition: background 0.2s;
+  }
+  .section-more:hover { background: var(--tag-bg); }
+
+  /* ── MAIN CONTENT GRID ── */
+  .content-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+    padding-bottom: 48px;
+  }
+
+  /* ── ARTICLE CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+  }
+  .card {
+    background: var(--bg2);
+    cursor: pointer;
+    transition: background 0.2s;
+    overflow: hidden;
+  }
+  .card:hover { background: var(--bg3); }
+  .card-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    filter: brightness(0.75);
+    transition: filter 0.3s, transform 0.3s;
+  }
+  .card:hover .card-img { filter: brightness(0.9); transform: scale(1.03); }
+  .card-body { padding: 16px; }
+  .card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 8px;
+    transition: color 0.2s;
+  }
+  .card:hover .card-title { color: var(--neon); }
+  .card-excerpt {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    display: flex;
+    gap: 12px;
+  }
+
+  /* ── LIST CARD (sidebar style) ── */
+  .list-card {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .list-card:last-child { border-bottom: none; }
+  .list-card-img {
+    width: 90px;
+    height: 65px;
+    object-fit: cover;
+    flex-shrink: 0;
+    filter: brightness(0.75);
+    transition: filter 0.2s;
+  }
+  .list-card:hover .list-card-img { filter: brightness(0.9); }
+  .list-card-body { flex: 1; }
+  .list-card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 6px;
+    transition: color 0.2s;
+  }
+  .list-card:hover .list-card-title { color: var(--neon); }
+  .list-card-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar { }
+
+  .sidebar-widget {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--neon);
+    margin-bottom: 24px;
+    padding: 20px;
+  }
+  .widget-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--neon);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .widget-title::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--neon);
+    box-shadow: var(--neon-glow);
+    border-radius: 50%;
+  }
+
+  /* Trending widget */
+  .trending-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .trending-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .trending-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    line-height: 1;
+    color: var(--border);
+    width: 32px;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+  .trending-item:hover .trending-num { color: var(--neon); text-shadow: var(--neon-glow); }
+  .trending-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.3;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+  .trending-item:hover .trending-text { color: var(--text); }
+
+  /* Telegram CTA */
+  .telegram-cta {
+    background: linear-gradient(135deg, #0a1a2e 0%, #0a0a1a 100%);
+    border: 1px solid var(--neon-dim);
+    box-shadow: inset 0 0 40px rgba(0,170,255,0.05);
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .telegram-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 12px #00aaff);
+  }
+  .telegram-cta h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .telegram-cta p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .btn-telegram {
+    display: block;
+    background: var(--neon);
+    color: var(--bg);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px;
+    border-radius: 4px;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .btn-telegram:hover {
+    background: #33bbff;
+    box-shadow: var(--neon-glow-strong);
+  }
+
+  /* Deal card */
+  .deal-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 14px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .deal-card:hover { border-color: var(--orange); }
+  .deal-img-wrap {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 28px;
+  }
+  .deal-info { flex: 1; }
+  .deal-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .deal-price-wrap { display: flex; align-items: center; gap: 10px; }
+  .deal-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--orange);
+  }
+  .deal-orig {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: line-through;
+  }
+  .deal-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    background: var(--red);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: auto;
+  }
+
+  /* YouTube embed area */
+  .yt-widget {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--red);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .yt-header {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .yt-icon { color: var(--red); font-size: 18px; }
+  .yt-header-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .yt-thumb {
+    position: relative;
+    cursor: pointer;
+  }
+  .yt-thumb img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    filter: brightness(0.7);
+    transition: filter 0.2s;
+  }
+  .yt-thumb:hover img { filter: brightness(0.9); }
+  .yt-play {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px; height: 48px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255,51,85,0.6);
+    transition: transform 0.2s;
+  }
+  .yt-thumb:hover .yt-play { transform: translate(-50%, -50%) scale(1.1); }
+  .yt-info { padding: 12px 16px; }
+  .yt-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .yt-channel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  /* ── CATEGORY SECTIONS ── */
+  .cat-section { margin-bottom: 48px; }
+
+  .horizontal-scroll {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border);
+  }
+
+  /* ── DEALS STRIP ── */
+  .deals-strip {
+    background: linear-gradient(135deg, #0a1000 0%, #0a0a0f 100%);
+    border-top: 2px solid var(--orange);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 0;
+    margin-bottom: 0;
+  }
+  .deals-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .deals-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+  .deals-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .deal-full-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 20px;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+  }
+  .deal-full-card:hover { border-color: var(--orange); transform: translateY(-2px); }
+  .deal-full-emoji { font-size: 32px; margin-bottom: 12px; }
+  .deal-full-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .deal-full-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--orange);
+    margin-bottom: 4px;
+  }
+  .deal-full-orig {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: line-through;
+    margin-bottom: 14px;
+  }
+  .deal-full-btn {
+    display: block;
+    background: var(--orange);
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 10px;
+    text-align: center;
+    border-radius: 3px;
+    transition: background 0.2s;
+  }
+  .deal-full-btn:hover { background: #ffaa33; }
+  .deal-full-badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: var(--red);
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+  
+  /* ── FAKE IMAGE PLACEHOLDERS ── */
+  .img-placeholder {
+    background: var(--bg3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    font-size: 28px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ── AD SLOT ── */
+  .ad-slot {
+    background: var(--bg3);
+    border: 1px dashed var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90px;
+    margin: 24px 0;
+  }
+  .ad-slot span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-main { grid-row: auto; }
+    .content-layout { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: repeat(2, 1fr); }
+    .horizontal-scroll { grid-template-columns: repeat(2, 1fr); }
+    .deals-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .topbar-ticker { display: none; }
+    nav { display: none; }
+    .card-grid { grid-template-columns: 1fr; }
+    .horizontal-scroll { grid-template-columns: 1fr; }
+    .deals-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 26px; }
+  }
+</style>

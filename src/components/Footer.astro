@@ -1,0 +1,122 @@
+<style>
+footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 48px 0 24px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  .footer-brand .logo { margin-bottom: 12px; }
+  .footer-brand p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .footer-socials { display: flex; gap: 10px; }
+  .social-btn {
+    width: 36px; height: 36px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
+  }
+  .social-btn:hover { border-color: var(--neon); background: var(--tag-bg); }
+  .footer-col h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--neon);
+    margin-bottom: 16px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 5px 0;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .footer-col ul li:hover { color: var(--text); }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-bottom p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .footer-bottom span { color: var(--neon); }
+</style>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:12px;">
+          <span class="logo-w">Weyalu</span><span class="logo-accent">series</span>
+        </div>
+        <p>Your daily source for TV series analysis, anime deep dives, tech reviews, and the best streaming deals on the internet. Made by fans, for fans.</p>
+        <div class="footer-socials">
+          <div class="social-btn">▶</div>
+          <div class="social-btn">✈</div>
+          <div class="social-btn">𝕏</div>
+          <div class="social-btn">📘</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li>Series News</li>
+          <li>Anime</li>
+          <li>Movies</li>
+          <li>Tech Reviews</li>
+          <li>Theories & Lore</li>
+          <li>Deals</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Shows</h4>
+        <ul>
+          <li>FROM</li>
+          <li>House of the Dragon</li>
+          <li>Euphoria</li>
+          <li>Spider-Noir</li>
+          <li>The Boys</li>
+          <li>Daredevil</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li>About Us</li>
+          <li>Privacy Policy</li>
+          <li>Terms of Use</li>
+          <li>Affiliate Disclosure</li>
+          <li>Contact</li>
+          <li>Advertise</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <span>Weyaluseries</span>. All rights reserved. We may earn a commission from affiliate links.</p>
+      <p>Built for fans of <span>Series · Anime · Tech</span></p>
+    </div>
+  </div>
+</footer>
