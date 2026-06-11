@@ -1,0 +1,25 @@
+---
+/** Código para obtener las noticias más recientes usando un CMS */
+const res = await fetch(
+    `${import.meta.env.STRAPI_URL}/api/news?sort=publishedAt:desc&pagination[limit]=5`,
+    { headers: { Authorization: `Bearer ${import.meta.env.STRAPI_TOKEN}` } },
+);
+const { data } = await res.json();
+
+interface NewsItem {
+    title: string;
+}
+
+const latest: NewsItem[] = data.map((item: any) => ({
+    title: item.attributes.title,
+}));
+
+const doubled = [...latest, ...latest];
+---
+
+<div class="breaking-bar">
+    <div class="breaking-label">BREAKING</div>
+    <div class="breaking-scroll">
+        {doubled.map((item) => <span>{item.title}</span>)}
+    </div>
+</div>

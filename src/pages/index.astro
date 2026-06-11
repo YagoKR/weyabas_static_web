@@ -1,10 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Style from '../layouts/Style.astro' //Importe los estilos para comprobar que funcionan, se implementa igual que lo demás <Style/>
 import Header from '../components/Header.astro';
+import BreakingTicker from '../components/BreakingTicker.astro'; // Falta implementar este componente, a la espera de usar un CMS para obtener las noticias más recientes
+import Main from '../components/Main.astro';
 import Footer from '../components/Footer.astro';
 ---
 
 <Layout>
     <Header />
+    <Main />
 	<Footer />
 </Layout>
