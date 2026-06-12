@@ -1,0 +1,195 @@
+// sanity-studio/schemas/article.ts
+export default {
+    name: 'article',
+    title: 'Article',
+    type: 'document',
+    fields: [
+        { name: 'title', title: 'Title', type: 'string' },
+        { name: 'slug', title: 'Slug', type: 'slug', options: { source: 'title' } },
+        { name: 'excerpt', title: 'Excerpt', type: 'text' },
+        {
+            name: 'category', title: 'Category', type: 'string', options: {
+                list: ['series', 'anime', 'movies', 'tech', 'deals']
+            }
+        },
+        { name: 'showTag', title: 'Show/Franchise Tag', type: 'string' }, // ej: "House of the Dragon"
+        { name: 'image', title: 'Image', type: 'image' },
+        { name: 'publishedAt', title: 'Published At', type: 'datetime' },
+        { name: 'content', title: 'Content', type: 'array', of: [{ type: 'block' }] },
+        { name: 'featured', title: 'Show in Latest News', type: 'boolean' },
+    ]
+}
+
+// src/lib/sanity.ts
+import { createClient } from '@sanity/client';
+
+export const client = createClient({
+    projectId: import.meta.env.SANITY_PROJECT_ID,
+    dataset: 'production',
+    apiVersion: '2024-01-01',
+    useCdn: false,
+});
+
+export interface Article {
+    title: string;
+    slug: string;
+    excerpt: string;
+    category: string;
+    showTag: string;
+    imageUrl: string;
+    date: string;
+    readTime: string;
+}
+
+export function formatArticle(raw: any): Article {
+    const wordCount = (raw.content ?? [])
+        .flatMap((b: any) => b.children?.map((c: any) => c.text) ?? [])
+        .join(' ').split(/\s+/).length;
+
+    return {
+        title: raw.title,
+        slug: raw.slug.current,
+        excerpt: raw.excerpt,
+        category: raw.category,
+        showTag: raw.showTag ?? raw.category,
+        imageUrl: raw.image?.asset?.url ?? '',
+        date: new Date(raw.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric' }),
+        readTime: `${Math.ceil(wordCount / 200)} min`,
+    };
+}
+
+const tagClassMap: Record<string, string> = {
+    series: 'tag-series',
+    anime: 'tag-anime',
+    movies: 'tag-movies',
+    tech: 'tag-tech',
+    deals: 'tag-deals',
+};
+
+export function getTagClass(category: string) {
+    return tagClassMap[category] ?? 'tag-series';
+}
+
+---
+// LatestNews.astro
+import { getTagClass, type Article } from '../lib/sanity';
+
+interface Props { items: Article[] }
+const { items } = Astro.props;
+---
+
+<div class="section-header">
+  <div class="section-neon-dot"></div>
+  <h2 class="section-title">Latest News</h2>
+  <div class="section-line"></div>
+  <a href="#" class="section-more">All News →</a>
+</div>
+
+<div class="card-grid">
+  {items.map(item => (
+    <a href={`/articles/${item.slug}`} class="card">
+      <img class="card-img" src={item.imageUrl} alt={item.title} />
+      <div class="card-body">
+        <span class={`tag ${getTagClass(item.category)}`}>{item.showTag}</span>
+        <div class="card-title">{item.title}</div>
+        <div class="card-excerpt">{item.excerpt}</div>
+        <div class="card-meta">
+          <span>{item.date}</span><span>{item.readTime}</span>
+        </div>
+      </div>
+    </a>
+  ))}
+</div>
+
+---
+// CategorySection.astro
+import { getTagClass, type Article } from '../lib/sanity';
+
+interface Props {
+    title: string;
+    category: string; // usado solo para el link "All X →"
+    items: Article[];
+    accentColor?: string;
+    accentBorder?: string;
+    marginTop?: string;
+}
+
+const { title, category, items, accentColor, accentBorder, marginTop } = Astro.props;
+---
+
+<div class="section-header" style={marginTop ? `margin-top:${marginTop};` : undefined}>
+  <div class="section-neon-dot" style={accentColor ? `background:${accentColor}; box-shadow: 0 0 18px ${accentColor}99;` : undefined}></div>
+  <h2 class="section-title" style={accentColor ? `color:${accentColor};` : undefined}>{title}</h2>
+  <div class="section-line" style={accentColor ? `background:linear-gradient(to right, ${accentColor}, transparent);` : undefined}></div>
+  <a href={`/${category}`} class="section-more" style={accentColor ? `color:${accentColor}; border-color:${accentBorder};` : undefined}>
+    All {title} →
+  </a>
+</div>
+
+<div class="horizontal-scroll">
+  {items.map(item => (
+    <a href={`/articles/${item.slug}`} class="card">
+      <img class="card-img" src={item.imageUrl} alt={item.title} />
+      <div class="card-body">
+        <span class={`tag ${getTagClass(item.category)}`}>{item.showTag}</span>
+        <div class="card-title">{item.title}</div>
+        <div class="card-meta">
+          <span>{item.date}</span><span>{item.readTime}</span>
+        </div>
+      </div>
+    </a>
+  ))}
+</div>
+
+---
+import { client, formatArticle } from '../lib/sanity';
+import LatestNews from '../components/LatestNews.astro';
+import CategorySection from '../components/CategorySection.astro';
+
+// Latest News: las 6 más recientes marcadas como "featured"
+const latestRaw = await client.fetch(`
+  *[_type == "article" && featured == true] | order(publishedAt desc) [0..5] {
+    title, slug, excerpt, category, showTag, publishedAt, content, "image": image.asset->{url}
+  }
+`);
+const latestNews = latestRaw.map(formatArticle);
+
+// Series: últimas 4 de categoría "series"
+const seriesRaw = await client.fetch(`
+  *[_type == "article" && category == "series"] | order(publishedAt desc) [0..3] {
+    title, slug, excerpt, category, showTag, publishedAt, content, "image": image.asset->{url}
+  }
+`);
+const seriesItems = seriesRaw.map(formatArticle);
+
+// Anime: últimas 4 de categoría "anime"
+const animeRaw = await client.fetch(`
+  *[_type == "article" && category == "anime"] | order(publishedAt desc) [0..3] {
+    title, slug, excerpt, category, showTag, publishedAt, content, "image": image.asset->{url}
+  }
+`);
+const animeItems = animeRaw.map(formatArticle);
+---
+
+    <div class="container">
+        <div class="content-layout">
+            <div class="main-col">
+
+                <LatestNews items={latestNews} />
+
+                <div class="ad-slot"><span>Advertisement</span></div>
+
+                <CategorySection title="Series Deep Dives" category="series" items={seriesItems} />
+
+                <CategorySection
+                    title="Anime"
+                    category="anime"
+                    items={animeItems}
+                    accentColor="var(--purple)"
+                    accentBorder="#6633aa"
+                    marginTop="40px"
+                />
+
+            </div>
+        </div>
+    </div>
