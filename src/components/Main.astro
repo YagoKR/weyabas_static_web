@@ -3,6 +3,12 @@
 // Este es el archivo principal de la página de inicio. Importa el layout general, el header, el main y el footer.
 // Codigo hardcodeado para calcular la fecha de publicación y el tiempo de lectura estimado de un artículo, a la espera de integrar un CMS para obtener esta información dinámicamente.
 
+import YoutubeWG from './WidgetYoutube.astro'
+import DealsWG from './WidgetDeals.astro'
+import TelegramWG from './WidgetTelegram.astro'
+import Trending from './Trending.astro'
+import Deals from './Deals.astro'
+
 const article = {
     publishedAt: "2026-06-09T10:30:00Z",
     author: "Angel",
@@ -16,6 +22,7 @@ const date = new Date(article.publishedAt).toLocaleDateString("en-US", {
     day: "numeric",
     year: "numeric",
 });
+
 // Ejemplo  <span>{date}</span>
 const wordCount = article.content.trim().split(/\s+/).length;
 const readTime = Math.ceil(wordCount / 200);
@@ -369,220 +376,14 @@ const readTime = Math.ceil(wordCount / 200);
 
             <!-- SIDEBAR -->
             <aside class="sidebar">
-                <!-- TELEGRAM CTA -->
-                <div class="telegram-cta">
-                    <div class="telegram-icon">✈️</div>
-                    <h3>Daily Deals on Telegram</h3>
-                    <p>
-                        Streaming sticks, anime figures, headphones & more —
-                        only the best discounts, curated daily.
-                    </p>
-                    <a href="#" class="btn-telegram">JOIN FREE CHANNEL</a>
-                </div>
-
-                <!-- TRENDING -->
-                <div class="sidebar-widget">
-                    <div class="widget-title">Trending Now</div>
-                    <div class="trending-item">
-                        <div class="trending-num">01</div>
-                        <div class="trending-text">
-                            Why Did Boyd's Totem Fail on the Creatures in FROM?
-                        </div>
-                    </div>
-                    <div class="trending-item">
-                        <div class="trending-num">02</div>
-                        <div class="trending-text">
-                            Roger Is Now Something Completely Different — FROM
-                            S4 Explained
-                        </div>
-                    </div>
-                    <div class="trending-item">
-                        <div class="trending-num">03</div>
-                        <div class="trending-text">
-                            House of Dragon S3 Full Cast Confirmed — Who
-                            Returns?
-                        </div>
-                    </div>
-                    <div class="trending-item">
-                        <div class="trending-num">04</div>
-                        <div class="trending-text">
-                            One Piece Elbaf: The Giant Warrior Pirates Ranked by
-                            Strength
-                        </div>
-                    </div>
-                    <div class="trending-item">
-                        <div class="trending-num">05</div>
-                        <div class="trending-text">
-                            Best Budget Streaming Devices Under $50 in 2026
-                        </div>
-                    </div>
-                </div>
-
-                <!-- YOUTUBE WIDGET -->
-                <div class="yt-widget">
-                    <div class="yt-header">
-                        <span class="yt-icon">▶</span>
-                        <span class="yt-header-text"
-                            >Latest from @angeluseries</span
-                        >
-                    </div>
-                    <div class="yt-thumb">
-                        <div
-                            class="img-placeholder"
-                            style="height:160px; font-size:12px; letter-spacing:2px;"
-                        >
-                            YOUTUBE THUMBNAIL
-                        </div>
-                        <div class="yt-play">▶</div>
-                    </div>
-                    <div class="yt-info">
-                        <div class="yt-title">
-                            FROM S4 Episode 7 — Boyd's Plan FAILED. Here's Why.
-                        </div>
-                        <div class="yt-channel">
-                            @angeluseries · 33K subscribers
-                        </div>
-                    </div>
-                </div>
-
-                <!-- QUICK DEALS SIDEBAR -->
-                <div class="sidebar-widget">
-                    <div class="widget-title">Hot Deals</div>
-                    <div class="deal-card">
-                        <div class="deal-img-wrap">📺</div>
-                        <div class="deal-info">
-                            <div class="deal-name">Fire TV Stick 4K Max</div>
-                            <div class="deal-price-wrap">
-                                <div class="deal-price">$34.99</div>
-                                <div class="deal-orig">$59.99</div>
-                                <div class="deal-badge">-42%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="deal-card">
-                        <div class="deal-img-wrap">🎧</div>
-                        <div class="deal-info">
-                            <div class="deal-name">Sony WH-1000XM6</div>
-                            <div class="deal-price-wrap">
-                                <div class="deal-price">$279</div>
-                                <div class="deal-orig">$399</div>
-                                <div class="deal-badge">-30%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="deal-card">
-                        <div class="deal-img-wrap">🗡️</div>
-                        <div class="deal-info">
-                            <div class="deal-name">
-                                Demon Slayer Tanjiro Figure
-                            </div>
-                            <div class="deal-price-wrap">
-                                <div class="deal-price">$44.99</div>
-                                <div class="deal-orig">$64.99</div>
-                                <div class="deal-badge">-31%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <a
-                        href="#"
-                        style="display:block; text-align:center; margin-top:12px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--orange); letter-spacing:1px;"
-                        >View all deals →</a
-                    >
-                </div>
-
-                <!-- WEYABU YOUTUBE -->
-                <div class="yt-widget" style="border-top-color: var(--purple);">
-                    <div class="yt-header">
-                        <span class="yt-icon" style="color:var(--purple);"
-                            >▶</span
-                        >
-                        <span class="yt-header-text">Latest from @weyabu</span>
-                    </div>
-                    <div class="yt-thumb">
-                        <div
-                            class="img-placeholder"
-                            style="height:160px; font-size:12px; letter-spacing:2px;"
-                        >
-                            WEYABU THUMBNAIL
-                        </div>
-                        <div
-                            class="yt-play"
-                            style="background:var(--purple); box-shadow:0 0 20px rgba(170,85,255,0.6);"
-                        >
-                            ▶
-                        </div>
-                    </div>
-                    <div class="yt-info">
-                        <div class="yt-title">
-                            Why Shanks Is Now the Strongest Character in One
-                            Piece
-                        </div>
-                        <div class="yt-channel">@weyabu · Anime Channel</div>
-                    </div>
+                <TelegramWG />
+                <Trending />
+                <YoutubeWG channel="angeluseries"/>
+                <YoutubeWG channel="weyabu"/>
+                <DealsWG />
                 </div>
             </aside>
         </div>
     </div>
-
-    <!-- DEALS STRIP -->
-    <div class="deals-strip">
-        <div class="container">
-            <div class="deals-header">
-                <h2 class="deals-title">🔥 Today's Best Deals</h2>
-                <div
-                    class="section-line"
-                    style="background:linear-gradient(to right, var(--orange), transparent);"
-                >
-                </div>
-                <a
-                    href="#"
-                    class="section-more"
-                    style="color:var(--orange); border-color:#995500;"
-                    >All Deals →</a
-                >
-            </div>
-            <div class="deals-grid">
-                <div class="deal-full-card">
-                    <div class="deal-full-badge">-42%</div>
-                    <div class="deal-full-emoji">📺</div>
-                    <div class="deal-full-name">
-                        Amazon Fire TV Stick 4K Max (2026)
-                    </div>
-                    <div class="deal-full-price">$34.99</div>
-                    <div class="deal-full-orig">Was $59.99</div>
-                    <a href="#" class="deal-full-btn">Buy on Amazon →</a>
-                </div>
-                <div class="deal-full-card">
-                    <div class="deal-full-badge">-30%</div>
-                    <div class="deal-full-emoji">🎧</div>
-                    <div class="deal-full-name">
-                        Sony WH-1000XM6 Wireless Headphones
-                    </div>
-                    <div class="deal-full-price">$279.00</div>
-                    <div class="deal-full-orig">Was $399.00</div>
-                    <a href="#" class="deal-full-btn">Buy on Amazon →</a>
-                </div>
-                <div class="deal-full-card">
-                    <div class="deal-full-badge">-31%</div>
-                    <div class="deal-full-emoji">🗡️</div>
-                    <div class="deal-full-name">
-                        Demon Slayer Tanjiro Kamado Figure — Authentic
-                    </div>
-                    <div class="deal-full-price">$44.99</div>
-                    <div class="deal-full-orig">Was $64.99</div>
-                    <a href="#" class="deal-full-btn">Buy on Amazon →</a>
-                </div>
-                <div class="deal-full-card">
-                    <div class="deal-full-badge">-25%</div>
-                    <div class="deal-full-emoji">📡</div>
-                    <div class="deal-full-name">
-                        Roku Ultra 2026 | 4K Streaming Player
-                    </div>
-                    <div class="deal-full-price">$74.99</div>
-                    <div class="deal-full-orig">Was $99.99</div>
-                    <a href="#" class="deal-full-btn">Buy on Amazon →</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <Deals />
 </main>

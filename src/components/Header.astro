@@ -42,6 +42,53 @@
     justify-content: space-between;
     height: 64px;
   }
+
+   /* LOGO */
+  .logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .logo-w { color: var(--text); }
+  .logo-accent {
+    color: var(--neon);
+    text-shadow: var(--neon-glow-strong);
+    position: relative;
+  }
+  .logo-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .header-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    transition: border-color 0.2s;
+  }
+  .header-search:focus-within { border-color: var(--neon); box-shadow: var(--neon-glow); }
+  .header-search input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 13px;
+    width: 180px;
+    font-family: 'Inter', sans-serif;
+  }
+  .header-search input::placeholder { color: var(--text-dim); }
+  .search-icon { color: var(--text-muted); font-size: 14px; }
 </style>
 
 <!-- TOPBAR -->
