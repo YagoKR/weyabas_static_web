@@ -1,0 +1,53 @@
+---
+import type { Article } from '../lib/sanity';
+import { getTagClass } from '../lib/sanity';
+
+interface Props {
+  title: string;
+  category: string;
+  items: Article[];
+  accentColor?: string;
+  accentBorder?: string;
+  marginTop?: string;
+}
+
+const { title, category, items, accentColor, accentBorder, marginTop } = Astro.props;
+---
+
+<div class="section-header" style={marginTop ? `margin-top:${marginTop};` : undefined}>
+  <div
+    class="section-neon-dot"
+    style={accentColor ? `background:${accentColor}; box-shadow: 0 0 18px ${accentColor}99;` : undefined}
+  ></div>
+  <h2 class="section-title" style={accentColor ? `color:${accentColor};` : undefined}>
+    {title}
+  </h2>
+  <div
+    class="section-line"
+    style={accentColor ? `background:linear-gradient(to right, ${accentColor}, transparent);` : undefined}
+  ></div>
+  
+    href={`/${category}`}
+    class="section-more"
+    style={accentColor ? `color:${accentColor}; border-color:${accentBorder};` : undefined}
+  >All {title} →</a>
+</div>
+
+<div class="horizontal-scroll">
+  {items.map(item => (
+    <a href={`/articles/${item.slug}`} class="card">
+      {item.imageUrl ? (
+        <img class="card-img" src={item.imageUrl} alt={item.title} />
+      ) : (
+        <div class="img-placeholder card-img">{item.showTag}</div>
+      )}
+      <div class="card-body">
+        <span class={`tag ${getTagClass(item.category)}`}>{item.showTag}</span>
+        <div class="card-title">{item.title}</div>
+        <div class="card-meta">
+          <span>{item.date}</span><span>{item.readTime}</span>
+        </div>
+      </div>
+    </a>
+  ))}
+</div>
