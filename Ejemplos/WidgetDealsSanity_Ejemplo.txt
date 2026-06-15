@@ -1,0 +1,48 @@
+---
+import type { Deal } from "../lib/sanity";
+
+interface Props {
+    deals: Deal[];
+    allDealsUrl?: string;
+}
+
+const { deals, allDealsUrl = "/deals" } = Astro.props;
+---
+
+<!-- Este widget se encuentra en el sidebar y muestra productos interesantes. Es diferente al otro componente, Deals, que es un apartado en sí mismo...
+Pero es raro que esté en dos sitios. Quizá sea prescindible. -->
+<!-- Este archivo contiene el código para el widget de ofertas calientes en el sidebar pero habria que instalar sanity o el CMS que toque para funcionar correctamente -->
+<!-- QUICK DEALS SIDEBAR -->
+<div class="sidebar-widget">
+    <div class="widget-title">Hot Deals</div>
+
+    {
+        deals.map((deal) => (
+            <a
+                href={deal.affiliateUrl}
+                target="_blank"
+                rel="noopener sponsored"
+                class="deal-card"
+            >
+                <div class="deal-img-wrap">{deal.emoji}</div>
+                <div class="deal-info">
+                    <div class="deal-name">{deal.name}</div>
+                    <div class="deal-price-wrap">
+                        <div class="deal-price">${deal.price.toFixed(2)}</div>
+                        <div class="deal-orig">
+                            ${deal.originalPrice.toFixed(2)}
+                        </div>
+                        <div class="deal-badge">-{deal.discount}%</div>
+                    </div>
+                </div>
+            </a>
+        ))
+    }
+
+    <a
+        href={allDealsUrl}
+        style="display:block; text-align:center; margin-top:12px; font-family:'JetBrains
+        Mono',monospace; font-size:11px; color:var(--orange); letter-spacing:1px;" >View
+        all deals →
+    </a>
+</div>

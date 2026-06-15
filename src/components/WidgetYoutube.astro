@@ -1,27 +1,74 @@
 ---
-// En este widget se implementará la funcionalidad que mostrará las últimas noticias de los canales.
-const { channel } = Astro.props
+interface Props {
+    channel: string; // nombre a mostrar"
+    channelId: string; // el ID real del canal de YouTube
+    subscribers?: string; // texto manual para mostrar número de suscriptores (opcional)"
+}
 
+const { channel, channelId, subscribers } = Astro.props;
+
+let video = {
+    title: "Latest video unavailable",
+    thumbnail: "",
+    videoId: "",
+};
+
+try {
+    const res = await fetch(
+        `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`,
+    );
+    const xml = await res.text();
+
+    // Extraer el primer <entry> del feed
+    const titleMatch = xml.match(/<entry>[\s\S]*?<title>(.*?)<\/title>/);
+    const videoIdMatch = xml.match(/<yt:videoId>(.*?)<\/yt:videoId>/);
+
+    if (titleMatch && videoIdMatch) {
+        video = {
+            title: titleMatch[1],
+            videoId: videoIdMatch[1],
+            thumbnail: `https://i.ytimg.com/vi/${videoIdMatch[1]}/hqdefault.jpg`,
+        };
+    }
+} catch (e) {
+    console.error("Error fetching YouTube feed:", e);
+}
 ---
+
 <!-- YOUTUBE WIDGET -->
 <div class="yt-widget">
     <div class="yt-header">
         <span class="yt-icon">▶</span>
         <span class="yt-header-text">Latest from @{channel}</span>
     </div>
-    <div class="yt-thumb">
-        <div
-            class="img-placeholder"
-            style="height:160px; font-size:12px; letter-spacing:2px;"
-        >
-            YOUTUBE THUMBNAIL
-        </div>
+    <a
+        href={`https://www.youtube.com/watch?v=${video.videoId}`}
+        target="_blank"
+        class="yt-thumb"
+    >
+        {
+            video.thumbnail ? (
+                <img
+                    src={video.thumbnail}
+                    alt={video.title}
+                    style="height:160px; object-fit:cover; width:100%;"
+                />
+            ) : (
+                <div
+                    class="img-placeholder"
+                    style="height:160px; font-size:12px; letter-spacing:2px;"
+                >
+                    YOUTUBE THUMBNAIL
+                </div>
+            )
+        }
         <div class="yt-play">▶</div>
-    </div>
+    </a>
     <div class="yt-info">
-        <div class="yt-title">
-            FROM S4 Episode 7 — Boyd's Plan FAILED. Here's Why.
+        <div class="yt-title">{video.title}</div>
+        <div class="yt-channel">
+            @{channel}
+            {subscribers ? `· ${subscribers}` : ""}
         </div>
-        <div class="yt-channel">@angeluseries · 33K subscribers</div>
     </div>
 </div>
