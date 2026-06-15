@@ -26,6 +26,7 @@ const date = new Date(article.publishedAt).toLocaleDateString("en-US", {
 // Ejemplo  <span>{date}</span>
 const wordCount = article.content.trim().split(/\s+/).length;
 const readTime = Math.ceil(wordCount / 200);
+
 ---
 
 <!-- MAIN -->
@@ -378,8 +379,8 @@ const readTime = Math.ceil(wordCount / 200);
             <aside class="sidebar">
                 <TelegramWG />
                 <Trending />
-                <YoutubeWG channel="angeluseries"/>
-                <YoutubeWG channel="weyabu"/>
+                <YoutubeWG channel="angeluseries" channelId="UCxxxxxxxxxxxxxxxxxxxxxx" />
+                <YoutubeWG channel="weyabu" channelId="UCyyyyyyyyyyyyyyyyyyyyyy" />
                 <DealsWG />
                 </div>
             </aside>
