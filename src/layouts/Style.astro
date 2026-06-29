@@ -1,3 +1,4 @@
+
 <style is:global>
     :root {
     --bg:        #0a0a0f;
@@ -605,19 +606,28 @@
   .yt-thumb {
     position: relative;
     cursor: pointer;
+    display:block;
   }
+  
   .yt-thumb img {
     width: 100%;
-    height: 160px;
+    height: fit-content;
     object-fit: cover;
     filter: brightness(0.7);
     transition: filter 0.2s;
   }
   .yt-thumb:hover img { filter: brightness(0.9); }
+  
   .yt-play {
+    /* - 'top/left: 50%' ubica la esquina izquierda (0,0) del botón en el centro. 
+   - 'translate(-50%, -50%)' lo mueve la mitad de su propio tamaño hacia arriba 
+   y a la izquierda para que el CENTRO del botón quede perfectamente alineado. */
     position: absolute;
-    top: 50%; left: 50%;
+    top: 50%; 
+    left: 50%;
     transform: translate(-50%, -50%);
+    /* El index posiciona a este elemento por encima del thumbnail */
+    z-index: 10;
     width: 48px; height: 48px;
     background: var(--red);
     border-radius: 50%;
@@ -627,9 +637,11 @@
     font-size: 18px;
     color: #fff;
     box-shadow: 0 0 20px rgba(255,51,85,0.6);
-    transition: transform 0.2s;
+    transition: transform 0.2s ease-out;
   }
-  .yt-thumb:hover .yt-play { transform: translate(-50%, -50%) scale(1.1); }
+
+  .yt-thumb:hover .yt-play { transform: translate(-50%, -50%) scale(1.2); }
+
   .yt-info { padding: 12px 16px; }
   .yt-title {
     font-family: 'Barlow Condensed', sans-serif;
@@ -792,7 +804,6 @@
   }
 
   /* -- HEADER -- */
-      /* ── TOPBAR ── */
   .topbar {
     background: var(--bg);
     border-bottom: 1px solid var(--border);
