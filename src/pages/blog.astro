@@ -1,0 +1,23 @@
+---
+
+import { getCollection } from "astro:content";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Style from "../layouts/Style.astro";
+import Layout from "../layouts/Layout.astro";
+
+// El nombre de la colección es lo que exportamos de content.config.ts
+const posts = await getCollection("posts")
+
+---
+<Layout>
+    <Style />
+    <Header />
+        <!-- Se accede a los valores de la coleccion de la siguiente manera -->
+        {posts.map(post => (
+            <a href={`/blog/${post.id}`}>
+                <h2>{post.data.title}</h2>
+            </a>
+        ))}
+    <Footer />
+</Layout>
