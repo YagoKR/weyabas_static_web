@@ -9,7 +9,7 @@ const postsCollection = defineCollection ({
     // Aqui se definen los "metadatos" del post. El tipo de dato es configurable por nosotros dependiendo de lo que queramos.
     schema: z.object({
         author: z.string(),
-        date: z.string(),
+        date: z.coerce.date(),
         title: z.string(),
         categories: z.array(z.string())
     })

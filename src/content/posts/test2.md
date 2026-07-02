@@ -1,8 +1,8 @@
 ---
 author: Carlos D. Angel
 categories: ["test post"]
-date: "2026-02-07"
-title: Test Post
+date: "2026-01-07"
+title: Test Post 2
 ---
 
 This is a sample post. This text is not particularly formatted in any way.
@@ -20,4 +20,3 @@ We'll even try a table here in a moment.
 | Column1 | Column2           |
 |---------|-------------------|
 | Woah    | Columns and rows! |
-

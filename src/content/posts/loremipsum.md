@@ -1,7 +1,7 @@
 ---
 author: Carlos D. Angel
 categories: ["lorem ipsum"]
-date: 02/07/2026
+date: "2026-03-07"
 title: Lorem Ipsum
 ---
 
