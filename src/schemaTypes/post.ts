@@ -1,26 +1,34 @@
+// src/schemaTypes/post.ts
 export default {
-    name: 'post',
-    title: 'Noticias',
-    type: 'document',
-    fields: [
-        {
-            name: 'title',
-            title: 'Título',
-            type: 'string',
-        },
-        {
-            name: 'slug',
-            title: 'Slug (URL)',
-            type: 'slug',
-            options: {
-                source: 'title',
-                maxLength: 96,
-            },
-        },
-        {
-            name: 'content',
-            title: 'Contenido',
-            type: 'text',
-        },
-    ],
+  name: 'posts',
+  title: 'Posts',
+  type: 'document',
+  fields: [
+    {
+      name: 'title',
+      title: 'Título',
+      type: 'string',
+    },
+    {
+      name: 'author',
+      title: 'Autor',
+      type: 'string',
+    },
+    {
+      name: 'date',
+      title: 'Fecha',
+      type: 'datetime',
+    },
+    {
+      name: 'categories',
+      title: 'Categorías',
+      type: 'array',
+      of: [{ type: 'string' }],
+    },
+    {
+      name: 'summary',
+      title: 'Resumen',
+      type: 'text',
+    },
+  ],
 };
