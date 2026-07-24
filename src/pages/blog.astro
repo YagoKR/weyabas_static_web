@@ -1,67 +1,96 @@
 ---
-
-import { getCollection, type CollectionEntry } from "astro:content";import Footer from "../components/Footer.astro";
-import { sortPosts } from '../utils/sortPosts'
+import { getCollection, type CollectionEntry } from "astro:content";
+import Footer from "../components/Footer.astro";
+import { sortPosts } from "../utils/sortPosts";
 import Header from "../components/Header.astro";
 import Style from "../layouts/Style.astro";
 import Layout from "../layouts/Layout.astro";
 
-// El nombre de la colección es lo que exportamos de content.config.ts
-const posts = await getCollection("posts")
+// 1. Obtenemos y ordenamos los posts
+const posts = await getCollection("posts");
+const sortedPosts = sortPosts(posts);
 
+// 2. Agrupamos los posts por fecha
+const groupedPosts = sortedPosts.reduce(
+    (acc, post) => {
+        const dateKey = new Date(post.data.date).toLocaleDateString("es-ES", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+
+        if (!acc[dateKey]) {
+            acc[dateKey] = [];
+        }
+        acc[dateKey].push(post);
+        return acc;
+    },
+    {} as Record<string, typeof sortedPosts>,
+);
 ---
+
 <Layout>
     <Style />
     <Header />
-        <!-- Se accede a los valores de la coleccion de la siguiente manera -->
+
+    <!-- Sección de Artículos Agrupados por Fecha -->
+    <section class="posts-grouped">
         {
-            /* TODO: la idea es que los articulos esten agrupados por fecha. */
-            sortedPosts.map(post => {
-                console.log(post.data.date)
-                return (
-                <a href={`/blog/${post.id}`}>
-                    <h2>{post.data.title}</h2>
-                </a>
-                );
-            })
+            Object.entries(groupedPosts).map(([date, postsInDate]) => (
+                <div class="date-group">
+                    {/* Título del grupo de fecha */}
+                    <h2 class="date-title">{date}</h2>
+
+                    {/* Lista de posts pertenecientes a esa fecha */}
+                    <div class="posts-list">
+                        {postsInDate.map((post) => (
+                            <a href={`/blog/${post.id}`} class="post-item">
+                                <h3>{post.data.title}</h3>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            ))
         }
+    </section>
 
-        <!-- ARTICLE BODY -->
-        <div class="article-body">
+    <!-- ARTICLE BODY -->
+    <div class="article-body">
+        <p>OPENING PARAGRAPH</p>
 
-          <p>OPENING PARAGRAPH</p>
+        <p>CONTEXT_PARAGRAPH — background the reader needs</p>
 
-          <p>CONTEXT_PARAGRAPH — background the reader needs</p>
+        <div class="ad-slot"><span>Advertisement</span></div>
 
-          <div class="ad-slot"><span>Advertisement</span></div>
+        <h2>SUBHEAD_1</h2>
+        <p>PARAGRAPH</p>
+        <p>PARAGRAPH</p>
 
-          <h2>SUBHEAD_1</h2>
-          <p>PARAGRAPH</p>
-          <p>PARAGRAPH</p>
+        <blockquote>
+            PULL_QUOTE — short punchy line pulled from the analysis
+        </blockquote>
 
-          <blockquote>PULL_QUOTE — short punchy line pulled from the analysis</blockquote>
+        <p>PARAGRAPH</p>
 
-          <p>PARAGRAPH</p>
-
-          <figure>
+        <figure>
             <div class="img-placeholder">SECONDARY_IMAGE_LABEL</div>
             <figcaption>IMAGE_CAPTION</figcaption>
-          </figure>
+        </figure>
 
-          <h2>SUBHEAD_2</h2>
-          <p>PARAGRAPH</p>
+        <h2>SUBHEAD_2</h2>
+        <p>PARAGRAPH</p>
 
-          <ul>
+        <ul>
             <li>BULLET_POINT</li>
             <li>BULLET_POINT</li>
             <li>BULLET_POINT</li>
-          </ul>
+        </ul>
 
-          <div class="ad-slot"><span>Advertisement</span></div>
+        <div class="ad-slot"><span>Advertisement</span></div>
 
-          <h2>SUBHEAD_3 — e.g. "What This Means Going Forward"</h2>
-          <p>CLOSING_PARAGRAPH — wrap-up / what to expect next</p>
+        <h2>SUBHEAD_3 — e.g. "What This Means Going Forward"</h2>
+        <p>CLOSING_PARAGRAPH — wrap-up / what to expect next</p>
+    </div>
 
-        </div>
     <Footer />
 </Layout>
