@@ -1,6 +1,7 @@
 ---
 // src/pages/[...slug].astro
 import { getCollection, render } from 'astro:content';
+import { getReadingTime } from '../utils/readingTime'
 import Layout from '../layouts/Layout.astro';
 import Style from '../layouts/Style.astro'
 import Header from '../components/Header.astro'
@@ -17,17 +18,9 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-
 const { title, author, date, categories } = post.data;
-
-// Funcion para calcular tiempo de lectura. Consideramos que cualquier cadena de texto que acaba con 1 o mas caracteres en blanco es una palabra.
-// Si no hay palabras, se devuelve 0.
-const wordCount = post.body ? post.body.trim().split(/\s+/).length : 0;
-
-// Se asume una velocidad de 200 PPM, la media estándar.
-const readingTime = Math.ceil(wordCount / 200);
+const readingTime = getReadingTime(post);
 ---
-    {console.log(wordCount)}
     <Layout />
     <Style />
     <Header />

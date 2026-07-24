@@ -1,6 +1,7 @@
 ---
 
 import { getCollection, type CollectionEntry } from "astro:content";import Footer from "../components/Footer.astro";
+import { sortPosts } from '../utils/sortPosts'
 import Header from "../components/Header.astro";
 import Style from "../layouts/Style.astro";
 import Layout from "../layouts/Layout.astro";
@@ -8,37 +9,12 @@ import Layout from "../layouts/Layout.astro";
 // El nombre de la colección es lo que exportamos de content.config.ts
 const posts = await getCollection("posts")
 
-/*
-Esta función permite ordenar las entradas por su fecha de publicación. 
-    - posts (object): el array de posts que está definido en la collection.
-    - ascending (bool): si es false, ordena de manera descendiente (más nuevo a más viejo). 
-    Si es true, ordena de manera ascendiente (más viejo a más nuevo). Esto podría permitir a los usuarios ordenar
-    según prefieran.
-*/
-function sortPosts(posts: CollectionEntry<"posts">[], ascending=false){
-    return posts.sort((a, b) => {
-        const dateA = new Date(a.data.date);
-        const dateB = new Date(b.data.date);
-        if (ascending) {
-            return dateA.getTime() - dateB.getTime();
-        } else {
-            return dateB.getTime() - dateA.getTime();
-        }
-    });
-    }
-
-let sortedPosts = sortPosts(posts,false);
-
-for (const post of sortedPosts) {
-    console.log(post.data.date);
-}
 ---
 <Layout>
     <Style />
     <Header />
         <!-- Se accede a los valores de la coleccion de la siguiente manera -->
         {
-
             /* TODO: la idea es que los articulos esten agrupados por fecha. */
             sortedPosts.map(post => {
                 console.log(post.data.date)

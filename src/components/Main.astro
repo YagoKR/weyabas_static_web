@@ -3,29 +3,21 @@
 // Este es el archivo principal de la página de inicio. Importa el layout general, el header, el main y el footer.
 // Codigo hardcodeado para calcular la fecha de publicación y el tiempo de lectura estimado de un artículo, a la espera de integrar un CMS para obtener esta información dinámicamente.
 
+import { getCollection } from 'astro:content'
+import { getReadingTime } from '../utils/readingTime'
+import { sortPosts } from '../utils/sortPosts'
 import YoutubeWG from './WidgetYoutube.astro'
 import DealsWG from './WidgetDeals.astro'
 import TelegramWG from './WidgetTelegram.astro'
 import Trending from './Trending.astro'
 import Deals from './Deals.astro'
 
-const article = {
-    publishedAt: "2026-06-09T10:30:00Z",
-    author: "Angel",
-    platform: "MGM+",
-    content:
-        "Lorem ipsum dolor sit amet consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris...", // el texto del artículo
-};
+// Buscar todos los posts y usar la funcion sortPosts() para que se organizen de mas recientes a mas antiguos.
+const posts = sortPosts(await getCollection('posts'));
 
-const date = new Date(article.publishedAt).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-});
-
-// Ejemplo  <span>{date}</span>
-const wordCount = article.content.trim().split(/\s+/).length;
-const readTime = Math.ceil(wordCount / 200);
+// Los tres articulos más recientes se ubican en el hero
+const heroPosts = posts.slice(0, 3);
+const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
 
 ---
 <!-- MAIN -->
@@ -36,27 +28,21 @@ const readTime = Math.ceil(wordCount / 200);
             <div class="hero-grid">
                 <!-- HERO MAIN -->
                 <div class="hero-main">
-                    <div
-                        class="img-placeholder hero-main-img"
-                        style="height:520px; font-size:14px; color:#1e2e3e; letter-spacing:3px;"
-                    >
+                    <a href={`/${mainPost.id}`} class="img-placeholder hero-main-img" style="height:520px; font-size:14px; color:#1e2e3e; letter-spacing:3px;">
                         FROM S4 HERO IMAGE
-                    </div>
+                    </a>
                     <div class="hero-main-content">
-                        <span class="tag tag-series">Series</span>
-                        <h1 class="hero-title">
-                            Why Did Boyd's Totem Plan Fail So Badly in FROM
-                            Season 4 Episode 7?
-                        </h1>
+                        <span class="tag tag-series">{mainPost.data.categories?.[0]}</span>
+                        <a href={`/${mainPost.id}`}><h1 class="hero-title">{mainPost.data.title}</h1></a>
                         <div class="hero-meta">
                             <span
                                 >by <strong style="color:#fff">Angel</strong
                                 ></span
                             >
                             <span class="dot">◆</span>
-                            <span>June 9, 2026</span>
+                            <span>{mainPost.data.date}</span>
                             <span class="dot">◆</span>
-                            <span>6 min read</span>
+                            <span>{getReadingTime(mainPost)} min read</span>
                             <span class="dot">◆</span>
                             <span style="color:var(--neon)">MGM+</span>
                         </div>
@@ -65,35 +51,29 @@ const readTime = Math.ceil(wordCount / 200);
 
                 <!-- HERO SECONDARY 1 -->
                 <div class="hero-secondary">
-                    <div class="img-placeholder hero-secondary-img">ANIME</div>
-                    <span class="tag tag-anime">Anime</span>
-                    <div class="secondary-title">
-                        Demon Slayer Season 5: Every Detail Hidden in the New
-                        Trailer You Probably Missed
-                    </div>
+                    <a href={`/${secondaryPost1.id}`} class="img-placeholder hero-secondary-img">ANIME</a>
+                    <span class="tag tag-anime">{secondaryPost1.data.categories?.[0]}</span>
+                    <a href={`/${secondaryPost1.id}`}><div class="secondary-title">{secondaryPost1.data.title}</div></a>
                     <div class="card-meta">
-                        <span>June 9, 2026</span>
-                        <span>4 min read</span>
+                        <span>{secondaryPost1.data.date}</span>
+                        <span>{getReadingTime(secondaryPost1)} min read</span>
                     </div>
                 </div>
 
                 <!-- HERO SECONDARY 2 -->
                 <div class="hero-secondary">
-                    <div class="img-placeholder hero-secondary-img">TECH</div>
-                    <span class="tag tag-tech">Tech</span>
-                    <div class="secondary-title">
-                        The Best Streaming Sticks of 2026 Ranked — Which One
-                        Should You Actually Buy?
-                    </div>
+                    <a href={`/${secondaryPost2.id}`} class="img-placeholder hero-secondary-img">TECH</a>
+                    <span class="tag tag-tech">{secondaryPost2.data.categories?.[0]}</span>
+                    <a href={`/${secondaryPost2.id}`}><div class="secondary-title">{secondaryPost2.data.title}</div></a>
                     <div class="card-meta">
-                        <span>June 9, 2026</span>
-                        <span>5 min read</span>
+                        <span>{secondaryPost2.data.date}</span>
+                        <span>{getReadingTime(secondaryPost2)} min read</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
+    
     <!-- AD SLOT -->
     <div class="container">
         <div class="ad-slot"><span>Advertisement</span></div>
