@@ -1,52 +1,48 @@
 ---
 // src/pages/[...slug].astro
 import { getCollection, render } from 'astro:content';
-import { getReadingTime } from '../utils/readingTime';
+import { getReadingTime } from '../utils/readingTime'
 import Layout from '../layouts/Layout.astro';
-import Style from '../layouts/Style.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-export async function getStaticPaths() {
-  const posts = await getCollection("posts");
+import Style from '../layouts/Style.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
 
-  return posts
-    // 1. Filtramos cualquier post que por error se llame 'admin' o traiga ruta admin
-    .filter((post) => post.id !== 'admin' && post.id !== 'admin/index')
-    .map((post) => ({
-      params: { slug: post.id },
-      props: { post },
-    }));
+export async function getStaticPaths() {
+    const posts = await getCollection("posts")
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
 }
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, author, date, categories, summary } = post.data;
+const { title, author, date, categories } = post.data;
 const readingTime = getReadingTime(post);
 ---
-
-<Layout>
-  <Style />
-  <Header />
-
-  <main>
+    <Layout />
+    <Style />
+    <Header />
     <div class="article-header">
-      <span class="tag tag-series">{categories}</span>
-      <h1 class="article-title">{title}</h1>
-      <p class="article-dek">{summary}</p>
-
-      <div class="article-meta">
-        <span>by <strong>{author}</strong></span>
-        <span class="dot">◆</span>
-        <span>{new Date(date).toLocaleDateString('es-ES')}</span>
-        <span class="dot">◆</span>
-        <span>{readingTime} min read</span>
-      </div>
+        <span class="tag tag-series">{post.data.categories}</span>
+        <h1 class="article-title">{post.data.title}</h1>
+        <p class="article-dek">{post.data.summary}</p>
+        <div class="article-meta">
+            <span>by <strong>{post.data.author}</strong></span>
+            <span class="dot">◆</span>
+            <span>{post.data.date}</span>
+            <span class="dot">◆</span>
+            <span>{readingTime} min read</span>
+            <span class="dot">◆</span>
+            <!-- TODO: VER A QUE SE REFIERE ESTE SPAN -->
+            <!-- <span style="color:var(--neon)">{{NETWORK_OR_PLATFORM}}</span> -->
+        </div>
     </div>
-
     <div class="article-body">
-      <Content />
+        <Content />
     </div>
-  </main>
-
-  <Footer />
-</Layout>
+    <Footer />
+    </main>
+  </body>
+</html>

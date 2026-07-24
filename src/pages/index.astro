@@ -1,23 +1,15 @@
 ---
-import { createClient } from '@sanity/client';
-import Layout from '../layouts/Layout.astro';
-import Style from '../layouts/Style.astro';
+import Layout from '../layouts/Layout.astro'
+import Style from '../layouts/Style.astro' //Importe los estilos para comprobar que funcionan, se implementa igual que lo demás <Style/>
 import Header from '../components/Header.astro';
-import BreakingTicker from '../components/BreakingTicker.astro';
+import BreakingTicker from '../components/BreakingTicker.astro'; // Falta implementar este componente, a la espera de usar un CMS para obtener las noticias más recientes
 import Main from '../components/Main.astro';
 import Footer from '../components/Footer.astro';
-
-export const sanityClient = createClient({
-  projectId: '3v8sx1or',
-  dataset: 'production',
-  useCdn: false,
-  apiVersion: '2024-01-01',
-});
 ---
 
 <Layout>
     <Style />
     <Header />
     <Main />
-    <Footer />
+	<Footer />
 </Layout>
