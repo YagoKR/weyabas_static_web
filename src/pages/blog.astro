@@ -44,11 +44,48 @@ for (const post of sortedPosts) {
                 console.log(post.data.date)
                 return (
                 <a href={`/blog/${post.id}`}>
-                    <h1>{post.data.date.toDateString()}</h1>
                     <h2>{post.data.title}</h2>
                 </a>
                 );
             })
         }
+
+        <!-- ARTICLE BODY -->
+        <div class="article-body">
+
+          <p>OPENING PARAGRAPH</p>
+
+          <p>CONTEXT_PARAGRAPH — background the reader needs</p>
+
+          <div class="ad-slot"><span>Advertisement</span></div>
+
+          <h2>SUBHEAD_1</h2>
+          <p>PARAGRAPH</p>
+          <p>PARAGRAPH</p>
+
+          <blockquote>PULL_QUOTE — short punchy line pulled from the analysis</blockquote>
+
+          <p>PARAGRAPH</p>
+
+          <figure>
+            <div class="img-placeholder">SECONDARY_IMAGE_LABEL</div>
+            <figcaption>IMAGE_CAPTION</figcaption>
+          </figure>
+
+          <h2>SUBHEAD_2</h2>
+          <p>PARAGRAPH</p>
+
+          <ul>
+            <li>BULLET_POINT</li>
+            <li>BULLET_POINT</li>
+            <li>BULLET_POINT</li>
+          </ul>
+
+          <div class="ad-slot"><span>Advertisement</span></div>
+
+          <h2>SUBHEAD_3 — e.g. "What This Means Going Forward"</h2>
+          <p>CLOSING_PARAGRAPH — wrap-up / what to expect next</p>
+
+        </div>
     <Footer />
 </Layout>

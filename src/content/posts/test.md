@@ -2,6 +2,8 @@
 author: Carlos D. Angel
 categories: ["test post"]
 date: "2026-02-07"
+summary:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at porttitor lorem, vel tincidunt orci."
 title: Test Post
 ---
 
