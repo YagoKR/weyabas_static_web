@@ -18,12 +18,22 @@ export default {
             name: 'date',
             title: 'Fecha',
             type: 'datetime',
+            initialValue: () => new Date().toISOString(),
         },
         {
             name: 'categories',
-            title: 'Categorías',
             type: 'array',
             of: [{ type: 'string' }],
+            options: {
+                list: [
+                    { title: 'Series', value: 'series' },
+                    { title: 'Anime', value: 'anime' },
+                    { title: 'Movies', value: 'movies' },
+                    { title: 'Tech', value: 'tech' },
+                    { title: 'Theories', value: 'theories'},
+                ],
+                layout: 'checkbox',
+            },
         },
         {
             name: 'summary',
