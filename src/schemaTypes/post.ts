@@ -19,6 +19,7 @@ export default {
             title: 'Fecha',
             type: 'datetime',
             initialValue: () => new Date().toISOString(),
+            readOnly: true,
         },
         {
             name: 'categories',
