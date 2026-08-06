@@ -1,27 +1,40 @@
 ---
-// src/pages/[...slug].astro
-import { getCollection, render } from 'astro:content';
+// /src/pages/[...slug].astro
+import { PortableText } from 'astro-portabletext'
 import { getReadingTime } from '../utils/readingTime';
+// Para importar sanityClient e necesita instalar el paquete npm @sanity/client e importar los tipos de sanity:client al archivo /src/env.d.ts
+import { sanityClient } from "sanity:client";
 import Layout from '../layouts/Layout.astro';
 import Style from '../layouts/Style.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-export async function getStaticPaths() {
-  const posts = await getCollection("posts");
 
-  return posts
-    // 1. Filtramos cualquier post que por error se llame 'admin' o traiga ruta admin
-    .filter((post) => post.id !== 'admin' && post.id !== 'admin/index')
-    .map((post) => ({
-      params: { slug: post.id },
-      props: { post },
-    }));
+/* getStaticPaths():
+  Devuelve un array de objetos con params (las URLs a crear) y props (los datos de cada página). 
+  Necesario para que Astro genere las paginas dinamicamente.
+*/
+export async function getStaticPaths() {
+  // Se piden los datos a Sanity con el cliente.
+  const posts = await sanityClient.fetch(
+    `*[_type == "posts" && defined(slug.current)] | order(date desc)`
+  );
+
+  /*
+    - params: define la ruta URL de la pagina. Le dice a Astro el valor que usará para la ruta. En este caso, el slug.
+    - props: envía el resto de los datos de la página y los guarda en Astro.props.
+  */
+  return posts.map((post: any) => ({
+    params: { slug: post.slug.current },
+    props: { post },
+  }));
 }
 
+// Se exporta el contenido de post a Astro.props para asi poder trabajar con el contenido.
 const { post } = Astro.props;
-const { Content } = await render(post);
-const { title, author, date, categories, summary } = post.data;
-const readingTime = getReadingTime(post);
+
+
+// const readingTime = getReadingTime(post.content);
+const readingTime = '0'
 ---
 
 <Layout>
@@ -30,21 +43,21 @@ const readingTime = getReadingTime(post);
 
   <main>
     <div class="article-header">
-      <span class="tag tag-series">{categories}</span>
-      <h1 class="article-title">{title}</h1>
-      <p class="article-dek">{summary}</p>
+      <span class="tag tag-series">{post.categories}</span>
+      <h1 class="article-title">{post.title}</h1>
+      <p class="article-dek">{post.summary}</p>
 
       <div class="article-meta">
-        <span>by <strong>{author}</strong></span>
+        <span>by <strong>{post.author}</strong></span>
         <span class="dot">◆</span>
-        <span>{new Date(date).toLocaleDateString('es-ES')}</span>
+        <span>{new Date(post.date).toLocaleDateString('es-ES')}</span>
         <span class="dot">◆</span>
         <span>{readingTime} min read</span>
       </div>
     </div>
 
     <div class="article-body">
-      <Content />
+      <PortableText value={post.content} />
     </div>
   </main>
 

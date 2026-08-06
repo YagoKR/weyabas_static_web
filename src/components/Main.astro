@@ -1,9 +1,11 @@
 ---
-// src/pages/index.astro
-// Este es el archivo principal de la página de inicio. Importa el layout general, el header, el main y el footer.
-// Codigo hardcodeado para calcular la fecha de publicación y el tiempo de lectura estimado de un artículo, a la espera de integrar un CMS para obtener esta información dinámicamente.
+// /src/components/Main.astro
 
-import { getCollection } from 'astro:content'
+/* 
+    El componente Main.astro integra la mayor parte de los distintos componentes de la página principal.
+*/
+
+import { sanityClient } from "sanity:client";
 import { getReadingTime } from '../utils/readingTime'
 import { sortPosts } from '../utils/sortPosts'
 import YoutubeWG from './WidgetYoutube.astro'
@@ -13,8 +15,9 @@ import Trending from './Trending.astro'
 import Deals from './Deals.astro'
 
 // Buscar todos los posts y usar la funcion sortPosts() para que se organizen de mas recientes a mas antiguos.
-const posts = sortPosts(await getCollection('posts'));
-
+const posts = await sanityClient.fetch(`
+  *[_type == "posts" && defined(slug.current)] | order(date desc)
+`);
 // Los tres articulos más recientes se ubican en el hero
 const heroPosts = posts.slice(0, 3);
 const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
@@ -28,21 +31,21 @@ const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
             <div class="hero-grid">
                 <!-- HERO MAIN -->
                 <div class="hero-main">
-                    <a href={`/${mainPost.id}`} class="img-placeholder hero-main-img" style="height:520px; font-size:14px; color:#1e2e3e; letter-spacing:3px;">
+                    <a href={`/${mainPost.slug.current}`} class="img-placeholder hero-main-img" style="height:520px; font-size:14px; color:#1e2e3e; letter-spacing:3px;">
                         FROM S4 HERO IMAGE
                     </a>
                     <div class="hero-main-content">
-                        <span class="tag tag-series">{mainPost.data.categories?.[0]}</span>
-                        <a href={`/${mainPost.id}`}><h1 class="hero-title">{mainPost.data.title}</h1></a>
+                        <span class="tag tag-series">{mainPost.categories?.[0]}</span>
+                        <a href={`/${mainPost.slug.current}`}><h1 class="hero-title">{mainPost.title}</h1></a>
                         <div class="hero-meta">
                             <span
                                 >by <strong style="color:#fff">Angel</strong
                                 ></span
                             >
                             <span class="dot">◆</span>
-                            <span>{mainPost.data.date}</span>
+                            <span>{mainPost.date}</span>
                             <span class="dot">◆</span>
-                            <span>{getReadingTime(mainPost)} min read</span>
+                            <span>XXX min read</span>
                             <span class="dot">◆</span>
                             <span style="color:var(--neon)">MGM+</span>
                         </div>
@@ -50,26 +53,30 @@ const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
                 </div>
 
                 <!-- HERO SECONDARY 1 -->
+                {secondaryPost1 && (
                 <div class="hero-secondary">
-                    <a href={`/${secondaryPost1.id}`} class="img-placeholder hero-secondary-img">ANIME</a>
-                    <span class="tag tag-anime">{secondaryPost1.data.categories?.[0]}</span>
-                    <a href={`/${secondaryPost1.id}`}><div class="secondary-title">{secondaryPost1.data.title}</div></a>
+                    <a href={`/${secondaryPost1.slug.current}`} class="img-placeholder hero-secondary-img">ANIME</a>
+                    <span class="tag tag-anime">{secondaryPost1.categories?.[0]}</span>
+                    <a href={`/${secondaryPost1.slug.current}`}><div class="secondary-title">{secondaryPost1.title}</div></a>
                     <div class="card-meta">
-                        <span>{secondaryPost1.data.date}</span>
-                        <span>{getReadingTime(secondaryPost1)} min read</span>
+                        <span>{secondaryPost1.date}</span>
+                        <span>XXX min read</span>
                     </div>
                 </div>
+                )}
 
                 <!-- HERO SECONDARY 2 -->
+                {secondaryPost2 && (
                 <div class="hero-secondary">
-                    <a href={`/${secondaryPost2.id}`} class="img-placeholder hero-secondary-img">TECH</a>
-                    <span class="tag tag-tech">{secondaryPost2.data.categories?.[0]}</span>
-                    <a href={`/${secondaryPost2.id}`}><div class="secondary-title">{secondaryPost2.data.title}</div></a>
+                    <a href={`/${secondaryPost2.slug.current}`} class="img-placeholder hero-secondary-img">TECH</a>
+                    <span class="tag tag-tech">{secondaryPost2.categories?.[0]}</span>
+                    <a href={`/${secondaryPost2.slug.current}`}><div class="secondary-title">{secondaryPost2.title}</div></a>
                     <div class="card-meta">
-                        <span>{secondaryPost2.data.date}</span>
-                        <span>{getReadingTime(secondaryPost2)} min read</span>
+                        <span>{secondaryPost2.date}</span>
+                        <span>XXX min read</span>
                     </div>
                 </div>
+                )}
             </div>
         </div>
     </section>

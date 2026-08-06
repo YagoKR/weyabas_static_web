@@ -1,3 +1,5 @@
+import { maxLength } from "astro:schema";
+
 // src/schemaTypes/post.ts
 export default {
     name: 'posts',
@@ -8,6 +10,15 @@ export default {
             name: 'title',
             title: 'Título',
             type: 'string',
+        },
+        {
+            name: 'slug',
+            title: 'Slug (URL)',
+            type: 'slug',
+            options: {
+                source: 'title',
+                maxLength: 96,
+            }
         },
         {
             name: 'author',
@@ -41,5 +52,11 @@ export default {
             title: 'Resumen',
             type: 'text',
         },
+        {
+            name: 'content',
+            title: 'Contenido',
+            type: 'array',
+            of: [{ type: 'block' }],
+        }
     ],
 };
