@@ -33,6 +33,14 @@ export default {
             readOnly: true,
         },
         {
+            name: 'image',
+            title: 'Imagen',
+            type: 'image',
+            options: {
+                hotspot: true,
+            },
+        },
+        {
             name: 'categories',
             type: 'array',
             of: [{ type: 'string' }],
@@ -42,7 +50,7 @@ export default {
                     { title: 'Anime', value: 'anime' },
                     { title: 'Movies', value: 'movies' },
                     { title: 'Tech', value: 'tech' },
-                    { title: 'Theories', value: 'theories'},
+                    { title: 'Theories', value: 'theories' },
                 ],
                 layout: 'checkbox',
             },
