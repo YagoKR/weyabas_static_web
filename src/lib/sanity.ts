@@ -1,10 +1,10 @@
 import { createClient } from '@sanity/client';
 
-export const sanityClient = createClient({
-  projectId: '3v8sx1or',
-  dataset: 'production',
-  useCdn: false,
-  apiVersion: '2024-01-01',
+export const client = createClient({
+    projectId: '3v8sx1or',
+    dataset: 'production',
+    useCdn: false,
+    apiVersion: '2024-01-01',
 });
 
 export interface Deal {

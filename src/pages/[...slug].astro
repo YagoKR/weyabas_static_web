@@ -2,39 +2,28 @@
 // /src/pages/[...slug].astro
 import { PortableText } from 'astro-portabletext'
 import { getReadingTime } from '../utils/readingTime';
-// Para importar sanityClient e necesita instalar el paquete npm @sanity/client e importar los tipos de sanity:client al archivo /src/env.d.ts
-import { sanityClient } from "sanity:client";
+import { client } from '../lib/sanity';
 import Layout from '../layouts/Layout.astro';
 import Style from '../layouts/Style.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-/* getStaticPaths():
-  Devuelve un array de objetos con params (las URLs a crear) y props (los datos de cada página). 
-  Necesario para que Astro genere las paginas dinamicamente.
-*/
-export async function getStaticPaths() {
-  // Se piden los datos a Sanity con el cliente.
-  const posts = await sanityClient.fetch(
-    `*[_type == "posts" && defined(slug.current)] | order(date desc)`
-  );
+// Obtenemos el slug directamente de los parámetros de la URL
+const { slug } = Astro.params;
 
-  /*
-    - params: define la ruta URL de la pagina. Le dice a Astro el valor que usará para la ruta. En este caso, el slug.
-    - props: envía el resto de los datos de la página y los guarda en Astro.props.
-  */
-  return posts.map((post: any) => ({
-    params: { slug: post.slug.current },
-    props: { post },
-  }));
+// Consultamos Sanity directamente para la ruta SSR actual
+const post = await client.fetch(
+  `*[_type == "posts" && slug.current == $slug][0]`,
+  { slug }
+);
+
+// Si la URL no existe en Sanity, redirigimos a 404
+if (!post) {
+  return Astro.redirect('/404');
 }
 
-// Se exporta el contenido de post a Astro.props para asi poder trabajar con el contenido.
-const { post } = Astro.props;
-
-
 // const readingTime = getReadingTime(post.content);
-const readingTime = '0'
+const readingTime = '0';
 ---
 
 <Layout>
@@ -43,21 +32,21 @@ const readingTime = '0'
 
   <main>
     <div class="article-header">
-      <span class="tag tag-series">{post.categories}</span>
+      <span class="tag tag-series">{post.categories || 'General'}</span>
       <h1 class="article-title">{post.title}</h1>
       <p class="article-dek">{post.summary}</p>
 
       <div class="article-meta">
         <span>by <strong>{post.author}</strong></span>
         <span class="dot">◆</span>
-        <span>{new Date(post.date).toLocaleDateString('es-ES')}</span>
+        <span>{post.date ? new Date(post.date).toLocaleDateString('es-ES') : ''}</span>
         <span class="dot">◆</span>
         <span>{readingTime} min read</span>
       </div>
     </div>
 
     <div class="article-body">
-      <PortableText value={post.content} />
+      {post.content && <PortableText value={post.content} />}
     </div>
   </main>
 

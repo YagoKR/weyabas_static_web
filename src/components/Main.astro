@@ -5,7 +5,8 @@
     El componente Main.astro integra la mayor parte de los distintos componentes de la página principal.
 */
 
-import { sanityClient } from "../lib/sanity";
+//import { sanityClient } from "../lib/sanity";
+import { client } from '../lib/sanity';
 import { getReadingTime } from '../utils/readingTime'
 import { sortPosts } from '../utils/sortPosts'
 import YoutubeWG from './WidgetYoutube.astro'
@@ -15,7 +16,7 @@ import Trending from './Trending.astro'
 import Deals from './Deals.astro'
 
 // Buscar todos los posts y usar la funcion sortPosts() para que se organizen de mas recientes a mas antiguos.
-const posts = await sanityClient.fetch(`
+const posts = await client.fetch(`
   *[_type == "posts" && defined(slug.current)] | order(date desc)
 `);
 // Los tres articulos más recientes se ubican en el hero
