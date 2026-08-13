@@ -29,7 +29,7 @@ const dataset = client.config().dataset;
     <Footer />
 </Layout>
 
-{/* Script cliente compatible con SSG, SSR y Cloudflare Pages */}
+{/* Script cliente compatible con Cloudflare Pages */}
 <script is:inline define:vars={{ projectId, dataset }}>
     async function performSearch() {
         // 1. Obtener el parámetro 'q' de la URL actual
