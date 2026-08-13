@@ -1,3 +1,13 @@
+// readingTime.ts
+
+/*
+    getReadingTime(): calcula el tiempo de lectura estimado en minutos para un string de texto.
+
+    * @param {string} [text=''] - El texto plano/contenido del artículo.
+    * @returns {number} - El tiempo de lectura en minutos (valor entero).
+    
+*/
+
 export function getReadingTime(content: any): number {
   if (!content) return 0;
 

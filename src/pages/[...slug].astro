@@ -1,12 +1,20 @@
 ---
-// /src/pages/[...slug].astro
-import { PortableText } from "astro-portabletext";
-import { getReadingTime } from "../utils/readingTime";
-import { client } from "../lib/sanity";
-import Layout from "../layouts/Layout.astro";
-import Style from "../layouts/Style.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
+// [...slug].astro
+
+/*
+* Este archivo funciona como manejador de rutas dinámicas para todas las páginas de entradas y URLs de distintas profundidades.
+* 
+* Utiliza el parámetro Rest de Astro (`[...slug]`) para capturar URLs de cualquier profundidad
+* (ej. `/titulo-del-post` o `/categoria/subcategoria/titulo-del-post`).
+*/
+
+import { PortableText } from 'astro-portabletext'
+import { getReadingTime } from '../utils/readingTime';
+import { client } from '../lib/sanity';
+import Layout from '../layouts/Layout.astro';
+import Style from '../layouts/Style.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
 // Obtenemos el slug directamente de los parámetros de la URL
 const { slug } = Astro.params;
