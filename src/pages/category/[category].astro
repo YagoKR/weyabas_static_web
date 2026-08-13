@@ -1,14 +1,21 @@
 ---
-import Layout from "../../layouts/Layout.astro"; // Ajustamos la ruta porque ahora está dentro de category/
+import Layout from "../../layouts/Layout.astro"; 
 import Style from "../../layouts/Style.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import { client } from "../../lib/sanity";
+import imageUrlBuilder from "@sanity/image-url";
 
-// 1. Extraemos el parámetro "category" de la URL (ej. "series", "anime", "tech")
+// Inicializamos el creador de URLs de imágenes
+const builder = imageUrlBuilder(client);
+function urlFor(source: any) {
+  return builder.image(source);
+}
+
+// 1. Extraemos el parámetro "category" de la URL
 const { category } = Astro.params;
 
-// 2. Interfaz para TypeScript
+// 2. Interfaz para TypeScript (incluyendo image)
 interface Post {
     _id: string;
     title: string;
@@ -16,9 +23,10 @@ interface Post {
     date?: string;
     summary?: string;
     author?: string;
+    image?: any;
 }
 
-// 3. Consulta a Sanity usando $category (con signo $) y pasándole la variable al final
+// 3. Consulta a Sanity (añadido el campo `image`)
 const seriesPosts = await client.fetch<Post[]>(
     `*[_type == "posts" && $category in categories] | order(date desc) {
     _id,
@@ -26,9 +34,10 @@ const seriesPosts = await client.fetch<Post[]>(
     "slug": slug.current,
     date,
     summary,
-    author
+    author,
+    image
   }`,
-    { category }, // <-- AQUÍ se le pasa el valor de la URL a Sanity
+    { category },
 );
 
 // 4. Agrupar posts por fecha
@@ -76,14 +85,26 @@ const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
                                 <div class="posts-list">
                                     {posts.map((post) => (
                                         <article class="post-item">
-                                            <a href={`/${post.slug}`}>
-                                                <h3>{post.title}</h3>
-                                            </a>
-                                            {post.summary && (
-                                                <p class="post-summary">
-                                                    {post.summary}
-                                                </p>
+                                            {post.image && (
+                                                <a href={`/${post.slug}`} class="post-image-link">
+                                                    <img
+                                                        src={urlFor(post.image).width(600).height(338).fit('crop').url()}
+                                                        alt={post.title}
+                                                        loading="lazy"
+                                                    />
+                                                </a>
                                             )}
+
+                                            <div class="post-content">
+                                                <a href={`/${post.slug}`}>
+                                                    <h3>{post.title}</h3>
+                                                </a>
+                                                {post.summary && (
+                                                    <p class="post-summary">
+                                                        {post.summary}
+                                                    </p>
+                                                )}
+                                            </div>
                                         </article>
                                     ))}
                                 </div>
