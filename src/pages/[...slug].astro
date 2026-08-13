@@ -1,12 +1,12 @@
 ---
 // /src/pages/[...slug].astro
-import { PortableText } from 'astro-portabletext'
-import { getReadingTime } from '../utils/readingTime';
-import { client } from '../lib/sanity';
-import Layout from '../layouts/Layout.astro';
-import Style from '../layouts/Style.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import { PortableText } from "astro-portabletext";
+import { getReadingTime } from "../utils/readingTime";
+import { client } from "../lib/sanity";
+import Layout from "../layouts/Layout.astro";
+import Style from "../layouts/Style.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
 // Obtenemos el slug directamente de los parámetros de la URL
 const { slug } = Astro.params;
@@ -14,16 +14,16 @@ const { slug } = Astro.params;
 // Consultamos Sanity directamente para la ruta SSR actual
 const post = await client.fetch(
   `*[_type == "posts" && slug.current == $slug][0]`,
-  { slug }
+  { slug },
 );
 
 // Si la URL no existe en Sanity, redirigimos a 404
 if (!post) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
 // const readingTime = getReadingTime(post.content);
-const readingTime = '0';
+const readingTime = post.content ? getReadingTime(post.content) : 1;
 ---
 
 <Layout>
@@ -32,14 +32,24 @@ const readingTime = '0';
 
   <main>
     <div class="article-header">
-      <span class="tag tag-series">{post.categories || 'General'}</span>
+      <span class="tag tag-series">
+        {
+          Array.isArray(post.categories)
+            ? post.categories[0]
+            : post.categories || "General"
+        }
+      </span>
       <h1 class="article-title">{post.title}</h1>
       <p class="article-dek">{post.summary}</p>
 
       <div class="article-meta">
         <span>by <strong>{post.author}</strong></span>
         <span class="dot">◆</span>
-        <span>{post.date ? new Date(post.date).toLocaleDateString('es-ES') : ''}</span>
+        <span
+          >{
+            post.date ? new Date(post.date).toLocaleDateString("es-ES") : ""
+          }</span
+        >
         <span class="dot">◆</span>
         <span>{readingTime} min read</span>
       </div>

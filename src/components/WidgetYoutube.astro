@@ -38,7 +38,7 @@ try {
 <div class="yt-widget">
     <div class="yt-header">
         <span class="yt-icon">▶</span>
-        <span class="yt-header-text">Latest from <a href=`https://www.youtube.com/channel/${channelId}`>@{channel}</a></span>
+        <span class="yt-header-text">Latest from <a href={`https://www.youtube.com/channel/${channelId}`}>@{channel}</a></span>
     </div>
     <a href={`https://www.youtube.com/watch?v=${video.videoId}`} target="_blank" class="yt-thumb">
         {
@@ -57,8 +57,7 @@ try {
     <div class="yt-info">
         <div class="yt-title">{video.title}</div>
         <div class="yt-channel">
-            <a href=`https://www.youtube.com/channel/${channelId}`>@{channel}</a
-            >
+            <a href={`https://www.youtube.com/channel/${channelId}`}>@{channel}</a>
             {subscribers ? `· ${subscribers}` : ""}
         </div>
     </div>

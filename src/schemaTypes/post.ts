@@ -46,6 +46,7 @@ export default {
             of: [{ type: 'string' }],
             options: {
                 list: [
+                    { title: 'News', value: 'news' },
                     { title: 'Series', value: 'series' },
                     { title: 'Anime', value: 'anime' },
                     { title: 'Movies', value: 'movies' },

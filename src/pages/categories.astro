@@ -1,0 +1,99 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Style from "../layouts/Style.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { client } from "../lib/sanity";
+
+// 1. Extraemos el parámetro "category" de la URL (ej. "series", "anime", "tech")
+const { category } = Astro.params;
+
+// 2. Interfaz para TypeScript
+interface Post {
+    _id: string;
+    title: string;
+    slug: string;
+    date?: string;
+    summary?: string;
+    author?: string;
+}
+
+// 3. Consulta a Sanity usando $category (con signo $) y pasándole la variable al final
+const seriesPosts = await client.fetch<Post[]>(
+  `*[_type == "posts" && $category in categories] | order(date desc) {
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    summary,
+    author
+  }`,
+  { category } // <-- AQUÍ se le pasa el valor de la URL a Sanity
+);
+
+// 4. Agrupar posts por fecha
+const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
+    const postDate = post.date ? new Date(post.date) : new Date();
+
+    const dateKey = postDate.toLocaleDateString("es-ES", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+
+    if (!acc[dateKey]) {
+        acc[dateKey] = [];
+    }
+    acc[dateKey].push(post);
+    return acc;
+}, {});
+---
+
+<Layout>
+    <Style />
+    <Header />
+
+    <main class="series-container">
+        <!-- Mostramos el nombre de la categoría actual de forma dinámica -->
+        <h1 class="page-title" style="text-transform: capitalize;">
+            Noticias y Artículos de {category}
+        </h1>
+
+        <section class="posts-grouped">
+            {
+                Object.keys(groupedPosts).length === 0 ? (
+                    <p class="no-posts">
+                        No hay artículos de {category} disponibles.
+                    </p>
+                ) : (
+                    Object.entries(groupedPosts).map(([date, postsInDate]) => {
+                        const posts = postsInDate as Post[];
+
+                        return (
+                            <div class="date-group">
+                                <h2 class="date-title">{date}</h2>
+
+                                <div class="posts-list">
+                                    {posts.map((post) => (
+                                        <article class="post-item">
+                                            <a href={`/${post.slug}`}>
+                                                <h3>{post.title}</h3>
+                                            </a>
+                                            {post.summary && (
+                                                <p class="post-summary">
+                                                    {post.summary}
+                                                </p>
+                                            )}
+                                        </article>
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    })
+                )
+            }
+        </section>
+    </main>
+
+    <Footer />
+</Layout>

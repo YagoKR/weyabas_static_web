@@ -1,15 +1,29 @@
-import type { CollectionEntry } from 'astro:content'
+export function getReadingTime(content: any): number {
+  if (!content) return 0;
 
-/*
-getReadingTime():
-    Funcion para calcular tiempo de lectura. Consideramos que cualquier cadena de texto que acaba con 1 o mas caracteres en blanco es una palabra.
-    Se debe proporcionar un string a partir del cual se calculará el tiempo de lectura.  Si el string está vacío, se devuelve 0.
-*/
+  const wpm = 200; // Palabras por minuto
+  let text = '';
 
-export function getReadingTime(text: string = ''): number {    
-    // Se asume una velocidad de 200 PPM, la media estándar.
-    const wpm = 200;
-    const wordCount = text ? text.trim().split(/\s+/).length : 0;
-    const readingTime = Math.ceil(wordCount / wpm);
-    return readingTime
+  // 1. Si es un string simple
+  if (typeof content === 'string') {
+    text = content;
+  } 
+  // 2. Si es el array de bloques PortableText de Sanity
+  else if (Array.isArray(content)) {
+    text = content
+      .map((block) => {
+        if (block._type !== 'block' || !block.children) return '';
+        return block.children.map((child: any) => child.text).join(' ');
+      })
+      .join(' ');
+  }
+
+  // Contamos las palabras limpias
+  const cleanText = text.trim();
+  if (!cleanText) return 0;
+
+  const wordCount = cleanText.split(/\s+/).length;
+  const readingTime = Math.ceil(wordCount / wpm);
+
+  return readingTime;
 }

@@ -1,3 +1,12 @@
+---
+interface Props {
+  telegramUrl: string;
+}
+
+const { telegramUrl } = Astro.props;
+---
+
+
 <!-- TELEGRAM CTA -->
 <div class="telegram-cta">
     <div class="telegram-icon">✈️</div>
@@ -6,5 +15,5 @@
         Streaming sticks, anime figures, headphones & more — only the best
         discounts, curated daily.
     </p>
-    <a href="enlace_aqui" class="btn-telegram" target="_blank" rel="noopener">JOIN FREE CHANNEL</a>
+    <a href={telegramUrl} class="btn-telegram" target="_blank" rel="noopener">JOIN FREE CHANNEL</a>
 </div>

@@ -1,10 +1,46 @@
+---
+import { client } from '../lib/sanity';
+
+const { pathname } = Astro.url;
+
+const isActive = (path: string) => {
+  if (path === "/") return pathname === "/";
+  return pathname.includes(path);
+};
+
+// 1. Limitamos la consulta a EXACTAMENTE las 3 últimas noticias ([0..2])
+const breakingNews = await client.fetch(`
+  *[_type == "posts"] | order(date desc)[0..2] {
+    _id,
+    title,
+    "slug": slug.current
+  }
+`);
+
+// 2. Duplicamos solo esas 3 noticias para el bucle del noticiero
+const tickerItems = [...breakingNews, ...breakingNews];
+---
+
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-inner">
-    <div class="topbar-ticker">
-      <div><span>●</span> FROM S4 E7 just dropped — Best Laid Plans recap live</div>
-      <div><span>●</span> House of Dragon S3 premieres June 21</div>
-      <div><span>●</span> Spider-Noir renewed for Season 2</div>
+    <div class="topbar-ticker-wrapper">
+      <div class="topbar-ticker">
+        {
+          tickerItems.length > 0 ? (
+            tickerItems.map((post: any) => (
+              <div class="ticker-item">
+                <span class="ticker-dot">●</span>
+                <a href={`/${post.slug}`}>{post.title}</a>
+              </div>
+            ))
+          ) : (
+            <div class="ticker-item">
+              <span class="ticker-dot">●</span> Bienvenido a Weyalu Series — Toda la actualidad
+            </div>
+          )
+        }
+      </div>
     </div>
     <div class="topbar-right">
       <a href="#">Newsletter</a>
@@ -19,22 +55,26 @@
   <div class="header-inner">
     <div>
       <div class="logo">
-        <a href="index.html"><span class="logo-w">Weyalu</span><span class="logo-accent">series</span></a>
+        <a href="/">
+          <span class="logo-w">Weyalu</span><span class="logo-accent">series</span>
+        </a>
       </div>
       <div class="logo-sub">Series · Anime · Tech · Deals</div>
     </div>
+
     <nav>
-      <a href="#" class="nav-link active">News</a>
-      <a href="#" class="nav-link">Series</a>
-      <a href="#" class="nav-link">Anime</a>
-      <a href="#" class="nav-link">Movies</a>
-      <a href="#" class="nav-link">Tech</a>
-      <a href="#" class="nav-link">Theories</a>
+      <a href="/" class={`nav-link ${isActive("/") ? "active" : ""}`}>News</a>
+      <a href="/category/series" class={`nav-link ${isActive("/category/series") ? "active" : ""}`}>Series</a>
+      <a href="/category/anime" class={`nav-link ${isActive("/category/anime") ? "active" : ""}`}>Anime</a>
+      <a href="/category/movies" class={`nav-link ${isActive("/category/movies") ? "active" : ""}`}>Movies</a>
+      <a href="/category/tech" class={`nav-link ${isActive("/category/tech") ? "active" : ""}`}>Tech</a>
+      <a href="/category/theories" class={`nav-link ${isActive("/category/theories") ? "active" : ""}`}>Theories</a>
       <a href="#" class="nav-link nav-deals">🔥 Deals</a>
     </nav>
+
     <div class="header-search">
       <span class="search-icon">🔍</span>
-      <input type="text" placeholder="Search series, anime, tech…">
+      <input type="text" placeholder="Search series, anime, tech…" />
     </div>
   </div>
 </header>

@@ -1083,4 +1083,212 @@
     color: var(--text-dim);
     margin-top: 8px;
   }
+
+  /* ==========================================
+   ESTILOS DE LECTURA DEL ARTÍCULO ([...slug].astro)
+   ========================================== */
+
+main {
+  max-width: 800px; /* Ancho idóneo para lectura cómoda */
+  margin: 2.5rem auto;
+  padding: 0 1.5rem;
+}
+
+/* ENCABEZADO DEL POST */
+.article-header {
+  margin-bottom: 2.5rem;
+  text-align: left;
+}
+
+.tag-series {
+  display: inline-block;
+  background-color: rgba(0, 210, 255, 0.15);
+  color: #00d2ff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.article-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+}
+
+.article-dek {
+  font-size: 1.2rem;
+  color: #9ca3af;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  font-weight: 4rem;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+  border-top: 1px solid #1f2937;
+  border-bottom: 1px solid #1f2937;
+  padding: 0.8rem 0;
+}
+
+.article-meta strong {
+  color: #d1d5db;
+}
+
+.article-meta .dot {
+  font-size: 0.5rem;
+  color: #00d2ff;
+}
+
+/* CUERPO DEL POST (Renderizado por PortableText) */
+.article-body {
+  color: #e5e7eb;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.article-body p {
+  margin-bottom: 1.5rem;
+}
+
+.article-body h2 {
+  font-size: 1.75rem;
+  color: #ffffff;
+  margin: 2.5rem 0 1rem 0;
+  font-weight: 700;
+}
+
+.article-body h3 {
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin: 2rem 0 0.8rem 0;
+}
+
+.article-body blockquote {
+  border-left: 4px solid #00d2ff;
+  background: #0d1117;
+  padding: 1rem 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: #d1d5db;
+  border-radius: 0 8px 8px 0;
+}
+
+.article-body ul, .article-body ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.article-body li {
+  margin-bottom: 0.5rem;
+}
+
+.article-body img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+/* ==========================================
+   ANCHO MÁXIMO GLOBAL DE LA WEB
+   ========================================== */
+
+/* 1. El contenedor principal que envuelve las secciones */
+main, .main-container, .container, .hero, .latest-news-section {
+  width: 100%;
+  max-width: 1280px; /* Ancho estándar para dashboards/noticias */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* 2. Corrección para la sección LATEST NEWS (Grilla de 3 columnas) */
+.latest-news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* Evita que el texto aplaste las columnas */
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* 3. Ajuste para que las tarjetas de las noticias se expandan */
+.news-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.news-card h3 {
+  word-break: break-word; /* Evita desbordamientos raros de texto */
+  line-height: 1.3;
+}
+
+/* ==========================================
+   ANIMACIÓN TICKER ESTILO NOTICIERO
+   ========================================== */
+
+.topbar-ticker-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.topbar-ticker {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  white-space: nowrap;
+  animation: ticker-slide 25s linear infinite; /* Ajusta los segundos (25s) si quieres que vaya más rápido o lento */
+}
+
+/* Pausa la animación al pasar el ratón por encima para poder hacer clic fácil */
+.topbar-ticker-wrapper:hover .topbar-ticker {
+  animation-play-state: paused;
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap; /* Fuerza a que todo el título quede en 1 sola línea */
+}
+
+.ticker-item a {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ticker-item a:hover {
+  color: #00d2ff;
+}
+
+.ticker-dot {
+  color: #00d2ff;
+  font-size: 0.7rem;
+}
+
+/* Animación de desplazamiento */
+@keyframes ticker-slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
 </style>
