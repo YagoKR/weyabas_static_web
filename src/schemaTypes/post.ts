@@ -44,6 +44,12 @@ export default {
                     name: 'alt',
                     type: 'string',
                     title: 'Texto Alternativo'
+                },
+                {
+                    name: 'caption',
+                    type: 'string',
+                    title: 'Pie de foto',
+                    description: 'Ej: Imagen de tal película, escena de tal anime, etc.'
                 }
             ]
         },

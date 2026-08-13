@@ -33,7 +33,7 @@ if (!post) {
 
 const readingTime = post.content ? getReadingTime(post.content) : 1;
 
-// Detectamos el campo de la imagen (mainImage o image)
+// Detectamos el campo de la imagen
 const imageSource = post.mainImage || post.image;
 ---
 
@@ -41,7 +41,7 @@ const imageSource = post.mainImage || post.image;
   <Style />
   <Header />
 
-  <main>
+  <main class="article-container">
     <div class="article-header">
       <span class="tag tag-series">
         {
@@ -66,15 +66,22 @@ const imageSource = post.mainImage || post.image;
       </div>
     </div>
 
-    {/* IMAGEN PRINCIPAL DE SANITY */}
+    {/* IMAGEN PRINCIPAL CON PIE DE FOTO / CRÉDITOS */}
     {
       imageSource && (
-        <div class="article-hero-image">
+        <figure class="article-hero-figure">
           <img
-            src={urlFor(imageSource).width(1200).height(675).url()}
-            alt={post.title}
+            src={urlFor(imageSource).width(1200).auto('format').url()}
+            alt={imageSource.alt || post.title}
           />
-        </div>
+          {
+            imageSource.caption && (
+              <figcaption class="image-caption">
+                {imageSource.caption}
+              </figcaption>
+            )
+          }
+        </figure>
       )
     }
 
