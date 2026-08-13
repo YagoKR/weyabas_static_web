@@ -25,7 +25,7 @@ const { items } = Astro.props;
 
 <div class="card-grid">
     {
-        items.map((item) => (
+        items.map((item: any) => (
             <div class="card">
                 <div class="img-placeholder card-img">{item.img}</div>
                 <div class="card-body">

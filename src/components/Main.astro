@@ -8,22 +8,36 @@
 // IMPORT
 import { client } from '../lib/sanity';
 import { getReadingTime } from '../utils/readingTime'
-import { sortPosts } from '../utils/sortPosts'
+import { naturalDate } from '../utils/naturalDate'
+import { urlFor } from '../utils/urlFor'
 import YoutubeWG from './WidgetYoutube.astro'
 import DealsWG from './WidgetDeals.astro'
 import TelegramWG from './WidgetTelegram.astro'
 import Trending from './Trending.astro'
 import Deals from './Deals.astro'
 
-
-// Buscar todos los posts y usar la funcion sortPosts() para que se organizen de mas recientes a mas antiguos.
+/*
+* posts: se piden los posts a Sanity mediante un query GROQ. Estos se devuelven organizados en orden descendiente.
+*/
 const posts = await client.fetch(`
   *[_type == "posts" && defined(slug.current)] | order(date desc)
 `);
-// Los tres articulos más recientes se ubican en el hero
+
+/*
+* heroPosts: selecciona los tres artículos más recientes para colocar en el hero.
+*/
 const heroPosts = posts.slice(0, 3);
+/*
+* mainPost: variable que contiene el post más reciente.
+* secondaryPost1: variable que contiene el segundo post mas reciente.
+* SecondaryPost2: variable que contiene el tercer post más reciente.
+*/
 const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
 
+/*
+* latestNews: selecciona los artículos más recientes excluyendo aquellos incluidos en el hero. No se discrimina en base a categoría.
+*/
+const latestNews = posts.slice(3, 9);
 ---
 <!-- MAIN -->
 <main>
@@ -33,23 +47,34 @@ const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
             <div class="hero-grid">
                 <!-- HERO MAIN -->
                 <div class="hero-main">
-                    <a href={`/${mainPost.slug.current}`} class="img-placeholder hero-main-img" style="height:520px; font-size:14px; color:#1e2e3e; letter-spacing:3px;">
-                        FROM S4 HERO IMAGE
+                    <a href={`/${mainPost.slug.current}`} class="img-placeholder hero-main-img">
+                        {mainPost.image ? (
+                            <img 
+                            src={urlFor(mainPost.image)
+                                // .width(800)
+                                // .height(500)
+                                .auto('format')
+                                .url()
+                                } 
+                            alt={mainPost.image.alt || mainPost.title}
+                            loading="lazy"
+                            />
+                        ) : (
+                            <span>{mainPost.title}</span>
+                        )}
                     </a>
                     <div class="hero-main-content">
                         <span class="tag tag-series">{mainPost.categories?.[0]}</span>
                         <a href={`/${mainPost.slug.current}`}><h1 class="hero-title">{mainPost.title}</h1></a>
                         <div class="hero-meta">
-                            <span
-                                >by <strong style="color:#fff">Angel</strong
-                                ></span
-                            >
+                            <span>by <strong style="color:#fff">{mainPost.author}</strong></span>
                             <span class="dot">◆</span>
-                            <span>{mainPost.date}</span>
+                            <span>{naturalDate(mainPost.date)}</span>
                             <span class="dot">◆</span>
-                            <span>XXX min read</span>
-                            <span class="dot">◆</span>
-                            <span style="color:var(--neon)">MGM+</span>
+                            <span>{getReadingTime(mainPost.content)} min read</span>
+                            
+                            <!-- <span class="dot">◆</span> -->
+                            <!-- <span style="color:var(--neon)">MGM+</span> -->
                         </div>
                     </div>
                 </div>
@@ -57,12 +82,27 @@ const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
                 <!-- HERO SECONDARY 1 -->
                 {secondaryPost1 && (
                 <div class="hero-secondary">
-                    <a href={`/${secondaryPost1.slug.current}`} class="img-placeholder hero-secondary-img">ANIME</a>
+                    <a href={`/${secondaryPost1.slug.current}`} class="img-placeholder hero-secondary-img">
+                        {secondaryPost1.image ? (
+                            <img 
+                            src={urlFor(secondaryPost1.image)
+                                // .width(800)
+                                // .height(500)
+                                .auto('format')
+                                .url()
+                                } 
+                            alt={secondaryPost1.image.alt || secondaryPost1.title}
+                            loading="lazy"
+                            />
+                        ) : (
+                            <span>{secondaryPost1.title}</span>
+                        )}
+                    </a>
                     <span class="tag tag-anime">{secondaryPost1.categories?.[0]}</span>
                     <a href={`/${secondaryPost1.slug.current}`}><div class="secondary-title">{secondaryPost1.title}</div></a>
                     <div class="card-meta">
-                        <span>{secondaryPost1.date}</span>
-                        <span>XXX min read</span>
+                        <span>{naturalDate(secondaryPost1.date)}</span>
+                        <span>{getReadingTime(secondaryPost1.content)} min read</span>
                     </div>
                 </div>
                 )}
@@ -70,19 +110,35 @@ const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
                 <!-- HERO SECONDARY 2 -->
                 {secondaryPost2 && (
                 <div class="hero-secondary">
-                    <a href={`/${secondaryPost2.slug.current}`} class="img-placeholder hero-secondary-img">TECH</a>
+                    <a href={`/${secondaryPost2.slug.current}`} class="img-placeholder hero-secondary-img">
+                        {secondaryPost2.image ? (
+                            <img 
+                            src={urlFor(secondaryPost2.image)
+                                // .width(800)
+                                // .height(500)
+                                .auto('format')
+                                .url()
+                                } 
+                            alt={secondaryPost2.image.alt || secondaryPost2.title}
+                            loading="lazy"
+                            />
+                        ) : (
+                            <span>{secondaryPost2.title}</span>
+                        )}
+                    </a>
                     <span class="tag tag-tech">{secondaryPost2.categories?.[0]}</span>
                     <a href={`/${secondaryPost2.slug.current}`}><div class="secondary-title">{secondaryPost2.title}</div></a>
                     <div class="card-meta">
-                        <span>{secondaryPost2.date}</span>
-                        <span>XXX min read</span>
+                        <span>{naturalDate(secondaryPost2.date)}</span>
+                        <span>{getReadingTime(secondaryPost2.content)} min read</span>
                     </div>
                 </div>
                 )}
             </div>
         </div>
     </section>
-    
+    <!-- /HERO -->
+
     <!-- AD SLOT -->
     <div class="container">
         <div class="ad-slot"><span>Advertisement</span></div>
@@ -99,119 +155,39 @@ const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
                     <div class="section-line"></div>
                     <a href="#" class="section-more">All News →</a>
                 </div>
-
+                <!-- Se utiliza la variable latestNews, que contiene 6 de los últimos posts más recientes (si existen) excluyendo aquellos
+                que están en el hero. -->
                 <div class="card-grid">
                     <div class="card">
-                        <div class="img-placeholder card-img">FROM</div>
+                        {latestNews.map((post: any) => (
+                        <a href={`/${post.slug.current}`} class="img-placeholder card-img">
+                            {post.image ? (
+                                <img 
+                                src={urlFor(post.image)
+                                    // .width(800)
+                                    // .height(500)
+                                    .auto('format')
+                                    .url()
+                                    } 
+                                alt={post.image.alt || post.title}
+                                loading="lazy"
+                                />
+                            ) : (
+                                <span>{post.title}</span>
+                            )}
+                        </a>
                         <div class="card-body">
-                            <span class="tag tag-series">Series</span>
-                            <div class="card-title">
-                                Roger Is No Longer Human — What the Man in
-                                Yellow Did to Him Changes Everything
-                            </div>
+                            <span class="tag tag-series">{post.categories}</span>
+                            <a href={`/${post.slug.current}`}><div class="card-title">{post.title}</div></a>
                             <div class="card-excerpt">
-                                The Colony House attack at the end of Episode 7
-                                wasn't just horror. It was a message from the
-                                entity controlling the town.
+                                {post.summary}
                             </div>
                             <div class="card-meta">
-                                <span>June 9</span><span>5 min</span>
+                            <span>{naturalDate(post.date)}</span>
+                            <span>{getReadingTime(post.content)} min read</span>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="img-placeholder card-img">ATLA</div>
-                        <div class="card-body">
-                            <span class="tag tag-series">Series</span>
-                            <div class="card-title">
-                                Avatar Live-Action Season 2: Why Toph Is the
-                                Character That Will Make or Break This Show
-                            </div>
-                            <div class="card-excerpt">
-                                Netflix finally revealed the actor playing Toph,
-                                and the fandom is already divided. Here's why
-                                the casting matters so much.
-                            </div>
-                            <div class="card-meta">
-                                <span>June 9</span><span>4 min</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="img-placeholder card-img">BEARS</div>
-                        <div class="card-body">
-                            <span class="tag tag-series">Series</span>
-                            <div class="card-title">
-                                The Bear Season 5 Is the Final Season — And the
-                                Real Reason Will Make You Emotional
-                            </div>
-                            <div class="card-excerpt">
-                                FX just confirmed it. The Bear ends with Season
-                                5. The showrunner's statement reveals what this
-                                was always building toward.
-                            </div>
-                            <div class="card-meta">
-                                <span>June 8</span><span>3 min</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="img-placeholder card-img">SPIDER</div>
-                        <div class="card-body">
-                            <span class="tag tag-series">Series</span>
-                            <div class="card-title">
-                                Spider-Noir Season 2: Everything We Know So Far
-                                After the Renewal Announcement
-                            </div>
-                            <div class="card-excerpt">
-                                Prime Video made it official. Nicolas Cage
-                                returns. Here's every confirmed detail and what
-                                the showrunners teased.
-                            </div>
-                            <div class="card-meta">
-                                <span>June 8</span><span>4 min</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="img-placeholder card-img">ANIME</div>
-                        <div class="card-body">
-                            <span class="tag tag-anime">Anime</span>
-                            <div class="card-title">
-                                Why One Piece's Elbaf Arc Is Already Being
-                                Called the Best Arc in the Entire Series
-                            </div>
-                            <div class="card-excerpt">
-                                Fans who read the manga knew this was coming.
-                                Now anime-only viewers are experiencing it for
-                                the first time — and losing it.
-                            </div>
-                            <div class="card-meta">
-                                <span>June 8</span><span>6 min</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="img-placeholder card-img">TECH</div>
-                        <div class="card-body">
-                            <span class="tag tag-tech">Tech</span>
-                            <div class="card-title">
-                                Amazon Fire TV Stick 4K vs Roku Ultra 2026:
-                                Which Streaming Stick Is Worth Your Money?
-                            </div>
-                            <div class="card-excerpt">
-                                We tested both with Netflix, HBO Max, Disney+,
-                                and MGM+. The winner isn't who you'd expect.
-                            </div>
-                            <div class="card-meta">
-                                <span>June 7</span><span>7 min</span>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
 
