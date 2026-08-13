@@ -72,9 +72,16 @@ const tickerItems = [...breakingNews, ...breakingNews];
       <a href="#" class="nav-link nav-deals">🔥 Deals</a>
     </nav>
 
-    <div class="header-search">
+    {/* BUSCADOR CONECTADO A /search */}
+    <form action="/search" method="GET" class="header-search">
       <span class="search-icon">🔍</span>
-      <input type="text" placeholder="Search series, anime, tech…" />
-    </div>
+      <input 
+        type="text" 
+        name="q" 
+        placeholder="Search series, anime, tech…" 
+        required
+        autocomplete="off"
+      />
+    </form>
   </div>
 </header>

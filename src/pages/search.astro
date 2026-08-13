@@ -1,0 +1,117 @@
+---
+// src/pages/search.astro
+import Layout from "../layouts/Layout.astro";
+import Style from "../layouts/Style.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { client } from "../lib/sanity";
+
+const projectId = client.config().projectId;
+const dataset = client.config().dataset;
+---
+
+<Layout>
+    <Style />
+    <Header />
+
+    <main class="search-container">
+        <header class="search-header">
+            <h1>Resultados de búsqueda</h1>
+            <p id="search-status" class="search-subtitle">
+                Cargando resultados...
+            </p>
+        </header>
+
+        {/* Contenedor donde se insertarán los resultados con JS */}
+        <div id="results-list" class="results-list"></div>
+    </main>
+
+    <Footer />
+</Layout>
+
+{/* Script cliente compatible con Cloudflare Pages */}
+<script is:inline define:vars={{ projectId, dataset }}>
+    async function performSearch() {
+        // 1. Obtener el parámetro 'q' de la URL actual
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get("q") || "";
+
+        const statusEl = document.getElementById("search-status");
+        const container = document.getElementById("results-list");
+
+        if (!container || !statusEl) return;
+
+        if (!query.trim()) {
+            statusEl.textContent = "Escribe algo en el buscador para empezar.";
+            return;
+        }
+
+        statusEl.innerHTML = `Mostrando resultados para: <strong>"${query}"</strong>`;
+
+        try {
+            // 2. Consulta GROQ para buscar por título o resumen
+            const groqQuery = encodeURIComponent(
+                `*[_type == "posts" && (title match "*${query}*" || summary match "*${query}*")] | order(date desc) {
+          _id,
+          title,
+          "slug": slug.current,
+          date,
+          summary,
+          "imageUrl": image.asset->url
+        }`,
+            );
+
+            // 3. Petición directa a la API HTTP pública de Sanity
+            const url = `https://${projectId}.api.sanity.io/v1/data/query/${dataset}?query=${groqQuery}`;
+            const res = await fetch(url);
+            const data = await res.json();
+            const posts = data.result || [];
+
+            // 4. Mostrar total de resultados
+            statusEl.innerHTML = `Mostrando ${posts.length} resultado(s) para: <strong>"${query}"</strong>`;
+
+            if (posts.length === 0) {
+                container.innerHTML = `<p class="no-results">No se encontraron artículos que coincidan con tu búsqueda.</p>`;
+                return;
+            }
+
+            // 5. Renderizar los resultados en el DOM
+            container.innerHTML = posts
+                .map((post) => {
+                    const formattedDate = post.date
+                        ? new Date(post.date).toLocaleDateString("es-ES", {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                          })
+                        : "";
+
+                    const imgHtml = post.imageUrl
+                        ? `<a href="/${post.slug}" class="search-card-image">
+               <img src="${post.imageUrl}?w=500&auto=format" alt="${post.title}" loading="lazy" />
+             </a>`
+                        : "";
+
+                    return `
+          <article class="search-card">
+            ${imgHtml}
+            <div class="search-card-content">
+              ${formattedDate ? `<span class="search-card-date">${formattedDate}</span>` : ""}
+              <h2>
+                <a href="/${post.slug}">${post.title}</a>
+              </h2>
+              ${post.summary ? `<p>${post.summary}</p>` : ""}
+            </div>
+          </article>
+        `;
+                })
+                .join("");
+        } catch (error) {
+            console.error("Error al buscar en Sanity:", error);
+            statusEl.textContent =
+                "Ocurrió un error al realizar la búsqueda. Inténtalo de nuevo.";
+        }
+    }
+
+    performSearch();
+</script>
