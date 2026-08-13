@@ -38,6 +38,8 @@ const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
 * latestNews: selecciona los artículos más recientes excluyendo aquellos incluidos en el hero. No se discrimina en base a categoría.
 */
 const latestNews = posts.slice(3, 9);
+
+console.log(secondaryPost1.categories)
 ---
 <!-- MAIN -->
 <main>
@@ -64,7 +66,7 @@ const latestNews = posts.slice(3, 9);
                         )}
                     </a>
                     <div class="hero-main-content">
-                        <span class="tag tag-series">{mainPost.categories?.[0]}</span>
+                        <span class={`tag tag-${mainPost.categories}`}>{mainPost.categories?.[0]}</span>
                         <a href={`/${mainPost.slug.current}`}><h1 class="hero-title">{mainPost.title}</h1></a>
                         <div class="hero-meta">
                             <span>by <strong style="color:#fff">{mainPost.author}</strong></span>
@@ -82,7 +84,7 @@ const latestNews = posts.slice(3, 9);
                 <!-- HERO SECONDARY 1 -->
                 {secondaryPost1 && (
                 <div class="hero-secondary">
-                    <a href={`/${secondaryPost1.slug.current}`} class="img-placeholder hero-secondary-img">
+                    <a href={`/${secondaryPost1.slug.current}`} class="hero-secondary-img">
                         {secondaryPost1.image ? (
                             <img 
                             src={urlFor(secondaryPost1.image)
@@ -98,7 +100,7 @@ const latestNews = posts.slice(3, 9);
                             <span>{secondaryPost1.title}</span>
                         )}
                     </a>
-                    <span class="tag tag-anime">{secondaryPost1.categories?.[0]}</span>
+                    <span class={`tag tag-${secondaryPost1.categories}`}>{secondaryPost1.categories?.[0]}</span>
                     <a href={`/${secondaryPost1.slug.current}`}><div class="secondary-title">{secondaryPost1.title}</div></a>
                     <div class="card-meta">
                         <span>{naturalDate(secondaryPost1.date)}</span>
@@ -110,7 +112,7 @@ const latestNews = posts.slice(3, 9);
                 <!-- HERO SECONDARY 2 -->
                 {secondaryPost2 && (
                 <div class="hero-secondary">
-                    <a href={`/${secondaryPost2.slug.current}`} class="img-placeholder hero-secondary-img">
+                    <a href={`/${secondaryPost2.slug.current}`} class="hero-secondary-img">
                         {secondaryPost2.image ? (
                             <img 
                             src={urlFor(secondaryPost2.image)
@@ -126,7 +128,7 @@ const latestNews = posts.slice(3, 9);
                             <span>{secondaryPost2.title}</span>
                         )}
                     </a>
-                    <span class="tag tag-tech">{secondaryPost2.categories?.[0]}</span>
+                    <span class={`tag tag-${secondaryPost2.categories}`}>{secondaryPost2.categories?.[0]}</span>
                     <a href={`/${secondaryPost2.slug.current}`}><div class="secondary-title">{secondaryPost2.title}</div></a>
                     <div class="card-meta">
                         <span>{naturalDate(secondaryPost2.date)}</span>
@@ -160,7 +162,7 @@ const latestNews = posts.slice(3, 9);
                 <div class="card-grid">
                     <div class="card">
                         {latestNews.map((post: any) => (
-                        <a href={`/${post.slug.current}`} class="img-placeholder card-img">
+                        <a href={`/${post.slug.current}`} class="card-img">
                             {post.image ? (
                                 <img 
                                 src={urlFor(post.image)
@@ -177,7 +179,7 @@ const latestNews = posts.slice(3, 9);
                             )}
                         </a>
                         <div class="card-body">
-                            <span class="tag tag-series">{post.categories}</span>
+                            <span class={`tag tag-${post.categories}`}>{post.categories}</span>
                             <a href={`/${post.slug.current}`}><div class="card-title">{post.title}</div></a>
                             <div class="card-excerpt">
                                 {post.summary}

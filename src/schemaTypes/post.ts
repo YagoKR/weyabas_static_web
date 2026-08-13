@@ -59,11 +59,11 @@ export default {
             of: [{ type: 'string' }],
             options: {
                 list: [
-                    { title: 'News', value: 'news' },
+                    // { title: 'News', value: 'news' },
                     { title: 'Series', value: 'series' },
                     { title: 'Anime', value: 'anime' },
-                    { title: 'Movies', value: 'movies' },
                     { title: 'Tech', value: 'tech' },
+                    { title: 'Movies', value: 'movies' },
                     { title: 'Theories', value: 'theories' },
                 ],
                 layout: 'checkbox',
