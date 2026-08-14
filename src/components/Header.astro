@@ -8,17 +8,22 @@ const isActive = (path: string) => {
   return pathname.includes(path);
 };
 
-// 1. Limitamos la consulta a EXACTAMENTE las 3 últimas noticias ([0..2])
+// 1. Obtenemos las últimas noticias con slug definido
 const breakingNews = await client.fetch(`
-  *[_type == "posts"] | order(date desc)[0..2] {
+  *[_type == "posts" && defined(slug.current)] | order(date desc)[0..2] {
     _id,
     title,
     "slug": slug.current
   }
 `);
 
-// 2. Duplicamos solo esas 3 noticias para el bucle del noticiero
-const tickerItems = [...breakingNews, ...breakingNews];
+// Multiplicamos el array si hay muy pocas noticias para asegurarnos de llenar la pantalla
+const baseItems = breakingNews.length > 0 ? breakingNews : [
+  { title: "Bienvenido a Weyalu Series — Toda la actualidad", slug: "#" }
+];
+
+// Si hay menos de 4 noticias, las duplicamos en el grupo base para asegurar densidad
+const listItems = baseItems.length < 4 ? [...baseItems, ...baseItems] : baseItems;
 ---
 
 <!-- TOPBAR -->
@@ -26,20 +31,27 @@ const tickerItems = [...breakingNews, ...breakingNews];
   <div class="topbar-inner">
     <div class="topbar-ticker-wrapper">
       <div class="topbar-ticker">
-        {
-          tickerItems.length > 0 ? (
-            tickerItems.map((post: any) => (
-              <div class="ticker-item">
-                <span class="ticker-dot">●</span>
-                <a href={`/${post.slug}`}>{post.title}</a>
-              </div>
-            ))
-          ) : (
+        
+        <!-- BLOQUE 1 -->
+        <div class="ticker-group">
+          {listItems.map((post: any) => (
             <div class="ticker-item">
-              <span class="ticker-dot">●</span> Bienvenido a Weyalu Series — Toda la actualidad
+              <span class="ticker-dot">●</span>
+              <a href={`/${post.slug}`}>{post.title}</a>
             </div>
-          )
-        }
+          ))}
+        </div>
+
+        <!-- BLOQUE 2 (Copia idéntica para bucle fluido) -->
+        <div class="ticker-group" aria-hidden="true">
+          {listItems.map((post: any) => (
+            <div class="ticker-item">
+              <span class="ticker-dot">●</span>
+              <a href={`/${post.slug}`}>{post.title}</a>
+            </div>
+          ))}
+        </div>
+
       </div>
     </div>
     <div class="topbar-right">

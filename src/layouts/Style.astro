@@ -1281,7 +1281,7 @@ main, .main-container, .container, .hero, .latest-news-section {
 }
 
 /* ==========================================
-   ANIMACIÓN TICKER ESTILO NOTICIERO
+   ANIMACIÓN TICKER ESTILO NOTICIERO (CONTINUO)
    ========================================== */
 
 .topbar-ticker-wrapper {
@@ -1296,14 +1296,21 @@ main, .main-container, .container, .hero, .latest-news-section {
 .topbar-ticker {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  white-space: nowrap;
-  animation: ticker-slide 25s linear infinite; /* Ajusta los segundos (25s) si quieres que vaya más rápido o lento */
+  width: max-content; /* Clave para calcular exactamente el 100% del contenido duplicado */
+  animation: ticker-slide 25s linear infinite; /* Ajusta la velocidad si lo deseas */
 }
 
-/* Pausa la animación al pasar el ratón por encima para poder hacer clic fácil */
+/* Pausa la animación al pasar el ratón por encima */
 .topbar-ticker-wrapper:hover .topbar-ticker {
   animation-play-state: paused;
+}
+
+/* Grupos en paralelo para lograr el bucle perfecto */
+.ticker-group {
+  display: flex;
+  align-items: center;
+  gap: 2rem; /* Espaciado entre elementos */
+  padding-right: 2rem; /* IMPORTANTE: Mismo valor que el gap para mantener la cadencia */
 }
 
 .ticker-item {
@@ -1317,6 +1324,7 @@ main, .main-container, .container, .hero, .latest-news-section {
   color: inherit;
   text-decoration: none;
   white-space: nowrap;
+  transition: color 0.2s ease;
 }
 
 .ticker-item a:hover {
@@ -1328,7 +1336,7 @@ main, .main-container, .container, .hero, .latest-news-section {
   font-size: 0.7rem;
 }
 
-/* Animación de desplazamiento */
+/* Desplazamiento continuo sin saltos visuales */
 @keyframes ticker-slide {
   0% {
     transform: translateX(0);
@@ -1518,5 +1526,56 @@ main, .main-container, .container, .hero, .latest-news-section {
   .search-card-image {
     width: 100%;
   }
+}
+/* 1. Tarjeta con altura rígida o distribución uniforme */
+.card, 
+.category-card, 
+.news-card {
+  background-color: #080b11 !important;
+  padding: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important; /* Llena la celda */
+  box-sizing: border-box !important;
+}
+
+/* 2. Cortar TÍTULOS a máximo 2 o 3 líneas con puntos suspensivos */
+.card h3,
+.card-title,
+.category-card h3,
+.category-card .card-title {
+  font-size: 1.05rem !important;
+  line-height: 1.25 !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  margin: 8px 0 !important;
+  
+  /* ESTO ES LO QUE CORTA EL TEXTO LARGO DE JENNA ORTEGA */
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important; /* Fuerza máximo 2 líneas (cámbialo a 3 si prefieres) */
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* 3. Cortar el EXTRACTO (Prueba de post en sanity) si existe */
+.card-excerpt,
+.card p {
+  font-size: 0.85rem !important;
+  color: #8b949e !important;
+  margin-bottom: 8px !important;
+  
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important; /* Máximo 1 línea de extracto */
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+/* 4. Empujar la FECHA / MINUTOS siempre al fondo de la tarjeta */
+.card-date,
+.card-footer,
+.card span:last-child {
+  margin-top: auto !important; /* Alinea la fecha abajo del todo en TODAS las tarjetas */
+  padding-top: 10px !important;
 }
 </style>

@@ -19,13 +19,14 @@ function urlFor(source: any) {
 
 // Obtenemos el slug de los parámetros de la URL
 const { slug } = Astro.params;
-
+const slugValue = Array.isArray(slug) ? slug[0] : slug;
 // Consultamos Sanity para el post actual
 const post = await client.fetch(
   `*[_type == "posts" && slug.current == $slug][0]`,
-  { slug },
+  { slug: slugValue },
 );
 
+console.log('SlugValue:', slugValue);
 // Si la URL no existe en Sanity, redirigimos a 404
 if (!post) {
   return Astro.redirect("/404");

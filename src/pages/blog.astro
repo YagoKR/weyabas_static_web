@@ -1,19 +1,27 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
-import Footer from "../components/Footer.astro";
-import { sortPosts } from "../utils/sortPosts";
-import Header from "../components/Header.astro";
-import Style from "../layouts/Style.astro";
 import Layout from "../layouts/Layout.astro";
+import Style from "../layouts/Style.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { client } from "../lib/sanity";
 
-// 1. Obtenemos y ordenamos los posts
-const posts = await getCollection("posts");
-const sortedPosts = sortPosts(posts);
+// 1. Consultamos TODOS los posts en Sanity trayendo la URL de la imagen y ordenando por fecha
+const posts = await client.fetch(`
+  *[_type == "posts" && defined(slug.current)] | order(date desc) {
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    summary,
+    categories,
+    "imageUrl": image.asset->url
+  }
+`);
 
-// 2. Agrupamos los posts por fecha
-const groupedPosts = sortedPosts.reduce(
-    (acc, post) => {
-        const dateKey = new Date(post.data.date).toLocaleDateString("es-ES", {
+// 2. Agrupamos los posts por fecha formateada en español
+const groupedPosts = posts.reduce(
+    (acc: any, post: any) => {
+        const dateKey = new Date(post.date).toLocaleDateString("es-ES", {
             year: "numeric",
             month: "long",
             day: "numeric",
@@ -25,72 +33,91 @@ const groupedPosts = sortedPosts.reduce(
         acc[dateKey].push(post);
         return acc;
     },
-    {} as Record<string, typeof sortedPosts>,
+    {} as Record<string, typeof posts>,
 );
 ---
 
-<Layout>
+<Layout title="Todas las Noticias | Weyalu Series">
     <Style />
     <Header />
 
-    <!-- Sección de Artículos Agrupados por Fecha -->
-    <section class="posts-grouped">
-        {
-            Object.entries(groupedPosts).map(([date, postsInDate]) => (
-                <div class="date-group">
-                    {/* Título del grupo de fecha */}
-                    <h2 class="date-title">{date}</h2>
+    <main style="max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem;">
+        <div style="margin-bottom: 2rem;">
+            <h1
+                style="color: #fff; font-size: 2rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;"
+            >
+                <span style="color: #00d2ff;">•</span> ALL NEWS
+            </h1>
+        </div>
 
-                    {/* Lista de posts pertenecientes a esa fecha */}
-                    <div class="posts-list">
-                        {postsInDate.map((post) => (
-                            <a href={`/blog/${post.id}`} class="post-item">
-                                <h3>{post.data.title}</h3>
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            ))
-        }
-    </section>
+        <!-- Sección de Artículos Agrupados por Fecha -->
+        <div class="posts-grouped">
+            {
+                Object.entries(groupedPosts).map(
+                    ([date, postsInDate]: [string, any]) => (
+                        <section style="margin-bottom: 3rem;">
+                            {/* Título de la fecha */}
+                            <h2 style="color: #00d2ff; font-size: 1.2rem; font-weight: 700; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.5rem; margin-bottom: 1.25rem; text-transform: capitalize;">
+                                {date}
+                            </h2>
 
-    <!-- ARTICLE BODY -->
-    <div class="article-body">
-        <p>OPENING PARAGRAPH</p>
+                            {/* Grilla de noticias publicadas ese día */}
+                            <div class="card-grid">
+                                {postsInDate.map((post: any) => (
+                                    <article class="card">
+                                        {post.imageUrl && (
+                                            <div class="card-img">
+                                                <img
+                                                    src={post.imageUrl}
+                                                    alt={post.title}
+                                                />
+                                            </div>
+                                        )}
 
-        <p>CONTEXT_PARAGRAPH — background the reader needs</p>
+                                        {post.categories &&
+                                            post.categories[0] && (
+                                                <span
+                                                    class={`badge badge-${post.categories[0].toLowerCase()}`}
+                                                >
+                                                    {post.categories[0]}
+                                                </span>
+                                            )}
 
-        <div class="ad-slot"><span>Advertisement</span></div>
+                                        <h3 class="card-title">
+                                            <a
+                                                href={`/${post.slug}`}
+                                                style="color: inherit; text-decoration: none;"
+                                            >
+                                                {post.title}
+                                            </a>
+                                        </h3>
 
-        <h2>SUBHEAD_1</h2>
-        <p>PARAGRAPH</p>
-        <p>PARAGRAPH</p>
+                                        {post.summary && (
+                                            <p class="card-excerpt">
+                                                {post.summary}
+                                            </p>
+                                        )}
 
-        <blockquote>
-            PULL_QUOTE — short punchy line pulled from the analysis
-        </blockquote>
-
-        <p>PARAGRAPH</p>
-
-        <figure>
-            <div class="img-placeholder">SECONDARY_IMAGE_LABEL</div>
-            <figcaption>IMAGE_CAPTION</figcaption>
-        </figure>
-
-        <h2>SUBHEAD_2</h2>
-        <p>PARAGRAPH</p>
-
-        <ul>
-            <li>BULLET_POINT</li>
-            <li>BULLET_POINT</li>
-            <li>BULLET_POINT</li>
-        </ul>
-
-        <div class="ad-slot"><span>Advertisement</span></div>
-
-        <h2>SUBHEAD_3 — e.g. "What This Means Going Forward"</h2>
-        <p>CLOSING_PARAGRAPH — wrap-up / what to expect next</p>
-    </div>
+                                        <div style="margin-top: auto; display: flex; justify-content: space-between; font-size: 0.8rem; color: #8b949e; padding-top: 10px;">
+                                            <span>
+                                                {new Date(
+                                                    post.date,
+                                                ).toLocaleDateString("en-US", {
+                                                    month: "short",
+                                                    day: "numeric",
+                                                    year: "numeric",
+                                                })}
+                                            </span>
+                                        </div>
+                                    </article>
+                                ))}
+                            </div>
+                        </section>
+                    ),
+                )
+            }
+        </div>
+    </main>
 
     <Footer />
 </Layout>
