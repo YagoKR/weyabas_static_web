@@ -25,7 +25,7 @@ const baseItems = breakingNews.length > 0 ? breakingNews : [
 // Si hay menos de 4 noticias, las duplicamos en el grupo base para asegurar densidad
 const listItems = baseItems.length < 4 ? [...baseItems, ...baseItems] : baseItems;
 ---
-
+<header>
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-inner">
@@ -63,7 +63,7 @@ const listItems = baseItems.length < 4 ? [...baseItems, ...baseItems] : baseItem
 </div>
 
 <!-- HEADER -->
-<header>
+
   <div class="header-inner">
     <div>
       <div class="logo">
