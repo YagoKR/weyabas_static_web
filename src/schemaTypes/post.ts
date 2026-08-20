@@ -79,6 +79,14 @@ export default {
             title: 'Contenido',
             type: 'array',
             of: [{ type: 'block' }],
+        },
+        {
+            name: 'views',
+            title: 'Número de clics (views)',
+            type: 'number',
+            initialValue: 0,
+            readOnly: true, 
+            hidden: true,
         }
     ],
 };

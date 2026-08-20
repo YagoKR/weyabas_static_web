@@ -93,3 +93,12 @@ const imageSource = post.mainImage || post.image;
 
   <Footer />
 </Layout>
+
+{/* Script para enviar vistas */}
+<script is:inline define:vars={{ postId: post._id }}>
+  if (postId) {
+    fetch(`/api/views/${postId}`, { method: 'POST' }).catch((err) =>
+      console.error('Error enviando visita:', err)
+    );
+  }
+</script>

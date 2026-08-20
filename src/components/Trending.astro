@@ -1,34 +1,42 @@
-<!-- TRENDING -->
+---
+import { client } from "../lib/sanity";
+
+// Traemos las 5 noticias con más clics
+const trendingPosts = await client.fetch(`
+  *[_type == "posts" && defined(slug.current)] | order(views desc)[0..4] {
+    _id,
+    title,
+    "slug": slug.current,
+    views
+    }
+`);
+---
+
 <div class="sidebar-widget">
-    <div class="widget-title">Trending Now</div>
+    <div class="widget-title"><span class="dot">•</span> TRENDING NOW</div>
+    {trendingPosts.map((post: any, index: number) => (
     <div class="trending-item">
-        <div class="trending-num">01</div>
+    <!-- Genera el número 01, 02, etc. automáticamente -->
+        <div class="trending-num">
+            {String(index + 1).padStart(2, '0')}
+        </div>
         <div class="trending-text">
-            Why Did Boyd's Totem Fail on the Creatures in FROM?
+            <a href={`/${post.slug}`} class="trending-link">
+                {post.title}
+            </a>
         </div>
     </div>
-    <div class="trending-item">
-        <div class="trending-num">02</div>
-        <div class="trending-text">
-            Roger Is Now Something Completely Different — FROM S4 Explained
-        </div>
-    </div>
-    <div class="trending-item">
-        <div class="trending-num">03</div>
-        <div class="trending-text">
-            House of Dragon S3 Full Cast Confirmed — Who Returns?
-        </div>
-    </div>
-    <div class="trending-item">
-        <div class="trending-num">04</div>
-        <div class="trending-text">
-            One Piece Elbaf: The Giant Warrior Pirates Ranked by Strength
-        </div>
-    </div>
-    <div class="trending-item">
-        <div class="trending-num">05</div>
-        <div class="trending-text">
-            Best Budget Streaming Devices Under $50 in 2026
-        </div>
-    </div>
+    ))}
 </div>
+
+<style>
+    .trending-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    }
+
+    .trending-link:hover {
+    color: #00d2ff;
+    }
+</style>
