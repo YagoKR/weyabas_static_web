@@ -72,7 +72,7 @@ const imageSource = post.mainImage || post.image;
       imageSource && (
         <figure class="article-hero-figure">
           <img
-            src={urlFor(imageSource).width(1200).auto('format').url()}
+            src={urlFor(imageSource).width(1000).quality(75).format('webp').url()}
             alt={imageSource.alt || post.title}
           />
           {
