@@ -1,0 +1,40 @@
+---
+import Layout from "./Layout.astro";
+import Style from "./Style.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const { frontmatter } = Astro.props;
+---
+
+<Layout title={frontmatter.title}>
+    <Style />
+    <Header />
+
+    <main class="legal-container">
+        <slot />
+    </main>
+
+    <Footer />
+</Layout>
+
+<style>
+    .legal-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #e0e0e0;
+        line-height: 1.7;
+    }
+    .legal-container h1 {
+        font-size: 2.2rem;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+    .legal-container h2 {
+        font-size: 1.4rem;
+        color: #00d2ff;
+        margin-top: 30px;
+        margin-bottom: 10px;
+    }
+</style>
