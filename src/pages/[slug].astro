@@ -94,11 +94,20 @@ const imageSource = post.mainImage || post.image;
   <Footer />
 </Layout>
 
-{/* Script para enviar vistas */}
+{/* Script para enviar vistas evitando Falso Positivo */}
 <script is:inline define:vars={{ postId: post._id }}>
   if (postId) {
-    fetch(`/api/views/${postId}`, { method: 'POST' }).catch((err) =>
-      console.error('Error enviando visita:', err)
-    );
+    // Clave única por artículo para este navegador
+    const storageKey = `visited_post_${postId}`;
+
+    // Solo ejecuta la petición si NO ha visitado este post en esta sesión
+    if (!sessionStorage.getItem(storageKey)) {
+      fetch(`/api/views/${postId}`, { method: 'POST' })
+        .then(() => {
+          // Marca el artículo como visitado en la sesión
+          sessionStorage.setItem(storageKey, 'true');
+        })
+        .catch((err) => console.error('Error enviando visita:', err));
+    }
   }
 </script>
