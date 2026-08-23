@@ -1636,4 +1636,23 @@ main, .main-container, .container, .hero, .latest-news-section {
   color: #000;
   border-color: #00d2ff;
 }
+
+/* Añadir/Asegurar la capa superior del Header */
+header,
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  background: var(--bg1, #0b0d14); /* Evita que el fondo sea transparente al hacer scroll */
+}
+
+/* Página de resultados (Actualizado) */
+.search-container {
+  max-width: 900px;
+  margin: 0 auto 2rem auto;
+  padding: 2rem 1.5rem 0 1.5rem;
+  min-height: 60vh;
+  position: relative;
+  z-index: 1;
+}
 </style>
