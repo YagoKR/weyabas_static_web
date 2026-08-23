@@ -69,14 +69,14 @@ const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
 
     <main class="series-container">
         <h1 class="page-title" style="text-transform: uppercase;">
-            Lo último en {category}
+            Latest in {category}
         </h1>
 
         <section class="posts-grouped">
             {
                 Object.keys(groupedPosts).length === 0 ? (
                     <p class="no-posts">
-                        No hay artículos de {category} disponibles.
+                        No articles available for {category}.
                     </p>
                 ) : (
                     Object.entries(groupedPosts).map(([date, postsInDate]) => {

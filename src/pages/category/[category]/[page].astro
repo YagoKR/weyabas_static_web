@@ -73,14 +73,14 @@ const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
 
     <main class="series-container">
         <h1 class="page-title" style="text-transform: uppercase;">
-            Lo último en {category} - Página {currentPage}
+            Latest in {category} - Page {currentPage}
         </h1>
 
         <section class="posts-grouped">
             {
                 Object.keys(groupedPosts).length === 0 ? (
                     <p class="no-posts">
-                        No hay más artículos disponibles en esta página.
+                        No more articles available on this page.
                     </p>
                 ) : (
                     Object.entries(groupedPosts).map(([date, postsInDate]) => {
@@ -137,7 +137,7 @@ const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
                     : `/category/${category}/${currentPage - 1}`}
                 class="page-btn"
             >
-                « Anterior
+                « Previous
             </a>
 
             <div class="page-numbers">
@@ -165,7 +165,7 @@ const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
                         href={`/category/${category}/${currentPage + 1}`}
                         class="page-btn"
                     >
-                        Siguiente »
+                        Next »
                     </a>
                 )
             }

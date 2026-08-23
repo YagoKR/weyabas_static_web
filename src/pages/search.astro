@@ -16,9 +16,9 @@ const dataset = client.config().dataset;
 
     <main class="search-container">
         <header class="search-header">
-            <h1>Resultados de búsqueda</h1>
+            <h1>Search Results</h1>
             <p id="search-status" class="search-subtitle">
-                Cargando resultados...
+                Loading results...
             </p>
         </header>
 
@@ -50,13 +50,13 @@ const dataset = client.config().dataset;
         if (!container || !statusEl || !paginationEl) return;
 
         if (!query.trim()) {
-            statusEl.textContent = "Escribe algo en el buscador para empezar.";
+            statusEl.textContent = "Type something in the search bar to get started.";
             container.innerHTML = "";
             paginationEl.style.display = "none";
             return;
         }
 
-        statusEl.innerHTML = `Buscando resultados para: <strong>"${query}"</strong>...`;
+        statusEl.innerHTML = `Searching for: <strong>"${query}"</strong>...`;
 
         try {
             const groqQuery = encodeURIComponent(
