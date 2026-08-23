@@ -34,7 +34,7 @@ const dataset = client.config().dataset;
 </Layout>
 
 <script is:inline define:vars={{ projectId, dataset }}>
-    const POSTS_PER_PAGE = 10; // Artículos por página en la búsqueda
+    const POSTS_PER_PAGE = 1; // Artículos por página en la búsqueda
     let allPosts = [];
     let currentPage = 1;
 
@@ -146,7 +146,7 @@ const dataset = client.config().dataset;
             navHtml += `</div>`;
 
             if (currentPage < totalPages) {
-                navHtml += `<a href="/search?q=${encodeURIComponent(query)}&page=${currentPage + 1}" class="page-btn">Siguiente »</a>`;
+                navHtml += `<a href="/search?q=${encodeURIComponent(query)}&page=${currentPage + 1}" class="page-btn">Next »</a>`;
             }
 
             paginationEl.innerHTML = navHtml;
