@@ -5,7 +5,7 @@ const { pathname } = Astro.url;
 
 const isActive = (path: string) => {
   if (path === "/") return pathname === "/";
-  return pathname.includes(path);
+  return pathname.startsWith(path);
 };
 
 // 1. Obtenemos las últimas noticias con slug definido

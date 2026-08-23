@@ -1,0 +1,176 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Style from "../../../layouts/Style.astro";
+import Header from "../../../components/Header.astro";
+import Footer from "../../../components/Footer.astro";
+import { client } from "../../../lib/sanity";
+import imageUrlBuilder from "@sanity/image-url";
+
+const builder = imageUrlBuilder(client);
+function urlFor(source: any) {
+    return builder.image(source);
+}
+
+// 1. Extraemos la categoría y el número de página de la URL
+const { category, page } = Astro.params;
+
+const POSTS_PER_PAGE = 10;
+const currentPage = Number(page) || 1;
+
+// Cálculo dinámico del rango
+const start = (currentPage - 1) * POSTS_PER_PAGE;
+const end = start + POSTS_PER_PAGE;
+
+interface Post {
+    _id: string;
+    title: string;
+    slug: string;
+    date?: string;
+    summary?: string;
+    author?: string;
+    image?: any;
+}
+
+// 2. Contamos cuántos artículos existen en total para calcular las páginas
+const totalPosts = await client.fetch<number>(
+    `count(*[_type == "posts" && $category in categories])`,
+    { category },
+);
+
+const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
+
+// 3. GROQ trae el bloque correspondiente de 10 noticias
+const seriesPosts = await client.fetch<Post[]>(
+    `*[_type == "posts" && $category in categories] | order(date desc) [$start...$end] {
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    summary,
+    author,
+    image
+  }`,
+    { category, start, end },
+);
+
+// 4. Agrupación por fechas
+const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
+    const postDate = post.date ? new Date(post.date) : new Date();
+    const dateKey = postDate.toLocaleDateString("es-ES", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+    if (!acc[dateKey]) acc[dateKey] = [];
+    acc[dateKey].push(post);
+    return acc;
+}, {});
+---
+
+<Layout>
+    <Style />
+    <Header />
+
+    <main class="series-container">
+        <h1 class="page-title" style="text-transform: uppercase;">
+            Lo último en {category} - Página {currentPage}
+        </h1>
+
+        <section class="posts-grouped">
+            {
+                Object.keys(groupedPosts).length === 0 ? (
+                    <p class="no-posts">
+                        No hay más artículos disponibles en esta página.
+                    </p>
+                ) : (
+                    Object.entries(groupedPosts).map(([date, postsInDate]) => {
+                        const posts = postsInDate as Post[];
+                        return (
+                            <div class="date-group">
+                                <h2 class="date-title">{date}</h2>
+                                <div class="posts-list">
+                                    {posts.map((post) => (
+                                        <article class="post-item">
+                                            {post.image && (
+                                                <a
+                                                    href={`/${post.slug}`}
+                                                    class="post-image-link"
+                                                >
+                                                    <img
+                                                        src={urlFor(post.image)
+                                                            .width(600)
+                                                            .height(338)
+                                                            .quality(75)
+                                                            .format("webp")
+                                                            .fit("crop")
+                                                            .url()}
+                                                        alt={post.title}
+                                                        loading="lazy"
+                                                    />
+                                                </a>
+                                            )}
+                                            <div class="post-content">
+                                                <a href={`/${post.slug}`}>
+                                                    <h3>{post.title}</h3>
+                                                </a>
+                                                {post.summary && (
+                                                    <p class="post-summary">
+                                                        {post.summary}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </article>
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    })
+                )
+            }
+        </section>
+
+        <!-- Paginador dinámico para páginas 2, 3... -->
+        <nav class="pagination">
+            <a
+                href={currentPage === 2
+                    ? `/category/${category}`
+                    : `/category/${category}/${currentPage - 1}`}
+                class="page-btn"
+            >
+                « Anterior
+            </a>
+
+            <div class="page-numbers">
+                {
+                    Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                        (num) => (
+                            <a
+                                href={
+                                    num === 1
+                                        ? `/category/${category}`
+                                        : `/category/${category}/${num}`
+                                }
+                                class={`page-number ${num === currentPage ? "active" : ""}`}
+                            >
+                                {num}
+                            </a>
+                        ),
+                    )
+                }
+            </div>
+
+            {
+                currentPage < totalPages && (
+                    <a
+                        href={`/category/${category}/${currentPage + 1}`}
+                        class="page-btn"
+                    >
+                        Siguiente »
+                    </a>
+                )
+            }
+        </nav>
+    </main>
+
+    <Footer />
+</Layout>

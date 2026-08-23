@@ -1599,4 +1599,41 @@ main, .main-container, .container, .hero, .latest-news-section {
   margin-top: auto !important; /* Alinea la fecha abajo del todo en TODAS las tarjetas */
   padding-top: 10px !important;
 }
+
+/* --- Estilos para la Paginación --- */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 40px 0;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 6px;
+}
+
+.page-number,
+.page-btn {
+  padding: 8px 14px;
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  border: 1px solid #333;
+  transition: background 0.2s ease;
+}
+
+.page-number:hover,
+.page-btn:hover {
+  background: #333;
+}
+
+.page-number.active {
+  background: #00d2ff;
+  color: #000;
+  border-color: #00d2ff;
+}
 </style>
