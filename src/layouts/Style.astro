@@ -1656,4 +1656,96 @@ header,
   position: relative;
   z-index: 1;
 }
+
+/* Banner cookies */
+
+.cookie-banner {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        max-width: 500px;
+        background: #12151e;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        padding: 1.2rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        z-index: 999999;
+        display: none;
+        font-family: 'Inter', sans-serif;
+      }
+
+      .cookie-content h3 {
+        margin: 0 0 0.4rem 0;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .cookie-content p {
+        font-size: 0.85rem;
+        color: #a0a6b8;
+        margin: 0 0 1rem 0;
+        line-height: 1.45;
+      }
+
+      .cookie-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .cookie-link {
+        color: #8a8f9d;
+        font-size: 0.85rem;
+        text-decoration: underline;
+        transition: color 0.2s;
+      }
+
+      .cookie-link:hover {
+        color: #fff;
+      }
+
+      .cookie-buttons {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .cookie-btn {
+        padding: 0.45rem 0.9rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.85rem;
+        border: none;
+        transition: opacity 0.2s;
+      }
+
+      .cookie-btn:hover {
+        opacity: 0.9;
+      }
+
+      .btn-accept {
+        background: #00d2ff;
+        color: #000;
+      }
+
+      .btn-reject {
+        background: rgba(255, 255, 255, 0.08);
+        color: #e4e4e7;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+
+      @media (max-width: 480px) {
+        .cookie-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .cookie-buttons {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+      }
 </style>
