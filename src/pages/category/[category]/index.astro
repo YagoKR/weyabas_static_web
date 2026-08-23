@@ -11,11 +11,9 @@ function urlFor(source: any) {
     return builder.image(source);
 }
 
-// 1. Extraemos dinámicamente la categoría de la URL
 const { category } = Astro.params;
-
-// Límite de noticias por página
-const POSTS_PER_PAGE = 10;
+const POSTS_PER_PAGE = 10; // Ajusta el número de artículos por página según necesidad
+const currentPage = 1;
 
 interface Post {
     _id: string;
@@ -27,7 +25,6 @@ interface Post {
     image?: any;
 }
 
-// 2. Contamos cuántos artículos existen en total en Sanity para esta categoría
 const totalPosts = await client.fetch<number>(
     `count(*[_type == "posts" && $category in categories])`,
     { category },
@@ -35,7 +32,6 @@ const totalPosts = await client.fetch<number>(
 
 const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
-// 3. GROQ con interpolación directa [0...${POSTS_PER_PAGE}] para limitar correctamente los posts
 const seriesPosts = await client.fetch<Post[]>(
     `*[_type == "posts" && $category in categories] | order(date desc) [0...${POSTS_PER_PAGE}] {
     _id,
@@ -49,7 +45,6 @@ const seriesPosts = await client.fetch<Post[]>(
     { category },
 );
 
-// 4. Agrupar los artículos por fecha
 const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
     const postDate = post.date ? new Date(post.date) : new Date();
     const dateKey = postDate.toLocaleDateString("es-ES", {
@@ -61,6 +56,22 @@ const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
     acc[dateKey].push(post);
     return acc;
 }, {});
+
+// Generar array de páginas dinámico con puntos suspensivos
+const pages: (number | string)[] = [];
+const delta = 1;
+
+for (let i = 1; i <= totalPages; i++) {
+    if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+    ) {
+        pages.push(i);
+    } else if (pages[pages.length - 1] !== "...") {
+        pages.push("...");
+    }
+}
 ---
 
 <Layout>
@@ -125,28 +136,26 @@ const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
             }
         </section>
 
-        <!-- Paginador para la Página 1 -->
         {
             totalPages > 1 && (
                 <nav class="pagination">
                     <div class="page-numbers">
-                        <a
-                            href={`/category/${category}`}
-                            class="page-number active"
-                        >
-                            1
-                        </a>
-                        {Array.from(
-                            { length: totalPages - 1 },
-                            (_, i) => i + 2,
-                        ).map((num) => (
-                            <a
-                                href={`/category/${category}/${num}`}
-                                class="page-number"
-                            >
-                                {num}
-                            </a>
-                        ))}
+                        {pages.map((p) =>
+                            p === "..." ? (
+                                <span class="page-ellipsis">...</span>
+                            ) : (
+                                <a
+                                    href={
+                                        p === 1
+                                            ? `/category/${category}`
+                                            : `/category/${category}/${p}`
+                                    }
+                                    class={`page-number ${p === currentPage ? "active" : ""}`}
+                                >
+                                    {p}
+                                </a>
+                            ),
+                        )}
                     </div>
 
                     <a href={`/category/${category}/2`} class="page-btn">
@@ -159,4 +168,3 @@ const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
 
     <Footer />
 </Layout>
-

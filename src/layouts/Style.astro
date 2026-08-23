@@ -1748,4 +1748,59 @@ header,
           grid-template-columns: 1fr 1fr;
         }
       }
+
+ /* Paginación estilo compacto */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 2.5rem 0;
+}
+
+.pagination-container {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.page-number,
+.page-arrow,
+.page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 6px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.page-number:hover,
+.page-arrow:hover,
+.page-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.page-number.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-weight: 700;
+}
+
+.page-arrow,
+.page-btn {
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 0 12px; 
+}
+
+.page-ellipsis {
+  color: #71717a;
+  padding: 0 4px;
+  font-weight: bold;
+}
 </style>

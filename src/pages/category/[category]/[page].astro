@@ -11,13 +11,11 @@ function urlFor(source: any) {
     return builder.image(source);
 }
 
-// 1. Extraemos la categoría y el número de página de la URL
 const { category, page } = Astro.params;
 
-const POSTS_PER_PAGE = 10;
+const POSTS_PER_PAGE = 10; // Ajusta el número de artículos por página según necesidad
 const currentPage = Number(page) || 1;
 
-// Cálculo dinámico del rango
 const start = (currentPage - 1) * POSTS_PER_PAGE;
 const end = start + POSTS_PER_PAGE;
 
@@ -31,7 +29,6 @@ interface Post {
     image?: any;
 }
 
-// 2. Contamos cuántos artículos existen en total para calcular las páginas
 const totalPosts = await client.fetch<number>(
     `count(*[_type == "posts" && $category in categories])`,
     { category },
@@ -39,7 +36,6 @@ const totalPosts = await client.fetch<number>(
 
 const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
-// 3. GROQ trae el bloque correspondiente de 10 noticias
 const seriesPosts = await client.fetch<Post[]>(
     `*[_type == "posts" && $category in categories] | order(date desc) [$start...$end] {
     _id,
@@ -53,7 +49,6 @@ const seriesPosts = await client.fetch<Post[]>(
     { category, start, end },
 );
 
-// 4. Agrupación por fechas
 const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
     const postDate = post.date ? new Date(post.date) : new Date();
     const dateKey = postDate.toLocaleDateString("es-ES", {
@@ -65,6 +60,22 @@ const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
     acc[dateKey].push(post);
     return acc;
 }, {});
+
+// Generar array de páginas dinámico con puntos suspensivos
+const pages: (number | string)[] = [];
+const delta = 1;
+
+for (let i = 1; i <= totalPages; i++) {
+    if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+    ) {
+        pages.push(i);
+    } else if (pages[pages.length - 1] !== "...") {
+        pages.push("...");
+    }
+}
 ---
 
 <Layout>
@@ -129,47 +140,50 @@ const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
             }
         </section>
 
-        <!-- Paginador dinámico para páginas 2, 3... -->
-        <nav class="pagination">
-            <a
-                href={currentPage === 2
-                    ? `/category/${category}`
-                    : `/category/${category}/${currentPage - 1}`}
-                class="page-btn"
-            >
-                « Previous
-            </a>
-
-            <div class="page-numbers">
-                {
-                    Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                        (num) => (
-                            <a
-                                href={
-                                    num === 1
-                                        ? `/category/${category}`
-                                        : `/category/${category}/${num}`
-                                }
-                                class={`page-number ${num === currentPage ? "active" : ""}`}
-                            >
-                                {num}
-                            </a>
-                        ),
-                    )
-                }
-            </div>
-
-            {
-                currentPage < totalPages && (
+        {
+            totalPages > 1 && (
+                <nav class="pagination">
                     <a
-                        href={`/category/${category}/${currentPage + 1}`}
+                        href={
+                            currentPage === 2
+                                ? `/category/${category}`
+                                : `/category/${category}/${currentPage - 1}`
+                        }
                         class="page-btn"
                     >
-                        Next »
+                        « Previous
                     </a>
-                )
-            }
-        </nav>
+
+                    <div class="page-numbers">
+                        {pages.map((p) =>
+                            p === "..." ? (
+                                <span class="page-ellipsis">...</span>
+                            ) : (
+                                <a
+                                    href={
+                                        p === 1
+                                            ? `/category/${category}`
+                                            : `/category/${category}/${p}`
+                                    }
+                                    class={`page-number ${p === currentPage ? "active" : ""}`}
+                                >
+                                    {p}
+                                </a>
+                            ),
+                        )}
+                    </div>
+
+                    {currentPage < totalPages && (
+                        <a
+                            href={`/category/${category}/${currentPage + 1}`}
+                            class="page-btn"
+                        >
+                            Next »
+                        </a>
+                    )}
+                </nav>
+            )
+        }
     </main>
 
     <Footer />

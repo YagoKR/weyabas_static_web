@@ -34,13 +34,13 @@ const dataset = client.config().dataset;
 </Layout>
 
 <script is:inline define:vars={{ projectId, dataset }}>
-    const POSTS_PER_PAGE = 1; // Artículos por página en la búsqueda
+    const POSTS_PER_PAGE = 10;
     let allPosts = [];
     let currentPage = 1;
 
     async function performSearch() {
         const urlParams = new URLSearchParams(window.location.search);
-        const query = urlParams.get("q") || "";
+        const query = (urlParams.get("q") || "").trim();
         currentPage = parseInt(urlParams.get("page")) || 1;
 
         const statusEl = document.getElementById("search-status");
@@ -49,9 +49,18 @@ const dataset = client.config().dataset;
 
         if (!container || !statusEl || !paginationEl) return;
 
-        if (!query.trim()) {
+        // Validar si el campo está vacío
+        if (!query) {
             statusEl.textContent = "Type something in the search bar to get started.";
             container.innerHTML = "";
+            paginationEl.style.display = "none";
+            return;
+        }
+
+        // VALIDACIÓN: Mínimo 3 caracteres
+        if (query.length < 3) {
+            statusEl.innerHTML = "Please enter at least <strong>3 characters</strong> to search.";
+            container.innerHTML = ``;
             paginationEl.style.display = "none";
             return;
         }
@@ -76,18 +85,18 @@ const dataset = client.config().dataset;
             allPosts = data.result || [];
 
             if (allPosts.length === 0) {
-                statusEl.innerHTML = `No se encontraron resultados para: <strong>"${query}"</strong>`;
-                container.innerHTML = `<p class="no-results">No hay artículos que coincidan con tu búsqueda.</p>`;
+                statusEl.innerHTML = `No results found for: <strong>"${query}"</strong>`;
+                container.innerHTML = `<p class="no-results">No articles found that match your search.</p>`;
                 paginationEl.style.display = "none";
                 return;
             }
 
-            statusEl.innerHTML = `Mostrando ${allPosts.length} resultado(s) para: <strong>"${query}"</strong>`;
+            statusEl.innerHTML = `Showing ${allPosts.length} result(s) for: <strong>"${query}"</strong>`;
 
             renderPage(query);
         } catch (error) {
             console.error("Error al buscar en Sanity:", error);
-            statusEl.textContent = "Ocurrió un error al realizar la búsqueda.";
+            statusEl.textContent = "An error occurred while performing the search.";
         }
     }
 
@@ -133,18 +142,43 @@ const dataset = client.config().dataset;
             })
             .join("");
 
-        // Renderizar el paginador si hay más de 1 página
+        // Renderizar el paginador dinámico
         if (totalPages > 1) {
             paginationEl.style.display = "flex";
             let navHtml = `<div class="page-numbers">`;
 
+            const pages = [];
+            const delta = 1;
+
             for (let i = 1; i <= totalPages; i++) {
-                const isActive = i === currentPage ? "active" : "";
-                navHtml += `<a href="/search?q=${encodeURIComponent(query)}&page=${i}" class="page-number ${isActive}">${i}</a>`;
+                if (
+                    i === 1 || 
+                    i === totalPages || 
+                    (i >= currentPage - delta && i <= currentPage + delta)
+                ) {
+                    pages.push(i);
+                } else if (pages[pages.length - 1] !== "...") {
+                    pages.push("...");
+                }
             }
+
+            // Botón Previous si no está en la página 1
+            if (currentPage > 1) {
+                navHtml = `<a href="/search?q=${encodeURIComponent(query)}&page=${currentPage - 1}" class="page-btn">« Previous</a>` + navHtml;
+            }
+
+            pages.forEach((p) => {
+                if (p === "...") {
+                    navHtml += `<span class="page-ellipsis">...</span>`;
+                } else {
+                    const isActive = p === currentPage ? "active" : "";
+                    navHtml += `<a href="/search?q=${encodeURIComponent(query)}&page=${p}" class="page-number ${isActive}">${p}</a>`;
+                }
+            });
 
             navHtml += `</div>`;
 
+            // Botón Next »
             if (currentPage < totalPages) {
                 navHtml += `<a href="/search?q=${encodeURIComponent(query)}&page=${currentPage + 1}" class="page-btn">Next »</a>`;
             }
