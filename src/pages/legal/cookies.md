@@ -24,3 +24,13 @@ We use cookies for the following purposes:
 You can control and manage cookies in your browser settings. Please note that removing or blocking cookies may impact your user experience.
 
 For more information, please contact us at weyaluseries@gmail.com or read our [Privacy Policy](/legal/privacy-policy).
+
+<style>
+  a {
+    color: #00d2ff !important;
+    text-decoration: underline;
+  }
+  a:hover {
+    color: #ffffff !important;
+  }
+</style>

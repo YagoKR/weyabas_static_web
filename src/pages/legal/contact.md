@@ -26,3 +26,13 @@ Whether you found a bug on the site, want to submit a press release, or have que
 ## Privacy & Data Handling
 
 If you contact us via email, your email address and message details will only be used to process and respond to your inquiry. We do not sell, rent, or share your contact information with third parties. For more details on how we handle personal data, please review our [Privacy Policy](/legal/privacy-policy).
+
+<style>
+  a {
+    color: #00d2ff !important;
+    text-decoration: underline;
+  }
+  a:hover {
+    color: #ffffff !important;
+  }
+</style>
