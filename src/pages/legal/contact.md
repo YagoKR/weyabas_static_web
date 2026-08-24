@@ -11,7 +11,7 @@ Whether you found a bug on the site, want to submit a press release, or have que
 
 ## Get in Touch
 
-* **General Inquiries:** weyaluseries@gmail.com
+* **General Inquiries:** [weyaluseries@gmail.com](mailto:weyaluseries@gmail.com)
 
 ---
 

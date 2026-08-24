@@ -38,7 +38,7 @@ If you are a resident of the European Economic Area (EEA), you have certain data
 * **Right to Restrict Processing:** You have the right to request that we restrict the processing of your personal data.
 * **Right to Object to Processing:** You have the right to object to our processing of your personal data.
 
-To exercise any of these rights, please contact us at **contact@weyaluseries.com**.
+To exercise any of these rights, please contact us at [weyaluseries@gmail.com](mailto:weyaluseries@gmail.com).
 
 ## 4. Children's Information
 
@@ -46,4 +46,4 @@ Weyaluseries does not knowingly collect any Personal Identifiable Information fr
 
 ## 5. Contact Information
 
-If you have additional questions or require more information about our Privacy Policy, please contact us via email at **contact@weyaluseries.com**.
+If you have additional questions or require more information about our Privacy Policy, please contact us via email at [weyaluseries@gmail.com](mailto:weyaluseries@gmail.com).
