@@ -4,13 +4,9 @@ Proyecto de página estática para la web de Weyabu y Angeluseries
 
 # Instalación de dependencias
 
-```
-npx astro add @sanity/astro @astrojs/react
+Asegurate de ejecutar el comando `npm install` en la raíz del proyecto para instalar tanto las dependencias de la página como dependencias de desaarrollo.
 
-npm install @astrojs/react @sanity/astro @sanity/client sanity @types/react-dom @types/react-is @types/react react-dom react-is react styled-components
-
-npx astro add cloudflare
-```
+---
 
 # Tutorial: como usar "prettier" para mantener codigo bien estructurado en VS Code
 
