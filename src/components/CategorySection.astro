@@ -1,81 +1,81 @@
 ---
 interface SectionItem {
-    img: string;
-    tag: string;
-    tagClass: string;
-    title: string;
-    date: string;
-    readTime: string;
+  img: string;
+  tag: string;
+  tagClass: string;
+  title: string;
+  date: string;
+  readTime: string;
 }
 
 interface Props {
-    title: string;
-    linkLabel?: string;
-    items: SectionItem[];
-    accentColor?: string; // e.g. "var(--purple)"
-    accentBorder?: string; // e.g. "#6633aa"
-    marginTop?: string; // e.g. "40px"
+  title: string;
+  linkLabel?: string;
+  items: SectionItem[];
+  accentColor?: string; // e.g. "var(--purple)"
+  accentBorder?: string; // e.g. "#6633aa"
+  marginTop?: string; // e.g. "40px"
 }
 
 const {
-    title,
-    linkLabel = `All ${title} →`,
-    items,
-    accentColor,
-    accentBorder,
-    marginTop,
+  title,
+  linkLabel = `All ${title} →`,
+  items,
+  accentColor,
+  accentBorder,
+  marginTop,
 } = Astro.props;
 ---
 
 <div
-    class="section-header"
-    style={marginTop ? `margin-top:${marginTop};` : undefined}
+  class="section-header"
+  style={marginTop ? `margin-top:${marginTop};` : undefined}
 >
-    <div
-        class="section-neon-dot"
-        style={accentColor
-            ? `background:${accentColor}; box-shadow: 0 0 18px ${accentColor}99;`
-            : undefined}
-    >
-    </div>
-    <h2
-        class="section-title"
-        style={accentColor ? `color:${accentColor};` : undefined}
-    >
-        {title}
-    </h2>
-    <div
-        class="section-line"
-        style={accentColor
-            ? `background:linear-gradient(to right, ${accentColor}, transparent);`
-            : undefined}
-    >
-    </div>
+  <div
+    class="section-neon-dot"
+    style={accentColor
+      ? `background:${accentColor}; box-shadow: 0 0 18px ${accentColor}99;`
+      : undefined}
+  >
+  </div>
+  <h2
+    class="section-title"
+    style={accentColor ? `color:${accentColor};` : undefined}
+  >
+    {title}
+  </h2>
+  <div
+    class="section-line"
+    style={accentColor
+      ? `background:linear-gradient(to right, ${accentColor}, transparent);`
+      : undefined}
+  >
+  </div>
 
-    href="#" class="section-more" style={
-        accentColor
-            ? `color:${accentColor}; border-color:${accentBorder};`
-            : undefined
-    }
-    >{linkLabel}
+  href="#" class="section-more" style={
+    accentColor
+      ? `color:${accentColor}; border-color:${accentBorder};`
+      : undefined
+  }
+  >{linkLabel}
 </div>
 
 <div class="horizontal-scroll">
-    {
-        items.map((item) => (
-            <div class="card">
-                <div class="img-placeholder card-img">{item.img}</div>
-                <div class="card-body">
-                    <span class={`tag ${item.tagClass}`}>{item.tag}</span>
-                    <div class="card-title">{item.title}</div>
-                    <div class="card-meta">
-                        <>
-                            <span>{item.date}</span>
-                            <span>{item.readTime}</span>
-                        </>
-                    </div>
-                </div>
-            </div>
-        ))
-    }
+  {
+    items.map((item) => (
+      <div class="card">
+        <div class="img-placeholder card-img">{item.img}</div>
+        <div class="card-body">
+          <span class={`tag ${item.tagClass}`}>{item.tag}</span>
+          <div class="card-title">{item.title}</div>
+          <div class="card-meta">
+            <>
+              <span>{item.date}</span>
+              <span>{item.readTime}</span>
+            </>
+          </div>
+        </div>
+      </div>
+    ))
+  }
 </div>

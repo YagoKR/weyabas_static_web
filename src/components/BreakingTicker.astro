@@ -11,14 +11,14 @@ const posts = await client.fetch(`
 `);
 
 interface NewsItem {
-    title: string;
-    slug: string;
+  title: string;
+  slug: string;
 }
 
 // 2. Mapeamos los datos limpios
 const latest: NewsItem[] = posts.map((item: any) => ({
-    title: item.title,
-    slug: item.slug,
+  title: item.title,
+  slug: item.slug,
 }));
 
 // 3. Duplicamos la lista para crear el efecto de marquee/scroll infinito sin saltos
@@ -26,14 +26,14 @@ const doubled = [...latest, ...latest];
 ---
 
 <div class="breaking-bar">
-    <div class="breaking-label">BREAKING</div>
-    <div class="breaking-scroll">
-        {
-            doubled.map((item) => (
-                <a href={`/${item.slug}`} class="breaking-item">
-                    <span>●</span> {item.title}
-                </a>
-            ))
-        }
-    </div>
+  <div class="breaking-label">BREAKING</div>
+  <div class="breaking-scroll">
+    {
+      doubled.map((item) => (
+        <a href={`/${item.slug}`} class="breaking-item">
+          <span>●</span> {item.title}
+        </a>
+      ))
+    }
+  </div>
 </div>

@@ -1,45 +1,45 @@
 ---
 interface NewsItem {
-    img: string;
-    tag: string;
-    tagClass: string;
-    title: string;
-    excerpt: string;
-    date: string;
-    readTime: string;
+  img: string;
+  tag: string;
+  tagClass: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  readTime: string;
 }
 
 interface Props {
-    items: NewsItem[];
+  items: NewsItem[];
 }
 
 const { items } = Astro.props;
 ---
 
 <div class="section-header">
-    <div class="section-neon-dot"></div>
-    <h2 class="section-title">Latest News</h2>
-    <div class="section-line"></div>
-    <a href="#" class="section-more">All News →</a>
+  <div class="section-neon-dot"></div>
+  <h2 class="section-title">Latest News</h2>
+  <div class="section-line"></div>
+  <a href="#" class="section-more">All News →</a>
 </div>
 
 <div class="card-grid">
-    {
-        items.map((item: any) => (
-            <div class="card">
-                <div class="img-placeholder card-img">{item.img}</div>
-                <div class="card-body">
-                    <span class={`tag ${item.tagClass}`}>{item.tag}</span>
-                    <div class="card-title">{item.title}</div>
-                    <div class="card-excerpt">{item.excerpt}</div>
-                    <div class="card-meta">
-                        <>
-                            <span>{item.date}</span>
-                            <span>{item.readTime}</span>
-                        </>
-                    </div>
-                </div>
-            </div>
-        ))
-    }
+  {
+    items.map((item: any) => (
+      <div class="card">
+        <div class="img-placeholder card-img">{item.img}</div>
+        <div class="card-body">
+          <span class={`tag ${item.tagClass}`}>{item.tag}</span>
+          <div class="card-title">{item.title}</div>
+          <div class="card-excerpt">{item.excerpt}</div>
+          <div class="card-meta">
+            <>
+              <span>{item.date}</span>
+              <span>{item.readTime}</span>
+            </>
+          </div>
+        </div>
+      </div>
+    ))
+  }
 </div>
