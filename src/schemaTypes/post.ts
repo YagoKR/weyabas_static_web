@@ -1,4 +1,6 @@
 import { maxLength } from "astro:schema";
+import { validation, type SlugRule } from 'sanity';
+import type { Rule } from 'sanity'
 
 // src/schemaTypes/post.ts
 export default {
@@ -18,7 +20,20 @@ export default {
             options: {
                 source: 'title',
                 maxLength: 96,
-            }
+                slugify: (input: string) => input
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[àáâäæãåā]/g, 'a')
+                    .replace(/[èéêëē]/g, 'e')
+                    .replace(/[ìíîïī]/g, 'i')
+                    .replace(/[òóôöœøōõ]/g, 'o')
+                    .replace(/[ùúûüū]/g, 'u')
+                    .replace(/ñ/g, 'n')
+                    .replace(/\s+/g, '-')
+                    .replace(/[^\w\-]+/g, '')
+                    .replace(/\-\-+/g, '-')
+            },
+            validation: (Rule: SlugRule) => Rule.required().error('Debes generar el slug antes de publicar.'),
         },
         {
             name: 'author',
@@ -51,7 +66,8 @@ export default {
                     title: 'Pie de foto',
                     description: 'Ej: Imagen de tal película, escena de tal anime, etc.'
                 }
-            ]
+            ],
+            validation: (Rule: Rule) => Rule.required().error('Debes subir una imagen antes de publicar.'),
         },
         {
             name: 'categories',
@@ -85,7 +101,7 @@ export default {
             title: 'Número de clics (views)',
             type: 'number',
             initialValue: 0,
-            readOnly: true, 
+            readOnly: true,
             hidden: true,
         }
     ],
