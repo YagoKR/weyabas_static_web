@@ -1,6 +1,4 @@
-import { maxLength } from "astro:schema";
-import { validation, type SlugRule } from 'sanity';
-import type { Rule } from 'sanity'
+import { type SlugRule, type Rule } from 'sanity';
 
 // src/schemaTypes/post.ts
 export default {
@@ -12,6 +10,7 @@ export default {
             name: 'title',
             title: 'Título',
             type: 'string',
+            validation: (Rule: Rule) => Rule.required().error('El título es obligatorio.'),
         },
         {
             name: 'slug',
@@ -39,6 +38,7 @@ export default {
             name: 'author',
             title: 'Autor',
             type: 'string',
+            validation: (Rule: Rule) => Rule.required().error('El autor es obligatorio.'),
         },
         {
             name: 'date',
@@ -46,6 +46,7 @@ export default {
             type: 'datetime',
             initialValue: () => new Date().toISOString(),
             readOnly: true,
+            validation: (Rule: Rule) => Rule.required(),
         },
         {
             name: 'image',
@@ -58,24 +59,26 @@ export default {
                 {
                     name: 'alt',
                     type: 'string',
-                    title: 'Texto Alternativo'
+                    title: 'Texto Alternativo',
+                    validation: (Rule: Rule) => Rule.required().error('El texto alternativo es obligatorio para accesibilidad.'),
                 },
                 {
                     name: 'caption',
                     type: 'string',
                     title: 'Pie de foto',
-                    description: 'Ej: Imagen de tal película, escena de tal anime, etc.'
+                    description: 'Ej: Imagen de tal película, escena de tal anime, etc.',
+                    validation: (Rule: Rule) => Rule.required().error('El pie de foto es obligatorio.'),
                 }
             ],
             validation: (Rule: Rule) => Rule.required().error('Debes subir una imagen antes de publicar.'),
         },
         {
             name: 'categories',
+            title: 'Categorías',
             type: 'array',
             of: [{ type: 'string' }],
             options: {
                 list: [
-                    // { title: 'News', value: 'news' },
                     { title: 'Series', value: 'series' },
                     { title: 'Anime', value: 'anime' },
                     { title: 'Tech', value: 'tech' },
@@ -84,17 +87,20 @@ export default {
                 ],
                 layout: 'checkbox',
             },
+            validation: (Rule: Rule) => Rule.required().min(1).error('Debes seleccionar al menos una categoría.'),
         },
         {
             name: 'summary',
             title: 'Resumen',
             type: 'text',
+            validation: (Rule: Rule) => Rule.required().error('El resumen es obligatorio.'),
         },
         {
             name: 'content',
             title: 'Contenido',
             type: 'array',
             of: [{ type: 'block' }],
+            validation: (Rule: Rule) => Rule.required().min(1).error('El contenido del post no puede estar vacío.'),
         },
         {
             name: 'views',
@@ -103,6 +109,7 @@ export default {
             initialValue: 0,
             readOnly: true,
             hidden: true,
+            validation: (Rule: Rule) => Rule.required(),
         }
     ],
 };
