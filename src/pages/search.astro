@@ -11,65 +11,63 @@ const dataset = client.config().dataset;
 ---
 
 <Layout>
-    <Style />
-    <Header />
+  <Style />
+  <Header />
 
-    <main class="search-container">
-        <header class="search-header">
-            <h1>Search Results</h1>
-            <p id="search-status" class="search-subtitle">
-                Loading results...
-            </p>
-        </header>
+  <main class="search-container">
+    <header class="search-header">
+      <h1>Search Results</h1>
+      <p id="search-status" class="search-subtitle">Loading results...</p>
+    </header>
 
-        {/* Contenedor donde se insertarán los resultados */}
-        <div id="results-list" class="results-list"></div>
+    {/* Contenedor donde se insertarán los resultados */}
+    <div id="results-list" class="results-list"></div>
 
-        {/* Paginador dinámico por JavaScript */}
-        <nav id="search-pagination" class="pagination" style="display: none;">
-        </nav>
-    </main>
+    {/* Paginador dinámico por JavaScript */}
+    <nav id="search-pagination" class="pagination" style="display: none;"></nav>
+  </main>
 
-    <Footer />
+  <Footer />
 </Layout>
 
 <script is:inline define:vars={{ projectId, dataset }}>
-    const POSTS_PER_PAGE = 10;
-    let allPosts = [];
-    let currentPage = 1;
+  const POSTS_PER_PAGE = 10;
+  let allPosts = [];
+  let currentPage = 1;
 
-    async function performSearch() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const query = (urlParams.get("q") || "").trim();
-        currentPage = parseInt(urlParams.get("page")) || 1;
+  async function performSearch() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = (urlParams.get("q") || "").trim();
+    currentPage = parseInt(urlParams.get("page")) || 1;
 
-        const statusEl = document.getElementById("search-status");
-        const container = document.getElementById("results-list");
-        const paginationEl = document.getElementById("search-pagination");
+    const statusEl = document.getElementById("search-status");
+    const container = document.getElementById("results-list");
+    const paginationEl = document.getElementById("search-pagination");
 
-        if (!container || !statusEl || !paginationEl) return;
+    if (!container || !statusEl || !paginationEl) return;
 
-        // Validar si el campo está vacío
-        if (!query) {
-            statusEl.textContent = "Type something in the search bar to get started.";
-            container.innerHTML = "";
-            paginationEl.style.display = "none";
-            return;
-        }
+    // Validar si el campo está vacío
+    if (!query) {
+      statusEl.textContent = "Type something in the search bar to get started.";
+      container.innerHTML = "";
+      paginationEl.style.display = "none";
+      return;
+    }
 
-        // VALIDACIÓN: Mínimo 3 caracteres
-        if (query.length < 3) {
-            statusEl.innerHTML = "Please enter at least <strong>3 characters</strong> to search.";
-            container.innerHTML = ``;
-            paginationEl.style.display = "none";
-            return;
-        }
+    // VALIDACIÓN: Mínimo 3 caracteres
+    if (query.length < 3) {
+      statusEl.innerHTML =
+        "Please enter at least <strong>3 characters</strong> to search.";
+      container.innerHTML = ``;
+      paginationEl.style.display = "none";
+      return;
+    }
 
-        statusEl.innerHTML = `Searching for: <strong>"${query}"</strong>...`;
+    statusEl.innerHTML = `Searching for: <strong>"${query}"</strong>...`;
 
-        try {
-            const groqQuery = encodeURIComponent(
-                `*[_type == "posts" && (title match "*${query}*" || summary match "*${query}*")] | order(date desc) {
+    try {
+      const groqQuery = encodeURIComponent(
+        `*[_type == "posts" && (title match "*${query}*" || summary match "*${query}*")] | order(date desc) {
                     _id,
                     title,
                     "slug": slug.current,
@@ -77,59 +75,59 @@ const dataset = client.config().dataset;
                     summary,
                     "imageUrl": image.asset->url
                 }`,
-            );
+      );
 
-            const url = `https://${projectId}.api.sanity.io/v1/data/query/${dataset}?query=${groqQuery}`;
-            const res = await fetch(url);
-            const data = await res.json();
-            allPosts = data.result || [];
+      const url = `https://${projectId}.api.sanity.io/v1/data/query/${dataset}?query=${groqQuery}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      allPosts = data.result || [];
 
-            if (allPosts.length === 0) {
-                statusEl.innerHTML = `No results found for: <strong>"${query}"</strong>`;
-                container.innerHTML = `<p class="no-results">No articles found that match your search.</p>`;
-                paginationEl.style.display = "none";
-                return;
-            }
+      if (allPosts.length === 0) {
+        statusEl.innerHTML = `No results found for: <strong>"${query}"</strong>`;
+        container.innerHTML = `<p class="no-results">No articles found that match your search.</p>`;
+        paginationEl.style.display = "none";
+        return;
+      }
 
-            statusEl.innerHTML = `Showing ${allPosts.length} result(s) for: <strong>"${query}"</strong>`;
+      statusEl.innerHTML = `Showing ${allPosts.length} result(s) for: <strong>"${query}"</strong>`;
 
-            renderPage(query);
-        } catch (error) {
-            console.error("Error al buscar en Sanity:", error);
-            statusEl.textContent = "An error occurred while performing the search.";
-        }
+      renderPage(query);
+    } catch (error) {
+      console.error("Error al buscar en Sanity:", error);
+      statusEl.textContent = "An error occurred while performing the search.";
     }
+  }
 
-    function renderPage(query) {
-        const container = document.getElementById("results-list");
-        const paginationEl = document.getElementById("search-pagination");
+  function renderPage(query) {
+    const container = document.getElementById("results-list");
+    const paginationEl = document.getElementById("search-pagination");
 
-        const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
-        if (currentPage > totalPages) currentPage = totalPages;
-        if (currentPage < 1) currentPage = 1;
+    const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
 
-        const start = (currentPage - 1) * POSTS_PER_PAGE;
-        const end = start + POSTS_PER_PAGE;
-        const pagePosts = allPosts.slice(start, end);
+    const start = (currentPage - 1) * POSTS_PER_PAGE;
+    const end = start + POSTS_PER_PAGE;
+    const pagePosts = allPosts.slice(start, end);
 
-        // Renderizar los posts de la página actual
-        container.innerHTML = pagePosts
-            .map((post) => {
-                const formattedDate = post.date
-                    ? new Date(post.date).toLocaleDateString("es-ES", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                      })
-                    : "";
+    // Renderizar los posts de la página actual
+    container.innerHTML = pagePosts
+      .map((post) => {
+        const formattedDate = post.date
+          ? new Date(post.date).toLocaleDateString("es-ES", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })
+          : "";
 
-                const imgHtml = post.imageUrl
-                    ? `<a href="/${post.slug}" class="search-card-image">
+        const imgHtml = post.imageUrl
+          ? `<a href="/${post.slug}" class="search-card-image">
                          <img src="${post.imageUrl}?w=500&auto=format" alt="${post.title}" loading="lazy" />
                        </a>`
-                    : "";
+          : "";
 
-                return `
+        return `
                     <article class="search-card">
                         ${imgHtml}
                         <div class="search-card-content">
@@ -139,55 +137,57 @@ const dataset = client.config().dataset;
                         </div>
                     </article>
                 `;
-            })
-            .join("");
+      })
+      .join("");
 
-        // Renderizar el paginador dinámico
-        if (totalPages > 1) {
-            paginationEl.style.display = "flex";
-            let navHtml = `<div class="page-numbers">`;
+    // Renderizar el paginador dinámico
+    if (totalPages > 1) {
+      paginationEl.style.display = "flex";
+      let navHtml = `<div class="page-numbers">`;
 
-            const pages = [];
-            const delta = 1;
+      const pages = [];
+      const delta = 1;
 
-            for (let i = 1; i <= totalPages; i++) {
-                if (
-                    i === 1 || 
-                    i === totalPages || 
-                    (i >= currentPage - delta && i <= currentPage + delta)
-                ) {
-                    pages.push(i);
-                } else if (pages[pages.length - 1] !== "...") {
-                    pages.push("...");
-                }
-            }
-
-            // Botón Previous si no está en la página 1
-            if (currentPage > 1) {
-                navHtml = `<a href="/search?q=${encodeURIComponent(query)}&page=${currentPage - 1}" class="page-btn">« Previous</a>` + navHtml;
-            }
-
-            pages.forEach((p) => {
-                if (p === "...") {
-                    navHtml += `<span class="page-ellipsis">...</span>`;
-                } else {
-                    const isActive = p === currentPage ? "active" : "";
-                    navHtml += `<a href="/search?q=${encodeURIComponent(query)}&page=${p}" class="page-number ${isActive}">${p}</a>`;
-                }
-            });
-
-            navHtml += `</div>`;
-
-            // Botón Next »
-            if (currentPage < totalPages) {
-                navHtml += `<a href="/search?q=${encodeURIComponent(query)}&page=${currentPage + 1}" class="page-btn">Next »</a>`;
-            }
-
-            paginationEl.innerHTML = navHtml;
-        } else {
-            paginationEl.style.display = "none";
+      for (let i = 1; i <= totalPages; i++) {
+        if (
+          i === 1 ||
+          i === totalPages ||
+          (i >= currentPage - delta && i <= currentPage + delta)
+        ) {
+          pages.push(i);
+        } else if (pages[pages.length - 1] !== "...") {
+          pages.push("...");
         }
-    }
+      }
 
-    performSearch();
+      // Botón Previous si no está en la página 1
+      if (currentPage > 1) {
+        navHtml =
+          `<a href="/search?q=${encodeURIComponent(query)}&page=${currentPage - 1}" class="page-btn">« Previous</a>` +
+          navHtml;
+      }
+
+      pages.forEach((p) => {
+        if (p === "...") {
+          navHtml += `<span class="page-ellipsis">...</span>`;
+        } else {
+          const isActive = p === currentPage ? "active" : "";
+          navHtml += `<a href="/search?q=${encodeURIComponent(query)}&page=${p}" class="page-number ${isActive}">${p}</a>`;
+        }
+      });
+
+      navHtml += `</div>`;
+
+      // Botón Next »
+      if (currentPage < totalPages) {
+        navHtml += `<a href="/search?q=${encodeURIComponent(query)}&page=${currentPage + 1}" class="page-btn">Next »</a>`;
+      }
+
+      paginationEl.innerHTML = navHtml;
+    } else {
+      paginationEl.style.display = "none";
+    }
+  }
+
+  performSearch();
 </script>
