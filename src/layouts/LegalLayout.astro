@@ -8,13 +8,11 @@ const { frontmatter } = Astro.props;
 ---
 
 <Layout title={frontmatter.title}>
-    <Style />
-    <Header />
+  <Style />
+  <Header />
+  <main class="legal-container">
+    <slot />
+  </main>
 
-    <main class="legal-container">
-        <slot />
-    </main>
-
-    <Footer />
+  <Footer />
 </Layout>
-

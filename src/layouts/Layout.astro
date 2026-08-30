@@ -5,63 +5,63 @@ const description = "A site about movies, TV shows, etc.";
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<title>{title}</title>
-		<meta name="generator" content={Astro.generator} />
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="description" content={description} />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap"
-			rel="stylesheet"
-		/>
-	</head>
-	<body>
-		<slot />
-		<div id="cookie-banner" class="cookie-banner">
-			<div class="cookie-content">
-				<h3>Cookie Preferences</h3>
-				<p>
-					We use cookies to improve your experience and deliver
-					personalized ads. You can accept all, reject non-essential
-					cookies, or read our policy.
-				</p>
-			</div>
-			<div class="cookie-actions">
-				<a href="/legal/cookies" class="cookie-link" target="_blank"
-					>Read Policy</a
-				>
-				<div class="cookie-buttons">
-					<button id="reject-cookies" class="cookie-btn btn-reject"
-						>Reject</button
-					>
-					<button id="accept-cookies" class="cookie-btn btn-accept"
-						>Accept All</button
-					>
-				</div>
-			</div>
-		</div>
-		<script>
-			const banner = document.getElementById("cookie-banner");
-			const acceptBtn = document.getElementById("accept-cookies");
-			const rejectBtn = document.getElementById("reject-cookies");
+  <head>
+    <title>{title}</title>
+    <meta name="generator" content={Astro.generator} />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+    <div id="cookie-banner" class="cookie-banner">
+      <div class="cookie-content">
+        <h3>Cookie Preferences</h3>
+        <p>
+          We use cookies to improve your experience and deliver personalized
+          ads. You can accept all, reject non-essential cookies, or
+          <a href="/legal/cookies" target="_blank"> read our policy</a>.
+        </p>
+      </div>
+      <div class="cookie-actions">
+        <a href="/legal/cookies" class="cookie-link" target="_blank"
+          >Read Policy</a
+        >
+        <div class="cookie-buttons">
+          <button id="reject-cookies" class="cookie-btn btn-reject"
+            >Reject</button
+          >
+          <button id="accept-cookies" class="cookie-btn btn-accept"
+            >Accept All</button
+          >
+        </div>
+      </div>
+    </div>
+    <script>
+      const banner = document.getElementById("cookie-banner");
+      const acceptBtn = document.getElementById("accept-cookies");
+      const rejectBtn = document.getElementById("reject-cookies");
 
-			if (!localStorage.getItem("cookie-consent")) {
-				if (banner) banner.style.display = "block";
-			}
+      if (!localStorage.getItem("cookie-consent")) {
+        if (banner) banner.style.display = "block";
+      }
 
-			acceptBtn?.addEventListener("click", () => {
-				localStorage.setItem("cookie-consent", "accepted");
-				if (banner) banner.style.display = "none";
-			});
+      acceptBtn?.addEventListener("click", () => {
+        localStorage.setItem("cookie-consent", "accepted");
+        if (banner) banner.style.display = "none";
+      });
 
-			rejectBtn?.addEventListener("click", () => {
-				localStorage.setItem("cookie-consent", "rejected");
-				if (banner) banner.style.display = "none";
-			});
-		</script>
-	</body>
+      rejectBtn?.addEventListener("click", () => {
+        localStorage.setItem("cookie-consent", "rejected");
+        if (banner) banner.style.display = "none";
+      });
+    </script>
+  </body>
 </html>

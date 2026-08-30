@@ -1,6 +1,6 @@
 ---
-layout: '../../layouts/LegalLayout.astro'
-title: 'Affiliate Disclosure'
+layout: "../../layouts/LegalLayout.astro"
+title: "Affiliate Disclosure"
 ---
 
 # Affiliate Disclosure
@@ -11,10 +11,10 @@ At **Weyaluseries**, we believe in full transparency with our readers. In compli
 
 ## How Affiliate Links Work
 
-When you click on an affiliate link on **Weyaluseries** and make a purchase or sign up for a subscription (such as a streaming service, VPN, tech gadget, or merchandise), we may receive a small monetary commission from the merchant at **no additional cost to you**. 
+When you click on an affiliate link on **Weyaluseries** and make a purchase or sign up for a subscription (such as a streaming service, VPN, tech gadget, or merchandise), we may receive a small monetary commission from the merchant at **no additional cost to you**.
 
-* The price you pay remains exactly the same whether you use our affiliate links or navigate directly to the vendor's site.
-* In some cases, using our referral links or promo codes may even grant you a special discount.
+- The price you pay remains exactly the same whether you use our affiliate links or navigate directly to the vendor's site.
+- In some cases, using our referral links or promo codes may even grant you a special discount.
 
 ## Amazon Associates Program Disclosure
 
