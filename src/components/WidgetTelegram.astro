@@ -1,4 +1,6 @@
 ---
+import telegramIcon from "../assets/socials/500px-Telegram.png";
+
 interface Props {
   telegramUrl: string;
 }
@@ -8,7 +10,7 @@ const { telegramUrl } = Astro.props;
 
 <!-- TELEGRAM CTA -->
 <div class="telegram-cta">
-  <div class="telegram-icon">✈️</div>
+  <div class="telegram-icon"><img src={telegramIcon.src} /></div>
   <h3>Daily Deals on Telegram</h3>
   <p>
     Streaming sticks, anime figures, headphones & more — only the best
