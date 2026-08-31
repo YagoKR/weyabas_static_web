@@ -1,4 +1,6 @@
 ---
+import youtubeIcon from "../assets/socials/YoutubeLogo.png";
+
 interface Props {
     channel: string; // nombre a mostrar
     channelId: string; // el ID real del canal de YouTube
@@ -37,7 +39,7 @@ try {
 <!-- YOUTUBE WIDGET -->
 <div class="yt-widget">
     <div class="yt-header">
-        <span class="yt-icon">▶</span>
+        <img src={youtubeIcon.src} />
         <span class="yt-header-text">Latest from <a href={`https://www.youtube.com/channel/${channelId}`}>@{channel}</a></span>
     </div>
     <a href={`https://www.youtube.com/watch?v=${video.videoId}`} target="_blank" class="yt-thumb">
