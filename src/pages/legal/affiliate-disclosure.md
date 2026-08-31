@@ -29,4 +29,4 @@ Our editorial content, reviews, and TV show/anime coverage are **never influence
 
 ## Contact Us
 
-If you have any questions regarding our affiliate relationships or how we monetize this site, please contact us at **contact@weyaluseries.com**.
+If you have any questions regarding our affiliate relationships or how we monetize this site, please contact us at[weyaluseries@gmail.com](mailto:weyaluseries@gmail.com).
