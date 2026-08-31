@@ -1,9 +1,12 @@
 <style is:global>
+/* BEGIN GLOBAL PAGE STYLE */
     :root {
     /* Fondos */
     --bg:        #0a0a0f;
     --bg2:       #11111a;
     --bg3:       #181824;
+    --bg4:       #47474d;
+
     --border:    #1e1e2e;
 
     /* Tags */
@@ -26,7 +29,7 @@
     --neon:      #00aaff;
     --neon-dim:  #0066cc;
     --neon-glow: 0 0 18px #00aaff55;
-    --neon-glow-strong: 0 0 32px #00aaff99;
+    --neon-glow-strong: 0 0 4px #00aaff99;
     
     --text-primary:      #e8e8f0;
     --text-secondary:  #9393b3;
@@ -36,14 +39,14 @@
     --green:     #00ff88;
     --purple:    #aa55ff;
     --orange:    #ff8800;
+    --white:     #e6eefd;
 
     /* Font Sizes */
-
-    --extralarge: 4rem;
-    --large: 3rem;
-    --medium: 2rem;
+    --extralarge: 2.5rem;
+    --large: 2rem;
+    --medium: 1.5rem;
     --small: 1rem;
-    --extrasmall: 0.8rem;
+    --extrasmall: 0.85rem;
 
   }
 
@@ -51,7 +54,7 @@
 
   html { 
     scroll-behavior: smooth; 
-    font-size: 10px;
+    font-size: var(--small);
   }
 
   body {
@@ -67,7 +70,8 @@
 
   img { display: block; width: 100%; }
 
-  /* ── SCANLINE TEXTURE ── */
+  /* Scanline textures are lowkey ugly as fudge on websites. Consider deleting. */
+  /* ── SCANLINE TEXTURE ──
   body::before {
     content: '';
     position: fixed;
@@ -81,169 +85,330 @@
     );
     pointer-events: none;
     z-index: 9999;
-  }
+  } */
+
+/* END GLOBAL PAGE STYLE */
+
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
 
   /* LOGO */
+
+  /* .logo: controls the <div> tag that contains the logo of the site and the subtext that accompanies the logo.  */
   .logo {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
-    font-size: 28px;
+    font-size: var(--extralarge);
     letter-spacing: -0.5px;
     text-transform: uppercase;
     line-height: 1;
   }
-  .logo-w { color: var(--text-primary); }
+
+ /* .logo-w: controls the WEYALU part of the logo. */
+ .logo-w { 
+    color: var(--text-primary);
+    font-size: var(--large);
+  }
+  /* .logo-accent: controls the SERIES part of the logo. */
   .logo-accent {
     color: var(--neon);
+    font-size: var(--large);
     text-shadow: var(--neon-glow-strong);
     position: relative;
   }
+  /* .logo-sub: controls the text that goes under the logo. */
   .logo-sub {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
+    font-size: var(--extrasmall);
     color: var(--text-muted);
     letter-spacing: 3px;
     text-transform: uppercase;
     margin-top: 2px;
   }
 
-  /* NAV */
-  nav { 
-    display: flex; 
-    flex-wrap: wrap;
-    gap: 4px; 
-    align-items: center; 
-  }
-  
-  .nav-link {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 8px 14px;
-    border-radius: 4px;
-    color: var(--text-muted);
-    transition: color 0.2s, background 0.2s;
-    position: relative;
-  }
-  .nav-link:hover { color: var(--text-primary); background: var(--bg3); }
-  .nav-link.active { color: var(--neon); }
-  .nav-link.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 14px; right: 14px;
-    height: 2px;
-    background: var(--neon);
-    box-shadow: var(--neon-glow);
-    border-radius: 2px;
-  }
-  .nav-deals {
-    background: var(--neon);
-    color: var(--bg) !important;
-    font-weight: 700;
-    margin-left: 8px;
-  }
-  .nav-deals:hover { background: #33bbff !important; color: var(--bg) !important; }
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
 
+  /* HEADER */
+  
+  /* .header-search: controls the search form. */
   .header-search {
     display: flex;
     align-items: center;
-    gap: 8px;
     background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 8px 14px;
-    transition: border-color 0.2s;
-    margin-right: 1.5rem;
+    border: 1px solid var(--bg4);
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.8rem;
   }
-  .header-search:focus-within { border-color: var(--neon); box-shadow: var(--neon-glow); }
+
+  /* .header-search input: controls the input area of the search form. */
   .header-search input {
     background: none;
     border: none;
     outline: none;
+    margin-left: 1em;
     color: var(--text-primary);
-    font-size: 13px;
-    width: 180px;
+    font-size: var(--small);
     font-family: 'Inter', sans-serif;
   }
 
+  /* .header-search:focus-within: controls how the search box should display when the user clicks on it. */
+  .header-search:focus-within { 
+    border-color: var(--neon); 
+    box-shadow: var(--neon-glow); 
+  }
+
+  /* .search-icon: controls the icon shown next to the input. */
+  .search-icon {
+    color: var(--text-muted); 
+    font-size: var(--small); 
+  }
+
+  /* .header-search input::placeholder: controls the way the placeholder text on the input form should display. */
   .header-search input::placeholder { 
     color: var(--text-secondary); 
   }
-  .search-icon { color: var(--text-muted); font-size: 14px; }
+  
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
 
-  /* ── BREAKING TICKER ── */
-  .breaking-bar {
-    background: var(--neon);
-    padding: 8px 0;
-    overflow: hidden;
-    position: relative;
-  }
-  .breaking-label {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
+  /* BREAKING NEWS */
+  
+  /* The .breaking-* classes are very inconsistent. It seems the "ticker" classes control most of the styles. */
+
+  /* .breaking-label: does not work. The label no longer appears. Consider deleting or reimplementing. */
+  /* .breaking-label {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
     background: var(--red);
     display: flex;
     align-items: center;
     padding: 0 16px;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
-    font-size: 12px;
+    font-size: var(--verysmall);
     letter-spacing: 2px;
     color: #fff;
     z-index: 2;
-  }
+    } */
+    
+    /* Legacy code: consider deletion. */
+    /* .breaking-scroll a::before {
+    content: '◆';
+    margin-right: 40px;
+    opacity: 0.5;
+    } */
+    
+  .breaking-bar {
+      background: var(--neon);
+      padding: 8px 0;
+      overflow: hidden;
+      position: relative;
+    }
+
   .breaking-scroll {
     display: flex;
     animation: ticker 30s linear infinite;
     white-space: nowrap;
     padding-left: 120px;
   }
-  .breaking-scroll span {
+
+  .breaking-item {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 600;
-    font-size: 13px;
+    font-size: var(--extralarge);
     color: var(--bg);
     padding: 0 40px;
-  }
-  .breaking-scroll span::before {
-    content: '◆';
-    margin-right: 40px;
-    opacity: 0.5;
-  }
+  } */
+  
+
   @keyframes ticker {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
   }
 
-  /* ── LAYOUT ── */
-  .container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 24px;
+
+  /* ==========================================
+  ANIMACIÓN TICKER ESTILO NOTICIERO (CONTINUO)
+  ========================================== */
+
+  /* .topbar-ticker: controls the div that contains the breaking news tickers. */
+  .topbar-ticker {
+    display: flex;
+    align-items: center;
+    width: max-content; /* Clave para calcular exactamente el 100% del contenido duplicado */
+    animation: ticker-slide 25s linear infinite; /* Ajusta la velocidad si lo deseas */
   }
 
-  /* ── HERO GRID ── */
-  .hero {
-    padding: 40px 0 0;
+  /* .topbar-ticker-wrapper: also controls a div that contains the breaking news tickers... */
+  .topbar-ticker-wrapper {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  /* .topbar-ticker-wrapper:hover .topbar-ticker: controls the behavior of the animation when the user hovers over an item. */
+  .topbar-ticker-wrapper:hover .topbar-ticker {
+    animation-play-state: paused;
+  }
+
+  /* .ticker-group: groups items to make sure they loop perfectly. */
+  .ticker-group {
+    display: flex;
+    align-items: center;
+    gap: 2rem;  /* Espaciado entre elementos */
+    padding-right: 2rem; /* IMPORTANTE: Mismo valor que el gap para mantener la cadencia */
+  }
+
+  /* .ticker-item: contains each news item that is shown, including the dot that appears with it. */
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 2rem;
+    white-space: nowrap; /* Fuerza a que todo el título quede en 1 sola línea */
+  }
+
+  /* .ticker-item a: controls the color of the items that appear in the breaking news section. */
+  .ticker-item a {
+    color: var(--text-primary);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+
+  /* .ticker-item a:hover: controls how the link on the breaking news slider should display when hovering over it. */
+  .ticker-item a:hover {
+    color: var(--neon);
+  }
+
+  /* .ticker-dot: displays how the circle next to the link on the breaking news slider should display. */
+  .ticker-dot {
+    color: var(--neon);
+    font-size: 0.7rem;
+  }
+
+  /* @keyframes ticker-slide: continuous sliding without visual jumps. It's kinda broken, because it only works fairly nicely
+  when you space them by 2rem... You cannot change the gap values without making it fubar. */
+  @keyframes ticker-slide {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+
+  /* NAV */
+
+  /* nav: self explanatory. The nav element contains all of the nav items. */
+  nav { 
+    display: flex; 
+    flex-wrap: wrap;
+    gap: var(--extrasmall); 
+    align-items: center; 
   }
   
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1fr 340px;
-    grid-template-rows: auto auto;
-    /* La separacion entre las cards */
-    gap: 5px;
-    background: var(--bg);
+  /* .nav-link: controls the style of nav links when unhovered. */
+  .nav-link {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: var(--small);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 4px;
+    color: var(--text-muted);
+    transition: color 0.2s, background 0.2s;
+    transition: font-size 0.2s;
+    position: relative;
+  }
+  /* .nav-link:hover: controls the style and behavior of nav links when hovered. */
+  .nav-link:hover { 
+    color: var(--text-primary); 
+    background: var(--bg3); 
+    font-size: var(--medium);
+    transition: font-size 0.2s;
   }
 
+  /* .nav-link.active: controls how the nav link should look like when the user is on the page. */
+  .nav-link.active { 
+    color: var(--neon); 
+  }
+
+  /* .nav-link.active::after: this is how we display the underline under the current page link. */
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 14px; right: 14px;
+    height: 0.2rem;
+    background: var(--neon);
+    border-radius: 2px;
+  }
+
+  /* .nav-deals: controls how the deals item should display. */
+  .nav-deals {
+    background: var(--neon);
+    color: var(--bg);
+    font-weight: 700;
+  }
+
+  /* .nav-deals:hover: controls how the deals element should display when hovering over it. */
+  .nav-deals:hover { 
+    background: var(--orange);
+    color: var(--bg);
+  }
+
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+
+  /* LAYOUT */
+  /* .container: this class is used in multiple points. It is used to contain the news grids, deals widget and advertisement slot placement. */
+  .container {
+    width: 100%;
+    /* Ancho estándar para dashboards/noticias. Mejor usar la medida "vw" en la anchura para que se adapte a la ventana del usuario. */
+    max-width: 90vw; 
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    box-sizing: border-box;
+  }
+
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+
+  /* HERO */
+
+  /* .hero: contains the hero elements. Three news cards that show the latest news. */
+  .hero {
+    padding: 1vh 0 1vh;
+  }
+  
+  /* .hero-grid: controls the grid elements. It creates two columns. The main hero element goes on the left. */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 75% 25%;
+    grid-template-rows: auto auto;
+    /* La separacion entre las cards */
+    gap: 1%;
+  }
+
+  /* .hero-main: controls the main element of the hero. It spans across both rows of the grid, starting at grid row line 1 (the top)
+  and ending at grid row line 3 (the bottom of the second row). */
   .hero-main {
     grid-row: 1 / 3;
     position: relative;
     overflow: hidden;
     cursor: pointer;
   }
+  
+  /* .hero-main-img: controls the image that the main hero element uses. */
   .hero-main-img {
     width: 100%;
     height: 520px;
@@ -252,14 +417,24 @@
     filter: brightness(0.90);
     transition: filter 0.3s, transform 0.4s;
   }
-  .hero-main:hover .hero-main-img { filter: brightness(1.0); transform: scale(1.02); }
+
+  /* .hero-main:hover .hero-main-img: controls the transition that occurs when you hover over the card. */
+  .hero-main:hover .hero-main-img { 
+    filter: brightness(1.0); 
+    transform: scale(1.02); 
+  }
   
+  /* .hero-main-content: controls the data that is shown under the main card. 
+  Things like the title, the author, the tag, the date, the read time, etc. */
   .hero-main-content {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     padding: 32px;
     background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
   }
+
+  /* .hero-secondary: this class contains the secondary hero elements.  Unlike the main card, here you can control things such as 
+  the background color of the card.*/
   .hero-secondary {
     background: var(--bg2);
     padding: 20px;
@@ -268,17 +443,75 @@
     position: relative;
     overflow: hidden;
   }
-  .hero-secondary:hover { background: var(--bg3); }
-  
-  .hero-secondary-img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    margin-bottom: 14px;
-    filter: brightness(0.7);
-  }
 
-  /* ── CARDS & TAGS ── */
+  /* .hero-secondary:hover: controls the behavior of the secondary hero elements when you hover over them. */
+  .hero-secondary:hover { 
+    background: var(--bg3); 
+  }
+  
+/* .hero-secondary-img: controls the images used in secondary hero elements. */
+.hero-secondary-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  margin-bottom: 14px;
+  filter: brightness(0.7);
+}
+/* .hero-title: controls the title of the main hero element. Gives it a shadow to distinguish it from the image and has more 
+font-weight to emphasize the content.  */
+.hero-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: var(--extralarge);
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  color: var(--white);
+  margin-bottom: 10px;
+  text-shadow: 0px 0px 5px #0a0a0f;
+}
+
+/* .hero-title:hover: this controls the hovering behavior for the main hero element's title. Secondary titles have their own class. */
+.hero-title:hover { 
+  color: var(--neon); 
+}
+
+/* .hero-title:hover: this controls the metadata for the main hero element specifically. Things such as date, author, read time, etc. */
+.hero-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--small);
+  color: var(--text-muted);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+/* .hero-meta .dot: controls the diamond shaped dot that separates the metadata for the main hero element.  */
+.hero-meta .dot { 
+  color: var(--neon); 
+}
+
+/* .secondary-title: this controls the secondary hero elements' titles. The main element's title has its own class. */
+.secondary-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: var(--medium);
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  transition: color 0.2s;
+}
+
+/* .hero-secondary:hover: controls the hovering behavior for secondary elements' titles.  */
+.hero-secondary:hover .secondary-title { 
+  color: var(--neon); 
+}
+
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
+
+  /* TAGS */
+
+  /* .tag: controls the general appearance of all tags. */
   .tag {
     display: inline-block;
     font-family: 'Barlow Condensed', sans-serif;
@@ -288,49 +521,27 @@
     text-transform: uppercase;
     padding: 3px 10px;
     border-radius: 3px;
+    margin: 0.5rem 0rem 0rem 0rem;
   }
 
+  /* .tag-series: controls the background color for the series tag. */
   .tag-series  { background: var(--tag-series);    color: #fff; }
+
+  /* .tag-anime: controls the background color for the anime tag. */
   .tag-anime   { background: var(--tag-anime); color: #fff; }
+
+  /* .tag-tech: controls the background color for the tech tag. */
   .tag-tech    { background: var(--tag-tech);   color: color: #fff; }
+  
+  /* .tag-movies: controls the background color for the movies tag. */
   .tag-movies  { background: var(--tag-movies);  color: color: #fff; }
+
+  /* .tag-theories: controls the background color for the theories tag. */
   .tag-theories  { background: var(--tag-movies);  color: color: #fff; }
 
-  .hero-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: var(--extralarge);
-    line-height: 1.05;
-    letter-spacing: -0.5px;
-    color: #fff;
-    margin-bottom: 10px;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
-  }
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
 
-  .hero-title:hover { color: var(--neon); }
-
-  .hero-meta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: var(--small);
-    color: var(--text-muted);
-    display: flex;
-    gap: 16px;
-    align-items: center;
-  }
-
-  .hero-meta .dot { color: var(--neon); }
-
-  .secondary-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: var(--medium);
-    line-height: 1.2;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-    transition: color 0.2s;
-  }
-
-  .hero-secondary:hover .secondary-title { color: var(--neon); }
 
   /* ── SECTION HEADER ── */
   .section-header {
@@ -535,7 +746,6 @@
   .telegram-cta {
     background: linear-gradient(135deg, #0a1a2e 0%, #0a0a1a 100%);
     border: 1px solid var(--neon-dim);
-    box-shadow: inset 0 0 40px rgba(0,170,255,0.05);
     padding: 24px;
     text-align: center;
     margin-bottom: 24px;
@@ -543,8 +753,8 @@
   .telegram-icon {
     font-size: 36px;
     margin-bottom: 12px;
-    filter: drop-shadow(0 0 12px #00aaff);
   }
+
   .telegram-cta h3 {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
@@ -572,6 +782,7 @@
     border-radius: 4px;
     transition: background 0.2s, box-shadow 0.2s;
   }
+
   .btn-telegram:hover {
     background: #33bbff;
     box-shadow: var(--neon-glow-strong);
@@ -879,7 +1090,6 @@
     display: flex;
     gap: 24px;
   }
-  .topbar-ticker span { color: var(--neon); margin-right: 6px; }
   
   .topbar-right { 
     display: flex; 
@@ -910,53 +1120,6 @@
     justify-content: space-between;
   }
 
-   /* LOGO */
-  .logo {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 28px;
-    letter-spacing: -0.5px;
-    text-transform: uppercase;
-    line-height: 1;
-  }
-  .logo-w { color: var(--text-primary); }
-  
-  .logo-accent {
-    color: var(--neon);
-    text-shadow: var(--neon-glow-strong);
-    position: relative;
-  }
-  .logo-sub {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1rem;
-    color: var(--text-muted);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-
-  .header-search {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 8px 14px;
-    transition: border-color 0.2s;
-  }
-  .header-search:focus-within { border-color: var(--neon); box-shadow: var(--neon-glow); }
-  .header-search input {
-    background: none;
-    border: none;
-    outline: none;
-    color: var(--text-primary);
-    font-size: 13px;
-    width: 180px;
-    font-family: 'Inter', sans-serif;
-  }
-  .header-search input::placeholder { color: var(--text-secondary); }
-  .search-icon { color: var(--text-muted); font-size: 14px; }
 
   /* -- FOOTER -- */
   footer {
@@ -1273,7 +1436,8 @@ main {
    ========================================== */
 
 /* 1. El contenedor principal que envuelve las secciones */
-main, .main-container, .container, .hero, .latest-news-section {
+/* NOTA: se ha eliminado a .hero de aqui para que el ancho se alinee perfectamente en cada seccion del cuerpo. */
+main, .main-container, .latest-news-section {
   width: 100%;
   max-width: 1280px; /* Ancho estándar para dashboards/noticias */
   margin-left: auto;
@@ -1301,72 +1465,6 @@ main, .main-container, .container, .hero, .latest-news-section {
 .news-card h3 {
   word-break: break-word; /* Evita desbordamientos raros de texto */
   line-height: 1.3;
-}
-
-/* ==========================================
-   ANIMACIÓN TICKER ESTILO NOTICIERO (CONTINUO)
-   ========================================== */
-
-.topbar-ticker-wrapper {
-  overflow: hidden;
-  white-space: nowrap;
-  width: 100%;
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.topbar-ticker {
-  display: flex;
-  align-items: center;
-  width: max-content; /* Clave para calcular exactamente el 100% del contenido duplicado */
-  animation: ticker-slide 25s linear infinite; /* Ajusta la velocidad si lo deseas */
-}
-
-/* Pausa la animación al pasar el ratón por encima */
-.topbar-ticker-wrapper:hover .topbar-ticker {
-  animation-play-state: paused;
-}
-
-/* Grupos en paralelo para lograr el bucle perfecto */
-.ticker-group {
-  display: flex;
-  align-items: center;
-  gap: 2rem; /* Espaciado entre elementos */
-  padding-right: 2rem; /* IMPORTANTE: Mismo valor que el gap para mantener la cadencia */
-}
-
-.ticker-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  white-space: nowrap; /* Fuerza a que todo el título quede en 1 sola línea */
-}
-
-.ticker-item a {
-  color: inherit;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color 0.2s ease;
-}
-
-.ticker-item a:hover {
-  color: #00d2ff;
-}
-
-.ticker-dot {
-  color: #00d2ff;
-  font-size: 0.7rem;
-}
-
-/* Desplazamiento continuo sin saltos visuales */
-@keyframes ticker-slide {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
 }
 
 /* Estilos para la imagen principal de la noticia */
@@ -1450,25 +1548,6 @@ main, .main-container, .container, .hero, .latest-news-section {
   .post-image-link {
     width: 100%;
   }
-}
-
-/* Contenedor del buscador del Header */
-.header-search {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 0.4rem 0.8rem;
-}
-
-.header-search input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #fff;
-  margin-left: 0.5rem;
-  width: 100%;
 }
 
 /* Página de resultados */
@@ -1680,12 +1759,12 @@ header,
       .cookie-content h3 {
         margin: 0 0 0.4rem 0;
         color: #fff;
-        font-size: 2rem;
+        font-size: var(--medium);
         font-weight: 600;
       }
 
       .cookie-content p {
-        font-size: 1.5rem;
+        font-size: var(--small);
         color: var(--text-primary);
         margin: 0 0 1rem 0;
         line-height: 1.45;
@@ -1701,7 +1780,7 @@ header,
 
       .cookie-link {
         color: #8a8f9d;
-        font-size: 0.85rem;
+        font-size: var(--extrasmall);
         text-decoration: underline;
         transition: color 0.2s;
       }
@@ -1720,7 +1799,7 @@ header,
         border-radius: 6px;
         font-weight: 600;
         cursor: pointer;
-        font-size: 0.85rem;
+        font-size: var(--extrasmall);
         border: none;
         transition: opacity 0.2s;
       }
