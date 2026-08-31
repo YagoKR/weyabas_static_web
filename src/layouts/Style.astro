@@ -1474,7 +1474,7 @@ main, .main-container, .latest-news-section {
   margin: 1.5rem auto 2.5rem auto; /* Centrado */
   border-radius: 8px;
   overflow: hidden;
-  aspect-ratio: 16 / 9; /* Mantiene la relación de aspecto exacta de la imagen original */
+  aspect-ratio: math.div(16, 9); /* Mantiene la relación de aspecto exacta de la imagen original */
 }
 
 .article-hero-image img {
@@ -1488,7 +1488,7 @@ main, .main-container, .latest-news-section {
   margin: 1.5rem auto 2rem auto;
   width: 100%;
   max-width: 700px; 
-  aspect-ratio: 16 / 9;
+  aspect-ratio: math.div(16, 9);
 }
 
 .article-hero-figure img {
@@ -1519,7 +1519,7 @@ main, .main-container, .latest-news-section {
 .post-image-link {
   flex-shrink: 0;
   width: 220px; /* Ancho fijo para la miniatura */
-  aspect-ratio: 16 / 9;
+  aspect-ratio: math.div(16, 9);
   border-radius: 8px;
   overflow: hidden;
   display: block;
@@ -1586,7 +1586,7 @@ main, .main-container, .latest-news-section {
 
 .search-card-image {
   width: 200px;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: math.div(16, 9);
   flex-shrink: 0;
   border-radius: 6px;
   overflow: hidden;
