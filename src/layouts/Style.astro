@@ -82,6 +82,7 @@
   }
 
   /* Scanline textures are lowkey ugly as fudge on websites. Consider deleting. */
+
   /* ── SCANLINE TEXTURE ──
   body::before {
     content: '';
@@ -188,6 +189,7 @@
   /* The .breaking-* classes are very inconsistent. It seems the "ticker" classes control most of the styles. */
 
   /* .breaking-label: does not work. The label no longer appears. Consider deleting or reimplementing. */
+
   /* .breaking-label {
   position: absolute;
   left: 0; top: 0; bottom: 0;
@@ -202,14 +204,14 @@
     color: #fff;
     z-index: 2;
     } */
-
-  /* Legacy code: consider deletion. */
-  /* .breaking-scroll a::before {
+    
+    /* Legacy code: consider deletion. */
+    /* .breaking-scroll a::before {
     content: '◆';
     margin-right: 40px;
     opacity: 0.5;
     } */
-
+    
   .breaking-bar {
     background: var(--neon);
     padding: 8px 0;
@@ -230,7 +232,9 @@
     font-size: var(--extralarge);
     color: var(--bg);
     padding: 0 40px;
-  }
+  } 
+  
+
   @keyframes ticker {
     from {
       transform: translateX(0);
@@ -285,7 +289,8 @@
 
   /* .ticker-item a: controls the color of the items that appear in the breaking news section. */
   .ticker-item a {
-    color: var(--text-primary);
+    color: var(--text-secondary);
+    font-size: var(--verysmall);
     text-decoration: none;
     white-space: nowrap;
     transition: color 0.2s ease;
@@ -299,7 +304,7 @@
   /* .ticker-dot: displays how the circle next to the link on the breaking news slider should display. */
   .ticker-dot {
     color: var(--neon);
-    font-size: 0.7rem;
+    font-size: var(--verysmall);
   }
 
   /* @keyframes ticker-slide: continuous sliding without visual jumps. It's kinda broken, because it only works fairly nicely
@@ -573,10 +578,7 @@ font-weight to emphasize the content.  */
   }
 
   /* .tag-theories: controls the background color for the theories tag. */
-  .tag-theories {
-    background: var(--tag-theories);
-    color: #fff;
-  }
+  .tag-theories  { background: var(--tag-movies);  color: color: #fff; }
 
   /* --------------------------------------------------------------------------------------------------------------------------------- */
   /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -586,8 +588,8 @@ font-weight to emphasize the content.  */
     display: flex;
     align-items: center;
     gap: 16px;
-    margin: 40px 0 20px;
   }
+
   .section-title {
     font-family: "Barlow Condensed", sans-serif;
     font-weight: 900;
@@ -626,8 +628,8 @@ font-weight to emphasize the content.  */
   /* ── MAIN CONTENT GRID ── */
   .content-layout {
     display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 32px;
+    grid-template-columns: 75% 25%;
+    gap: 1%;
     padding-bottom: 48px;
   }
 
@@ -820,8 +822,17 @@ font-weight to emphasize the content.  */
     text-align: center;
     margin-bottom: 24px;
   }
+
   .telegram-icon {
-    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Ensures it spans the container to center within */
+  }
+
+  .telegram-icon img {
+    width: 40%;
+    height: auto;
     margin-bottom: 12px;
   }
 
@@ -932,17 +943,14 @@ font-weight to emphasize the content.  */
     margin-bottom: 24px;
     overflow: hidden;
   }
+
   .yt-header {
     padding: 14px 16px;
     display: flex;
     align-items: center;
-    gap: 10px;
     border-bottom: 1px solid var(--border);
   }
-  .yt-icon {
-    color: var(--red);
-    font-size: 18px;
-  }
+  .yt-icon { color: var(--red); font-size: 18px; }
   .yt-header-text {
     font-family: "Barlow Condensed", sans-serif;
     font-weight: 700;
@@ -1225,10 +1233,8 @@ font-weight to emphasize the content.  */
     gap: 16px;
     padding: 0rem 0rem 0rem 1rem;
   }
-
-  .topbar-right a:hover {
-    color: var(--neon);
-  }
+  
+  .topbar-right a:hover { color: var(--neon); }
 
   /* ── HEADER ── */
   header {
@@ -1272,13 +1278,9 @@ font-weight to emphasize the content.  */
     line-height: 1.6;
     margin-bottom: 16px;
   }
-  .footer-socials {
-    display: flex;
-    gap: 10px;
-  }
+  .footer-socials { display: flex; gap: 10px; }
   .social-btn {
-    width: 36px;
-    height: 36px;
+    width: 36px; height: 36px;
     background: var(--bg3);
     border: 1px solid var(--border);
     border-radius: 4px;
@@ -1291,10 +1293,7 @@ font-weight to emphasize the content.  */
       background 0.2s;
     cursor: pointer;
   }
-  .social-btn:hover {
-    border-color: var(--neon);
-    background: var(--neon);
-  }
+  .social-btn:hover { border-color: var(--neon); background: var(--neon); }
 
   .footer-col h4 {
     font-family: "Barlow Condensed", sans-serif;
