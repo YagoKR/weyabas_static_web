@@ -29,7 +29,7 @@
     --neon:      #00aaff;
     --neon-dim:  #0066cc;
     --neon-glow: 0 0 18px #00aaff55;
-    --neon-glow-strong: 0 0 32px #00aaff99;
+    --neon-glow-strong: 0 0 4px #00aaff99;
     
     --text-primary:      #e8e8f0;
     --text-secondary:  #9393b3;
@@ -367,33 +367,48 @@
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 
-  /* ── LAYOUT ── */
+  /* LAYOUT */
+  /* .container: this class is used in multiple points. It is used to contain the news grids, deals widget and advertisement slot placement. */
   .container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 24px;
+    width: 100%;
+    /* Ancho estándar para dashboards/noticias. Mejor usar la medida "vw" en la anchura para que se adapte a la ventana del usuario. */
+    max-width: 90vw; 
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    box-sizing: border-box;
   }
 
-  /* ── HERO GRID ── */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+
+  /* HERO */
+
+  /* .hero: contains the hero elements. Three news cards that show the latest news. */
   .hero {
-    padding: 40px 0 0;
+    padding: 1vh 0 1vh;
   }
   
+  /* .hero-grid: controls the grid elements. It creates two columns. The main hero element goes on the left. */
   .hero-grid {
     display: grid;
-    grid-template-columns: 1fr 340px;
+    grid-template-columns: 75% 25%;
     grid-template-rows: auto auto;
     /* La separacion entre las cards */
-    gap: 5px;
-    background: var(--bg);
+    gap: 1%;
   }
 
+  /* .hero-main: controls the main element of the hero. It spans across both rows of the grid, starting at grid row line 1 (the top)
+  and ending at grid row line 3 (the bottom of the second row). */
   .hero-main {
     grid-row: 1 / 3;
     position: relative;
     overflow: hidden;
     cursor: pointer;
   }
+  
+  /* .hero-main-img: controls the image that the main hero element uses. */
   .hero-main-img {
     width: 100%;
     height: 520px;
@@ -402,14 +417,24 @@
     filter: brightness(0.90);
     transition: filter 0.3s, transform 0.4s;
   }
-  .hero-main:hover .hero-main-img { filter: brightness(1.0); transform: scale(1.02); }
+
+  /* .hero-main:hover .hero-main-img: controls the transition that occurs when you hover over the card. */
+  .hero-main:hover .hero-main-img { 
+    filter: brightness(1.0); 
+    transform: scale(1.02); 
+  }
   
+  /* .hero-main-content: controls the data that is shown under the main card. 
+  Things like the title, the author, the tag, the date, the read time, etc. */
   .hero-main-content {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     padding: 32px;
     background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
   }
+
+  /* .hero-secondary: this class contains the secondary hero elements.  Unlike the main card, here you can control things such as 
+  the background color of the card.*/
   .hero-secondary {
     background: var(--bg2);
     padding: 20px;
@@ -418,17 +443,75 @@
     position: relative;
     overflow: hidden;
   }
-  .hero-secondary:hover { background: var(--bg3); }
-  
-  .hero-secondary-img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    margin-bottom: 14px;
-    filter: brightness(0.7);
-  }
 
-  /* ── CARDS & TAGS ── */
+  /* .hero-secondary:hover: controls the behavior of the secondary hero elements when you hover over them. */
+  .hero-secondary:hover { 
+    background: var(--bg3); 
+  }
+  
+/* .hero-secondary-img: controls the images used in secondary hero elements. */
+.hero-secondary-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  margin-bottom: 14px;
+  filter: brightness(0.7);
+}
+/* .hero-title: controls the title of the main hero element. Gives it a shadow to distinguish it from the image and has more 
+font-weight to emphasize the content.  */
+.hero-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: var(--extralarge);
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  color: var(--white);
+  margin-bottom: 10px;
+  text-shadow: 0px 0px 5px #0a0a0f;
+}
+
+/* .hero-title:hover: this controls the hovering behavior for the main hero element's title. Secondary titles have their own class. */
+.hero-title:hover { 
+  color: var(--neon); 
+}
+
+/* .hero-title:hover: this controls the metadata for the main hero element specifically. Things such as date, author, read time, etc. */
+.hero-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--small);
+  color: var(--text-muted);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+/* .hero-meta .dot: controls the diamond shaped dot that separates the metadata for the main hero element.  */
+.hero-meta .dot { 
+  color: var(--neon); 
+}
+
+/* .secondary-title: this controls the secondary hero elements' titles. The main element's title has its own class. */
+.secondary-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: var(--medium);
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  transition: color 0.2s;
+}
+
+/* .hero-secondary:hover: controls the hovering behavior for secondary elements' titles.  */
+.hero-secondary:hover .secondary-title { 
+  color: var(--neon); 
+}
+
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
+
+  /* TAGS */
+
+  /* .tag: controls the general appearance of all tags. */
   .tag {
     display: inline-block;
     font-family: 'Barlow Condensed', sans-serif;
@@ -438,49 +521,27 @@
     text-transform: uppercase;
     padding: 3px 10px;
     border-radius: 3px;
+    margin: 0.5rem 0rem 0rem 0rem;
   }
 
+  /* .tag-series: controls the background color for the series tag. */
   .tag-series  { background: var(--tag-series);    color: #fff; }
+
+  /* .tag-anime: controls the background color for the anime tag. */
   .tag-anime   { background: var(--tag-anime); color: #fff; }
+
+  /* .tag-tech: controls the background color for the tech tag. */
   .tag-tech    { background: var(--tag-tech);   color: color: #fff; }
+  
+  /* .tag-movies: controls the background color for the movies tag. */
   .tag-movies  { background: var(--tag-movies);  color: color: #fff; }
+
+  /* .tag-theories: controls the background color for the theories tag. */
   .tag-theories  { background: var(--tag-movies);  color: color: #fff; }
 
-  .hero-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: var(--extralarge);
-    line-height: 1.05;
-    letter-spacing: -0.5px;
-    color: #fff;
-    margin-bottom: 10px;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
-  }
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
+  /* --------------------------------------------------------------------------------------------------------------------------------- */
 
-  .hero-title:hover { color: var(--neon); }
-
-  .hero-meta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: var(--small);
-    color: var(--text-muted);
-    display: flex;
-    gap: 16px;
-    align-items: center;
-  }
-
-  .hero-meta .dot { color: var(--neon); }
-
-  .secondary-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: var(--medium);
-    line-height: 1.2;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-    transition: color 0.2s;
-  }
-
-  .hero-secondary:hover .secondary-title { color: var(--neon); }
 
   /* ── SECTION HEADER ── */
   .section-header {
@@ -685,7 +746,6 @@
   .telegram-cta {
     background: linear-gradient(135deg, #0a1a2e 0%, #0a0a1a 100%);
     border: 1px solid var(--neon-dim);
-    box-shadow: inset 0 0 40px rgba(0,170,255,0.05);
     padding: 24px;
     text-align: center;
     margin-bottom: 24px;
@@ -693,8 +753,8 @@
   .telegram-icon {
     font-size: 36px;
     margin-bottom: 12px;
-    filter: drop-shadow(0 0 12px #00aaff);
   }
+
   .telegram-cta h3 {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
@@ -722,6 +782,7 @@
     border-radius: 4px;
     transition: background 0.2s, box-shadow 0.2s;
   }
+
   .btn-telegram:hover {
     background: #33bbff;
     box-shadow: var(--neon-glow-strong);
@@ -1375,7 +1436,8 @@ main {
    ========================================== */
 
 /* 1. El contenedor principal que envuelve las secciones */
-main, .main-container, .container, .hero, .latest-news-section {
+/* NOTA: se ha eliminado a .hero de aqui para que el ancho se alinee perfectamente en cada seccion del cuerpo. */
+main, .main-container, .latest-news-section {
   width: 100%;
   max-width: 1280px; /* Ancho estándar para dashboards/noticias */
   margin-left: auto;
