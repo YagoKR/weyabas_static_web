@@ -18,10 +18,10 @@ const posts = await client.fetch(`
   }
 `);
 
-// 2. Agrupamos los posts por fecha formateada en español
+// 2. Agrupamos los posts por fecha formateada en inglés
 const groupedPosts = posts.reduce(
   (acc: any, post: any) => {
-    const dateKey = new Date(post.date).toLocaleDateString("es-ES", {
+    const dateKey = new Date(post.date).toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
