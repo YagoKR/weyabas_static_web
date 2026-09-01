@@ -136,7 +136,7 @@ const animePosts = await client.fetch(`
                   <span>{secondaryPost1.title}</span>
                 )}
               </a>
-              <div class="tags-container">
+              <div class="tags-container hero-tags">
                 {Array.isArray(secondaryPost1.categories) ? (
                   secondaryPost1.categories.map((c: string) => (
                     <span class={`tag tag-${c}`}>{c}</span>
@@ -178,7 +178,7 @@ const animePosts = await client.fetch(`
                   <span>{secondaryPost2.title}</span>
                 )}
               </a>
-              <div class="tags-container">
+              <div class="tags-container hero-tags">
                 {Array.isArray(secondaryPost2.categories) ? (
                   secondaryPost2.categories.map((c: string) => (
                     <span class={`tag tag-${c}`}>{c}</span>
@@ -244,7 +244,7 @@ const animePosts = await client.fetch(`
                       )}
                     </a>
                     <div class="card-body">
-                      <div class="tags-container">
+                      <div class="tags-container latest-tags">
                         {Array.isArray(post.categories) ? (
                           post.categories.map((c: string) => (
                             <span class={`tag tag-${c}`}>{c}</span>

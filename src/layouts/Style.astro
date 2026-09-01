@@ -204,14 +204,14 @@
     color: #fff;
     z-index: 2;
     } */
-    
-    /* Legacy code: consider deletion. */
-    /* .breaking-scroll a::before {
+
+  /* Legacy code: consider deletion. */
+  /* .breaking-scroll a::before {
     content: '◆';
     margin-right: 40px;
     opacity: 0.5;
     } */
-    
+
   .breaking-bar {
     background: var(--neon);
     padding: 8px 0;
@@ -232,8 +232,7 @@
     font-size: var(--extralarge);
     color: var(--bg);
     padding: 0 40px;
-  } 
-  
+  }
 
   @keyframes ticker {
     from {
@@ -540,9 +539,18 @@ font-weight to emphasize the content.  */
 
   /* TAGS */
 
-  /* .tag: controls the general appearance of all tags. */
+  .tags-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+    line-height: 1;
+  }
+
   .tag {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-family: "Barlow Condensed", sans-serif;
     font-weight: 700;
     font-size: var(--small);
@@ -550,7 +558,13 @@ font-weight to emphasize the content.  */
     text-transform: uppercase;
     padding: 3px 10px;
     border-radius: 3px;
-    margin: 0.5rem 0rem 0rem 0rem;
+    margin: 0;
+    line-height: 1;
+    box-sizing: border-box;
+  }
+
+  .hero-tags {
+    margin-top: 12px;
   }
 
   /* .tag-series: controls the background color for the series tag. */
@@ -578,7 +592,10 @@ font-weight to emphasize the content.  */
   }
 
   /* .tag-theories: controls the background color for the theories tag. */
-  .tag-theories  { background: var(--tag-movies);  color: color: #fff; }
+  .tag-theories {
+    background: var(--tag-theories);
+    color: #fff;
+  }
 
   /* --------------------------------------------------------------------------------------------------------------------------------- */
   /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -650,17 +667,26 @@ font-weight to emphasize the content.  */
     background: var(--bg3);
   }
 
+  /* El enlace actua como contenedor de altura fija */
   .card-img {
-    display: inline-block;
-    margin: 10px 0px 0px;
-
-    /* width: 100%;
+    display: block;
+    width: 100%;
     height: 160px;
-    object-fit: cover; */
+    overflow: hidden;
+    border-radius: 6px;
+    margin-top: 10px;
     filter: brightness(0.75);
     transition:
       filter 0.3s,
       transform 0.3s;
+  }
+
+  /* La imagen llena exactamente el contenedor y se recorta sin deformarse */
+  .card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .card:hover .card-img {
     filter: brightness(0.9);
@@ -696,7 +722,9 @@ font-weight to emphasize the content.  */
     font-size: var(--small);
     color: var(--text-secondary);
     display: flex;
+    align-items: center;
     gap: 12px;
+    margin-top: auto;
   }
 
   /* ── LIST CARD (sidebar style) ── */
@@ -950,7 +978,10 @@ font-weight to emphasize the content.  */
     align-items: center;
     border-bottom: 1px solid var(--border);
   }
-  .yt-icon { color: var(--red); font-size: 18px; }
+  .yt-icon {
+    color: var(--red);
+    font-size: 18px;
+  }
   .yt-header-text {
     font-family: "Barlow Condensed", sans-serif;
     font-weight: 700;
@@ -1233,8 +1264,10 @@ font-weight to emphasize the content.  */
     gap: 16px;
     padding: 0rem 0rem 0rem 1rem;
   }
-  
-  .topbar-right a:hover { color: var(--neon); }
+
+  .topbar-right a:hover {
+    color: var(--neon);
+  }
 
   /* ── HEADER ── */
   header {
@@ -1278,9 +1311,13 @@ font-weight to emphasize the content.  */
     line-height: 1.6;
     margin-bottom: 16px;
   }
-  .footer-socials { display: flex; gap: 10px; }
+  .footer-socials {
+    display: flex;
+    gap: 10px;
+  }
   .social-btn {
-    width: 36px; height: 36px;
+    width: 36px;
+    height: 36px;
     background: var(--bg3);
     border: 1px solid var(--border);
     border-radius: 4px;
@@ -1293,7 +1330,10 @@ font-weight to emphasize the content.  */
       background 0.2s;
     cursor: pointer;
   }
-  .social-btn:hover { border-color: var(--neon); background: var(--neon); }
+  .social-btn:hover {
+    border-color: var(--neon);
+    background: var(--neon);
+  }
 
   .footer-col h4 {
     font-family: "Barlow Condensed", sans-serif;
@@ -1852,7 +1892,7 @@ font-weight to emphasize the content.  */
   /* 4. Empujar la FECHA / MINUTOS siempre al fondo de la tarjeta */
   .card-date,
   .card-footer,
-  .card span:last-child {
+  .card-meta{
     margin-top: auto !important; /* Alinea la fecha abajo del todo en TODAS las tarjetas */
     padding-top: 10px !important;
   }
@@ -2098,7 +2138,7 @@ font-weight to emphasize the content.  */
     font-weight: bold;
   }
 
-    .youtube-icon {
+  .youtube-icon {
     width: 24px !important;
     height: 24px !important;
     object-fit: contain;
@@ -2127,204 +2167,199 @@ font-weight to emphasize the content.  */
   }
 
   /* Hace que las tarjetas se estiren por igual y usen Flexbox vertical */
-.card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
+  .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 
-/* El cuerpo ocupa todo el espacio disponible */
-.card-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
+  /* El cuerpo ocupa todo el espacio disponible */
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
 
-/* Fija una altura o reserva espacio uniforme para los tags */
-.tags-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  min-height: 28px; /* Mantiene la misma altura independientemente del nº de filas */
-  margin-bottom: 8px;
-}
-
-/* Empuja la fecha y tiempo de lectura al final de la tarjeta */
-.card-meta {
-  margin-top: auto;
-}
-/* ===================================================
+  /* Empuja la fecha y tiempo de lectura al final de la tarjeta */
+  .card-meta {
+    margin-top: auto;
+  }
+  /* ===================================================
    ALIGNMENT & CARD CONSISTENCY (DESKTOP & MOBILE)
    =================================================== */
 
-/* Uniformidad en contenedores de etiquetas */
-.tags-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  min-height: 28px;
-  margin-bottom: 8px;
-}
+  /* Uniformidad en contenedores de etiquetas */
+  .tags-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
 
-/* Base unificada para todos los tags */
-.tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  padding: 0 10px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  line-height: 1;
-  border-radius: 4px;
-  box-sizing: border-box;
-  vertical-align: middle;
-}
+  /* Base unificada para todos los tags */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    padding: 0 10px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1;
+    border-radius: 4px;
+    box-sizing: border-box;
+    vertical-align: middle;
+    margin: 0 !important;
+    position: relative;
+    top: 0;
+  }
 
-/* Colores por tag */
-.tag-series {
-  background-color: #006699;
-  color: #ffffff;
-}
+  /* Colores por tag */
+  .tag-series {
+    background-color: #006699;
+    color: #ffffff;
+  }
 
-.tag-anime {
-  background-color: #8800aa;
-  color: #ffffff;
-}
+  .tag-anime {
+    background-color: #8800aa;
+    color: #ffffff;
+  }
 
-/* Tarjetas y alturas simétricas */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  align-items: stretch;
-}
+  /* Tarjetas y alturas simétricas */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    align-items: stretch;
+  }
 
-.card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
+  .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 
-.card-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
 
-.card-excerpt {
-  flex: 1;
-  margin-bottom: 12px;
-}
+  .card-excerpt {
+    flex: 1;
+    margin-bottom: 12px;
+  }
 
-.card-meta {
-  margin-top: auto;
-}
+  .card-meta {
+    margin-top: auto;
+  }
 
-
-/* ===================================================
+  /* ===================================================
    MOBILE RESPONSIVE (PANTALLAS <= 768PX)
    =================================================== */
 
-@media (max-width: 768px) {
-  
-  /* Prevenir desbordamientos del body */
-  html, body, main {
-    overflow-x: hidden;
-    width: 100%;
-  }
+  @media (max-width: 768px) {
+    /* Prevenir desbordamientos del body */
+    html,
+    body,
+    main {
+      overflow-x: hidden;
+      width: 100%;
+    }
 
-  .container {
-    padding-left: 16px;
-    padding-right: 16px;
-    box-sizing: border-box;
-  }
+    .container {
+      padding-left: 16px;
+      padding-right: 16px;
+      box-sizing: border-box;
+    }
 
-  /* Layout principal en 1 sola columna */
-  .content-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-  }
+    /* Layout principal en 1 sola columna */
+    .content-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
 
-  /* Hero grid en 1 sola columna */
-  .hero-grid {
-    grid-template-columns: 1fr;
-  }
+    /* Hero grid en 1 sola columna */
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
 
-  /* Latest news en 1 columna */
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
+    /* Latest news en 1 columna */
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
 
-  /* Menú de navegación con scroll horizontal limpio */
-  nav, .nav-links, .menu-categories {
-    display: flex;
-    white-space: nowrap;
-    overflow-x: auto;
-    max-width: 100%;
-    padding-bottom: 5px;
-    -webkit-overflow-scrolling: touch;
-  }
+    /* Menú de navegación con scroll horizontal limpio */
+    nav,
+    .nav-links,
+    .menu-categories {
+      display: flex;
+      white-space: nowrap;
+      overflow-x: auto;
+      max-width: 100%;
+      padding-bottom: 5px;
+      -webkit-overflow-scrolling: touch;
+    }
 
-  /* Carrusel de Series y Anime ajustado */
-  .horizontal-scroll {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 16px;
-    padding-bottom: 10px;
-    -webkit-overflow-scrolling: touch;
-  }
+    /* Carrusel de Series y Anime ajustado */
+    .horizontal-scroll {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 16px;
+      padding-bottom: 10px;
+      -webkit-overflow-scrolling: touch;
+    }
 
-  .horizontal-scroll .card {
-    flex: 0 0 260px;
-    min-width: 260px;
-    scroll-snap-align: start;
-  }
+    .horizontal-scroll .card {
+      flex: 0 0 260px;
+      min-width: 260px;
+      scroll-snap-align: start;
+    }
 
-  .card-img, 
-  .card-img img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
+    .card-img,
+    .card-img img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      overflow: hidden;
+    }
 
-  /* Buscador al 100% de ancho */
-  .search-input, 
-  [type="search"], 
-  .search-bar {
-    width: 100%;
-    box-sizing: border-box;
-  }
+    /* Buscador al 100% de ancho */
+    .search-input,
+    [type="search"],
+    .search-bar {
+      width: 100%;
+      box-sizing: border-box;
+    }
 
-  /* Footer apilado verticalmente */
-  footer .footer-container, 
-  footer .footer-grid,
-  .footer-content {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    width: 100%;
-    box-sizing: border-box;
-  }
+    /* Footer apilado verticalmente */
+    footer .footer-container,
+    footer .footer-grid,
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+      box-sizing: border-box;
+    }
 
-  .footer-column, 
-  .footer-section {
-    width: 100%;
-  }
+    .footer-column,
+    .footer-section {
+      width: 100%;
+    }
 
-  .footer-bottom {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-  }
+    .footer-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: center;
+    }
 
-  .hero-title {
-    font-size: 1.5rem;
+    .hero-title {
+      font-size: 1.5rem;
+    }
   }
-}
 </style>
