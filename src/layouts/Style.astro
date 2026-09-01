@@ -2097,4 +2097,61 @@ font-weight to emphasize the content.  */
     padding: 0 4px;
     font-weight: bold;
   }
+
+    .youtube-icon {
+    width: 24px !important;
+    height: 24px !important;
+    object-fit: contain;
+  }
+
+  /* Aseguramos que la cabecera alinee bien el icono y el texto */
+  .yt-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Aseguramos que la imagen del vídeo no desborde el contenedor */
+  .yt-thumb {
+    position: relative;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .yt-thumb img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* Hace que las tarjetas se estiren por igual y usen Flexbox vertical */
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* El cuerpo ocupa todo el espacio disponible */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Fija una altura o reserva espacio uniforme para los tags */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 28px; /* Mantiene la misma altura independientemente del nº de filas */
+  margin-bottom: 8px;
+}
+
+/* Empuja la fecha y tiempo de lectura al final de la tarjeta */
+.card-meta {
+  margin-top: auto;
+}
+
 </style>

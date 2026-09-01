@@ -92,22 +92,24 @@ const animePosts = await client.fetch(`
             }
           </a>
           <div class="hero-main-content">
-            <span
-              class={`tag tag-${Array.isArray(mainPost?.categories) ? mainPost.categories[0] : mainPost?.categories || "news"}`}
-            >
+            <div class="tags-container">
               {
-                Array.isArray(mainPost?.categories)
-                  ? mainPost.categories[0]
-                  : mainPost?.categories || "news"
+                Array.isArray(mainPost?.categories) ? (
+                  mainPost.categories.map((c: string) => (
+                    <span class={`tag tag-${c}`}>{c}</span>
+                  ))
+                ) : (
+                  <span class={`tag tag-${mainPost?.categories || "news"}`}>
+                    {mainPost?.categories || "news"}
+                  </span>
+                )
               }
-            </span>
+            </div>
             <a href={`/${mainPost?.slug?.current || mainPost?.slug}`}>
               <h1 class="hero-title">{mainPost?.title}</h1>
             </a>
             <div class="hero-meta">
-              <span
-                >by <strong style="color:#fff">{mainPost?.author}</strong></span
-              >
+              <span>by <strong style="color:#fff">{mainPost?.author}</strong></span>
               <span class="dot">◆</span>
               <span>{naturalDate(mainPost?.date)}</span>
               <span class="dot">◆</span>
@@ -134,13 +136,17 @@ const animePosts = await client.fetch(`
                   <span>{secondaryPost1.title}</span>
                 )}
               </a>
-              <span
-                class={`tag tag-${Array.isArray(secondaryPost1.categories) ? secondaryPost1.categories[0] : secondaryPost1.categories || "news"}`}
-              >
-                {Array.isArray(secondaryPost1.categories)
-                  ? secondaryPost1.categories[0]
-                  : secondaryPost1.categories || "news"}
-              </span>
+              <div class="tags-container">
+                {Array.isArray(secondaryPost1.categories) ? (
+                  secondaryPost1.categories.map((c: string) => (
+                    <span class={`tag tag-${c}`}>{c}</span>
+                  ))
+                ) : (
+                  <span class={`tag tag-${secondaryPost1.categories || "news"}`}>
+                    {secondaryPost1.categories || "news"}
+                  </span>
+                )}
+              </div>
               <a
                 href={`/${secondaryPost1.slug?.current || secondaryPost1.slug}`}
               >
@@ -172,13 +178,17 @@ const animePosts = await client.fetch(`
                   <span>{secondaryPost2.title}</span>
                 )}
               </a>
-              <span
-                class={`tag tag-${Array.isArray(secondaryPost2.categories) ? secondaryPost2.categories[0] : secondaryPost2.categories || "news"}`}
-              >
-                {Array.isArray(secondaryPost2.categories)
-                  ? secondaryPost2.categories[0]
-                  : secondaryPost2.categories || "news"}
-              </span>
+              <div class="tags-container">
+                {Array.isArray(secondaryPost2.categories) ? (
+                  secondaryPost2.categories.map((c: string) => (
+                    <span class={`tag tag-${c}`}>{c}</span>
+                  ))
+                ) : (
+                  <span class={`tag tag-${secondaryPost2.categories || "news"}`}>
+                    {secondaryPost2.categories || "news"}
+                  </span>
+                )}
+              </div>
               <a
                 href={`/${secondaryPost2.slug?.current || secondaryPost2.slug}`}
               >
@@ -218,9 +228,6 @@ const animePosts = await client.fetch(`
           {
             latestNews &&
               latestNews.map((post: any) => {
-                const cat = Array.isArray(post.categories)
-                  ? post.categories[0]
-                  : post.categories || "news";
                 const slugUrl = post.slug?.current || post.slug;
 
                 return (
@@ -237,7 +244,17 @@ const animePosts = await client.fetch(`
                       )}
                     </a>
                     <div class="card-body">
-                      <span class={`tag tag-${cat}`}>{cat}</span>
+                      <div class="tags-container">
+                        {Array.isArray(post.categories) ? (
+                          post.categories.map((c: string) => (
+                            <span class={`tag tag-${c}`}>{c}</span>
+                          ))
+                        ) : (
+                          <span class={`tag tag-${post.categories || "news"}`}>
+                            {post.categories || "news"}
+                          </span>
+                        )}
+                      </div>
                       <a href={`/${slugUrl}`}>
                         <div class="card-title">{post.title}</div>
                       </a>
@@ -270,9 +287,6 @@ const animePosts = await client.fetch(`
           {
             seriesPosts && seriesPosts.length > 0 ? (
               seriesPosts.map((post: any) => {
-                const cat = Array.isArray(post.categories)
-                  ? post.categories[0]
-                  : post.categories || "series";
                 const slugUrl = post.slug?.current || post.slug;
 
                 return (
@@ -294,7 +308,7 @@ const animePosts = await client.fetch(`
                       )}
                     </a>
                     <div class="card-body">
-                      <span class={`tag tag-${cat}`}>{cat}</span>
+                      <span class="tag tag-series">series</span>
                       <a href={`/${slugUrl}`}>
                         <div class="card-title">{post.title}</div>
                       </a>
@@ -338,9 +352,6 @@ const animePosts = await client.fetch(`
           {
             animePosts && animePosts.length > 0 ? (
               animePosts.map((post: any) => {
-                const cat = Array.isArray(post.categories)
-                  ? post.categories[0]
-                  : post.categories || "anime";
                 const slugUrl = post.slug?.current || post.slug;
 
                 return (
@@ -362,7 +373,7 @@ const animePosts = await client.fetch(`
                       )}
                     </a>
                     <div class="card-body">
-                      <span class={`tag tag-${cat}`}>{cat}</span>
+                      <span class="tag tag-anime">anime</span>
                       <a href={`/${slugUrl}`}>
                         <div class="card-title">{post.title}</div>
                       </a>
@@ -380,7 +391,7 @@ const animePosts = await client.fetch(`
           }
         </div>
       </div>
-      <!-- /main-col (CIERRA CORRECTAMENTE LA COLUMNA IZQUIERDA AQUÍ) -->
+      <!-- /main-col -->
 
       <!-- RIGHT COLUMN (Sidebar) -->
       <aside class="sidebar">
