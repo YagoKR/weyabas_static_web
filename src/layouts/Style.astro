@@ -2153,5 +2153,178 @@ font-weight to emphasize the content.  */
 .card-meta {
   margin-top: auto;
 }
+/* ===================================================
+   ALIGNMENT & CARD CONSISTENCY (DESKTOP & MOBILE)
+   =================================================== */
 
+/* Uniformidad en contenedores de etiquetas */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  margin-bottom: 8px;
+}
+
+/* Base unificada para todos los tags */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 10px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+  border-radius: 4px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+/* Colores por tag */
+.tag-series {
+  background-color: #006699;
+  color: #ffffff;
+}
+
+.tag-anime {
+  background-color: #8800aa;
+  color: #ffffff;
+}
+
+/* Tarjetas y alturas simétricas */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card-excerpt {
+  flex: 1;
+  margin-bottom: 12px;
+}
+
+.card-meta {
+  margin-top: auto;
+}
+
+
+/* ===================================================
+   MOBILE RESPONSIVE (PANTALLAS <= 768PX)
+   =================================================== */
+
+@media (max-width: 768px) {
+  
+  /* Prevenir desbordamientos del body */
+  html, body, main {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+  }
+
+  /* Layout principal en 1 sola columna */
+  .content-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  /* Hero grid en 1 sola columna */
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Latest news en 1 columna */
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Menú de navegación con scroll horizontal limpio */
+  nav, .nav-links, .menu-categories {
+    display: flex;
+    white-space: nowrap;
+    overflow-x: auto;
+    max-width: 100%;
+    padding-bottom: 5px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Carrusel de Series y Anime ajustado */
+  .horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .horizontal-scroll .card {
+    flex: 0 0 260px;
+    min-width: 260px;
+    scroll-snap-align: start;
+  }
+
+  .card-img, 
+  .card-img img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  /* Buscador al 100% de ancho */
+  .search-input, 
+  [type="search"], 
+  .search-bar {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Footer apilado verticalmente */
+  footer .footer-container, 
+  footer .footer-grid,
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .footer-column, 
+  .footer-section {
+    width: 100%;
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+}
 </style>
