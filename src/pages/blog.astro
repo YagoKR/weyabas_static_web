@@ -6,7 +6,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { client } from "../lib/sanity";
 
-// 1. Consultamos TODOS los posts en Sanity trayendo la URL de la imagen y ordenando por fecha
+// Consultamos TODOS los posts en Sanity trayendo la URL de la imagen y ordenando por fecha
 const posts = await client.fetch(`
   *[_type == "posts" && defined(slug.current)] | order(date desc) {
     _id,
@@ -19,7 +19,7 @@ const posts = await client.fetch(`
   }
 `);
 
-// 2. Agrupamos los posts por fecha formateada en inglés
+// Agrupamos los posts por fecha formateada en inglés
 const groupedPosts = posts.reduce(
   (acc: any, post: any) => {
     const dateKey = new Date(post.date).toLocaleDateString("en-US", {

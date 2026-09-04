@@ -13,12 +13,12 @@ import Footer from "../components/Footer.astro";
 
 // --- FUNCIÓN REQUERIDA PARA RUTAS DINÁMICAS PRERENDERIZADAS ---
 export async function getStaticPaths() {
-  // 1. Consultar Sanity para traer el slug de todos los artículos publicados
+  // Consultar Sanity para traer el slug de todos los artículos publicados
   const posts = await client.fetch<Array<{ slug: { current: string } }>>(
     `*[_type == "posts" && defined(slug.current)]{ slug }`
   );
 
-  // 2. Mapear los slugs para pasarlos como parámetros a Astro
+  // Mapear los slugs para pasarlos como parámetros a Astro
   return posts.map((post) => ({
     params: { slug: post.slug.current },
   }));
