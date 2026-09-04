@@ -1,11 +1,51 @@
 ---
+export const prerender = true;
 import Layout from "../../../layouts/Layout.astro";
 import Style from "../../../layouts/Style.astro";
 import Header from "../../../components/Header.astro";
 import Footer from "../../../components/Footer.astro";
 import { client } from "../../../lib/sanity";
 import imageUrlBuilder from "@sanity/image-url";
+export async function getStaticPaths() {
+	const POSTS_PER_PAGE = 10;
 
+	// 1. Obtener todas las categorías y convertirlas a texto/cadena simple limpia
+	const rawCategories = await client.fetch<any[]>(
+		`*[_type == "posts" && defined(categories)].categories[]`
+	);
+
+	const cleanCategories = rawCategories
+		.map((cat) => {
+			if (typeof cat === "string") return cat;
+			if (typeof cat === "object" && cat !== null) {
+				return cat.slug?.current || cat.title || cat.name || cat._ref;
+			}
+			return null;
+		})
+		.filter((cat): cat is string => Boolean(cat));
+
+	const uniqueCategories = [...new Set(cleanCategories)];
+
+	const paths = [];
+
+	// 2. Generar las rutas para cada categoría y sus páginas
+	for (const category of uniqueCategories) {
+		const totalPosts = await client.fetch<number>(
+			`count(*[_type == "posts" && ($category in categories || $category in categories[].title || $category in categories[].slug.current || $category in categories[]->slug.current)])`,
+			{ category }
+		);
+
+		const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE) || 1;
+
+		for (let page = 1; page <= totalPages; page++) {
+			paths.push({
+				params: { category, page: page.toString() },
+			});
+		}
+	}
+
+	return paths;
+}
 const builder = imageUrlBuilder(client);
 function urlFor(source: any) {
     return builder.image(source);
@@ -29,15 +69,17 @@ interface Post {
     image?: any;
 }
 
+// 1. Contar posts usando la condición flexible de categoría
 const totalPosts = await client.fetch<number>(
-    `count(*[_type == "posts" && $category in categories])`,
-    { category },
+	`count(*[_type == "posts" && ($category in categories || $category in categories[].title || $category in categories[].slug.current || $category in categories[]->slug.current)])`,
+	{ category }
 );
 
 const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
+// 2. Traer posts inyectando directamente los valores de start y end en el rango [start...end]
 const seriesPosts = await client.fetch<Post[]>(
-    `*[_type == "posts" && $category in categories] | order(date desc) [$start...$end] {
+	`*[_type == "posts" && ($category in categories || $category in categories[].title || $category in categories[].slug.current || $category in categories[]->slug.current)] | order(date desc) [${start}...${end}] {
     _id,
     title,
     "slug": slug.current,
@@ -46,7 +88,7 @@ const seriesPosts = await client.fetch<Post[]>(
     author,
     image
   }`,
-    { category, start, end },
+	{ category }
 );
 
 const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {

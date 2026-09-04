@@ -1,14 +1,11 @@
 ---
+export const prerender = true;
 import Layout from "../layouts/Layout.astro";
 import Style from "../layouts/Style.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { client } from "../lib/sanity";
 
-// 1. Extraemos el parámetro "category" de la URL (ej. "series", "anime", "tech")
-const { category } = Astro.params;
-
-// 2. Interfaz para TypeScript
 interface Post {
   _id: string;
   title: string;
@@ -18,32 +15,28 @@ interface Post {
   author?: string;
 }
 
-// 3. Consulta a Sanity usando $category (con signo $) y pasándole la variable al final
+// Consulta sin el filtro $category
 const seriesPosts = await client.fetch<Post[]>(
-  `*[_type == "posts" && $category in categories] | order(date desc) {
+  `*[_type == "posts"] | order(date desc) {
     _id,
     title,
     "slug": slug.current,
     date,
     summary,
     author
-  }`,
-  { category }, // <-- AQUÍ se le pasa el valor de la URL a Sanity
+  }`
 );
 
-// 4. Agrupar posts por fecha
+// Agrupar posts por fecha
 const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
   const postDate = post.date ? new Date(post.date) : new Date();
-
   const dateKey = postDate.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
 
-  if (!acc[dateKey]) {
-    acc[dateKey] = [];
-  }
+  if (!acc[dateKey]) acc[dateKey] = [];
   acc[dateKey].push(post);
   return acc;
 }, {});
@@ -54,23 +47,20 @@ const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
   <Header />
 
   <main class="series-container">
-    <!-- Mostramos el nombre de la categoría actual de forma dinámica -->
     <h1 class="page-title" style="text-transform: capitalize;">
-      News and Articles for {category}
+      All News and Articles
     </h1>
 
     <section class="posts-grouped">
       {
         Object.keys(groupedPosts).length === 0 ? (
-          <p class="no-posts">No articles available for {category}.</p>
+          <p class="no-posts">No articles available.</p>
         ) : (
           Object.entries(groupedPosts).map(([date, postsInDate]) => {
             const posts = postsInDate as Post[];
-
             return (
               <div class="date-group">
                 <h2 class="date-title">{date}</h2>
-
                 <div class="posts-list">
                   {posts.map((post) => (
                     <article class="post-item">

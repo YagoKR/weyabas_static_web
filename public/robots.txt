@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://weyaluseries.net/sitemap-index.xml

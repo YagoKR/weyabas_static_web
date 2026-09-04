@@ -1,4 +1,5 @@
 ---
+prerender: true
 layout: "../../layouts/LegalLayout.astro"
 title: "Contact Us"
 ---

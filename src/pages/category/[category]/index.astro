@@ -1,11 +1,35 @@
 ---
+export const prerender = true;
 import Layout from "../../../layouts/Layout.astro";
 import Style from "../../../layouts/Style.astro";
 import Header from "../../../components/Header.astro";
 import Footer from "../../../components/Footer.astro";
 import { client } from "../../../lib/sanity";
 import imageUrlBuilder from "@sanity/image-url";
+export async function getStaticPaths() {
+	// Traemos las categorías extrayendo texto, title, slug o referencia
+	const rawCategories = await client.fetch<any[]>(
+		`*[_type == "posts" && defined(categories)].categories[]`
+	);
 
+	// Convertimos cada categoría a un string limpio (sea objeto, referencia o texto simple)
+	const cleanCategories = rawCategories
+		.map((cat) => {
+			if (typeof cat === "string") return cat;
+			if (typeof cat === "object" && cat !== null) {
+				return cat.slug?.current || cat.title || cat.name || cat._ref;
+			}
+			return null;
+		})
+		.filter((cat): cat is string => Boolean(cat));
+
+	const uniqueCategories = [...new Set(cleanCategories)];
+
+	// Retornar cada categoría limpia como parámetro de ruta estática
+	return uniqueCategories.map((category) => ({
+		params: { category },
+	}));
+}
 const builder = imageUrlBuilder(client);
 function urlFor(source: any) {
     return builder.image(source);
@@ -26,14 +50,14 @@ interface Post {
 }
 
 const totalPosts = await client.fetch<number>(
-    `count(*[_type == "posts" && $category in categories])`,
-    { category },
+	`count(*[_type == "posts" && ($category in categories || $category in categories[].title || $category in categories[].slug.current || $category in categories[]->slug.current)])`,
+	{ category }
 );
 
 const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
 const seriesPosts = await client.fetch<Post[]>(
-    `*[_type == "posts" && $category in categories] | order(date desc) [0...${POSTS_PER_PAGE}] {
+	`*[_type == "posts" && ($category in categories || $category in categories[].title || $category in categories[].slug.current || $category in categories[]->slug.current)] | order(date desc) [0...${POSTS_PER_PAGE}] {
     _id,
     title,
     "slug": slug.current,
@@ -42,7 +66,7 @@ const seriesPosts = await client.fetch<Post[]>(
     author,
     image
   }`,
-    { category },
+	{ category }
 );
 
 const groupedPosts = seriesPosts.reduce((acc: Record<string, Post[]>, post) => {
