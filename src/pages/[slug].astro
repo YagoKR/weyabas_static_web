@@ -11,18 +11,7 @@ import Style from "../layouts/Style.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
-// --- FUNCIÓN REQUERIDA PARA RUTAS DINÁMICAS PRERENDERIZADAS ---
-export async function getStaticPaths() {
-  // Consultar Sanity para traer el slug de todos los artículos publicados
-  const posts = await client.fetch<Array<{ slug: { current: string } }>>(
-    `*[_type == "posts" && defined(slug.current)]{ slug }`
-  );
 
-  // Mapear los slugs para pasarlos como parámetros a Astro
-  return posts.map((post) => ({
-    params: { slug: post.slug.current },
-  }));
-}
 
 // Inicializamos el creador de URLs de imágenes de Sanity
 const builder = imageUrlBuilder(client);
