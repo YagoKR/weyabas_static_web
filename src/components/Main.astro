@@ -15,12 +15,12 @@ import DealsWG from "./WidgetDeals.astro";
 import TelegramWG from "./WidgetTelegram.astro";
 import Trending from "./Trending.astro";
 import Deals from "./Deals.astro";
-
 /*
  * posts: se piden los posts a Sanity mediante un query GROQ. Estos se devuelven organizados en orden descendiente.
+ * Se añade !(_id in path("drafts.**")) para excluir borradores.
  */
 const posts = await client.fetch(`
-  *[_type == "posts" && defined(slug.current)] | order(date desc)
+  *[_type == "posts" && defined(slug.current) && !(_id in path("drafts.**"))] | order(date desc)
 `);
 
 /*
@@ -38,9 +38,10 @@ const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
  * latestNews: selecciona los artículos más recientes excluyendo aquellos incluidos en el hero. No se discrimina en base a categoría.
  */
 const latestNews = posts.slice(3, 9);
-// Fetch latest 4 'series' posts
+
+// Fetch latest 4 'series' posts (sin borradores)
 const seriesPosts = await client.fetch(`
-  *[_type == "posts" && "series" in categories] | order(date desc)[0..3] {
+  *[_type == "posts" && "series" in categories && !(_id in path("drafts.**"))] | order(date desc)[0..3] {
     _id,
     title,
     slug,
@@ -52,9 +53,9 @@ const seriesPosts = await client.fetch(`
   }
 `);
 
-// Fetch latest 4 'anime' posts
+// Fetch latest 4 'anime' posts (sin borradores)
 const animePosts = await client.fetch(`
-  *[_type == "posts" && "anime" in categories] | order(date desc)[0..3] {
+  *[_type == "posts" && "anime" in categories && !(_id in path("drafts.**"))] | order(date desc)[0..3] {
     _id,
     title,
     slug,
@@ -77,7 +78,7 @@ const animePosts = await client.fetch(`
         <div class="hero-main">
           <a
             href={`/${mainPost?.slug?.current || mainPost?.slug}`}
-            class="img-placeholder hero-main-img"
+            class=" hero-main-img"
           >
             {
               mainPost?.image ? (

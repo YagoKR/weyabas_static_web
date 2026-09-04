@@ -421,31 +421,38 @@
 
   /* .hero-main: controls the main element of the hero. It spans across both rows of the grid, starting at grid row line 1 (the top)
   and ending at grid row line 3 (the bottom of the second row). */
-  .hero-main {
-    grid-row: 1 / 3;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-  }
+/* 1. El contenedor del Hero se expande para ocupar las 2 filas del Grid */
+.hero-main {
+  grid-row: 1 / 3;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
-  /* .hero-main-img: controls the image that the main hero element uses. */
-  .hero-main-img {
-    width: 100%;
-    height: 520px;
-    object-fit: cover;
-    display: block;
-    filter: brightness(0.9);
-    transition:
-      filter 0.3s,
-      transform 0.4s;
-  }
+/* 2. La caja del enlace ocupa el 100% de la altura disponible */
+.hero-main-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 480px; /* Garantiza una altura mínima uniforme */
+  overflow: hidden;
+}
 
-  /* .hero-main:hover .hero-main-img: controls the transition that occurs when you hover over the card. */
-  .hero-main:hover .hero-main-img {
+/* 3. La imagen física rellena y recorta los bordes automáticamente */
+.hero-main-img img {
+  width: 100%;
+  height: 85%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+  /* El efecto hover sobre la foto */
+  .hero-main:hover .hero-main-img img {
     filter: brightness(1);
     transform: scale(1.02);
   }
-
   /* .hero-main-content: controls the data that is shown under the main card. 
   Things like the title, the author, the tag, the date, the read time, etc. */
   .hero-main-content {
@@ -1892,7 +1899,7 @@ font-weight to emphasize the content.  */
   /* 4. Empujar la FECHA / MINUTOS siempre al fondo de la tarjeta */
   .card-date,
   .card-footer,
-  .card-meta{
+  .card-meta {
     margin-top: auto !important; /* Alinea la fecha abajo del todo en TODAS las tarjetas */
     padding-top: 10px !important;
   }
