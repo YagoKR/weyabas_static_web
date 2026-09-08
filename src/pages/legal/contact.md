@@ -17,7 +17,7 @@ Whether you found a bug on the site, want to submit a press release, or have que
 ## Site Operator & Transparency
 
 - **Website Name:** WeyaluSeries
-- **Main URL:** https://weyaluseries.com
+- **Main URL:** https://weyaluseries.net
 - **Response Time:** We aim to respond to all legitimate inquiries within 24–48 business hours.
 
 ## Privacy & Data Handling
