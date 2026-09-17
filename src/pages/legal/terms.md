@@ -43,4 +43,4 @@ These terms and conditions are governed by and construed in accordance with inte
 
 ## 6. Contact Us
 
-If you have any questions regarding these Terms and Conditions, please reach out to us at [weyaluseriesoficial@gmail.com](mailto:weyaluseriesoficial@gmail.com).
+If you have any questions regarding these Terms and Conditions, please reach out to us at [<weyaluseriesoficial@gmail.com>](mailto:weyaluseriesoficial@gmail.com).

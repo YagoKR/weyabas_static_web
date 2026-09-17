@@ -12,12 +12,12 @@ Whether you found a bug on the site, want to submit a press release, or have que
 
 ## Get in Touch
 
-- **General Inquiries:** [weyaluseriesoficial@gmail.com](mailto:weyaluseriesoficial@gmail.com)
+- **General Inquiries:** [<weyaluseriesoficial@gmail.com>](mailto:weyaluseriesoficial@gmail.com)
 
 ## Site Operator & Transparency
 
 - **Website Name:** WeyaluSeries
-- **Main URL:** https://weyaluseries.net
+- **Main URL:** [https://weyaluseries.net](https://weyaluseries.net)
 - **Response Time:** We aim to respond to all legitimate inquiries within 24–48 business hours.
 
 ## Privacy & Data Handling
