@@ -15,29 +15,32 @@ import DealsWG from "./WidgetDeals.astro";
 import TelegramWG from "./WidgetTelegram.astro";
 import Trending from "./Trending.astro";
 import Deals from "./Deals.astro";
+
 /*
- * posts: se piden los posts a Sanity mediante un query GROQ. Estos se devuelven organizados en orden descendiente.
+ * heroPosts: selecciona los tres artículos con más vistas (views desc) para colocar en el hero.
+ * Coinciden con el orden del componente Trending.astro.
  * Se añade !(_id in path("drafts.**")) para excluir borradores.
  */
-const posts = await client.fetch(`
-  *[_type == "posts" && defined(slug.current) && !(_id in path("drafts.**"))] | order(date desc)
+const heroPosts = await client.fetch(`
+  *[_type == "posts" && defined(slug.current) && !(_id in path("drafts.**"))] | order(views desc)[0..2]
 `);
 
 /*
- * heroPosts: selecciona los tres artículos más recientes para colocar en el hero.
- */
-const heroPosts = posts.slice(0, 3);
-/*
- * mainPost: variable que contiene el post más reciente.
- * secondaryPost1: variable que contiene el segundo post mas reciente.
- * SecondaryPost2: variable que contiene el tercer post más reciente.
+ * mainPost: post #1 con más visitas en Trending.
+ * secondaryPost1: post #2 más visto.
+ * secondaryPost2: post #3 más visto.
  */
 const [mainPost, secondaryPost1, secondaryPost2] = heroPosts;
 
+// Extraemos los IDs del Hero para no repetirlos en el bloque de últimas noticias
+const heroPostIds = heroPosts.map((p: any) => p._id);
+
 /*
- * latestNews: selecciona los artículos más recientes excluyendo aquellos incluidos en el hero. No se discrimina en base a categoría.
+ * latestNews: selecciona los 6 artículos más recientes por fecha, excluyendo los que ya están en el hero.
  */
-const latestNews = posts.slice(3, 9);
+const latestNews = await client.fetch(`
+  *[_type == "posts" && defined(slug.current) && !(_id in path("drafts.**")) && !(_id in $heroPostIds)] | order(date desc)[0..5]
+`, { heroPostIds });
 
 // Fetch latest 4 'series' posts (sin borradores)
 const seriesPosts = await client.fetch(`
