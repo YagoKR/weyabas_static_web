@@ -2384,22 +2384,10 @@ font-weight to emphasize the content.  */
     }
 
     /* Colores según categoría */
-    .bg-theories {
-      background-color: #ff978f;
-    }
-    .bg-tech {
-      background-color: #008d47;
-    }
-    .bg-movies {
-      background-color: #946000;
-    }
-    .bg-series {
-      background-color: #005c8a;
-    }
-    .bg-anime {
-      background-color: #7a0092;
-    }
-    .bg-default {
-      background-color: #4b5563;
-    }
+    .bg-series { background-color: var(--tag-series, #005c8a); }
+    .bg-anime { background-color: var(--tag-anime, #7a0092); }
+    .bg-movies { background-color: var(--tag-movies, #946000); }
+    .bg-tech { background-color: var(--tag-tech, #008d47); }
+    .bg-theories { background-color: var(--tag-theories, #ff978f); }
+    .bg-default { background-color: #4b5563; }
 </style>
