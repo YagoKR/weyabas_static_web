@@ -6,7 +6,11 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { client } from "../lib/sanity";
 
-// Consultamos TODOS los posts en Sanity trayendo la URL de la imagen y ordenando por fecha
+// 1. Obtener la página actual desde los parámetros de la URL (?page=1, ?page=2...)
+const url = new URL(Astro.request.url);
+const currentPage = parseInt(url.searchParams.get("page") || "1", 10);
+
+// 2. Fetch de todas las noticias desde Sanity
 const posts = await client.fetch(`
   *[_type == "posts" && defined(slug.current)] | order(date desc) {
     _id,
@@ -15,34 +19,65 @@ const posts = await client.fetch(`
     date,
     summary,
     categories,
+    readTime,
     "imageUrl": image.asset->url
   }
 `);
 
-// Agrupamos los posts por fecha formateada en inglés
-const groupedPosts = posts.reduce(
-  (acc: any, post: any) => {
-    const dateKey = new Date(post.date).toLocaleDateString("en-US", {
-      year: "numeric",
+// Función helper para formatear fechas ordinales (ej: September 23rd, 2026)
+function formatOrdinalDate(dateString: string) {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.toLocaleString("en-US", { month: "long" });
+  const year = date.getFullYear();
+
+  let suffix = "th";
+  if (day % 10 === 1 && day !== 11) suffix = "st";
+  else if (day % 10 === 2 && day !== 12) suffix = "nd";
+  else if (day % 10 === 3 && day !== 13) suffix = "rd";
+
+  return `${month} ${day}${suffix}, ${year}`;
+}
+
+// 3. Extraer todos los días únicos con noticias ordenados descendentemente
+const uniqueDays = Array.from(
+  new Set(
+    posts.map((post: any) => new Date(post.date).toISOString().split("T")[0]),
+  ),
+);
+
+// 4. Lógica de paginación por bloques de 3 días
+const DAYS_PER_PAGE = 3;
+const totalPages = Math.ceil(uniqueDays.length / DAYS_PER_PAGE) || 1;
+
+// Obtener los 3 días correspondientes a la página actual
+const startIndex = (currentPage - 1) * DAYS_PER_PAGE;
+const currentDays = uniqueDays.slice(startIndex, startIndex + DAYS_PER_PAGE);
+
+// Agrupar los posts por cada uno de los días de la página actual
+const groupedPostsByDay = (currentDays as string[]).map((day) => {
+  const dayPosts = posts.filter(
+    (post: any) => new Date(post.date).toISOString().split("T")[0] === day
+  );
+  return {
+    day,
+    formattedDayTitle: new Date(`${day}T00:00:00`).toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",
-    });
-
-    if (!acc[dateKey]) {
-      acc[dateKey] = [];
-    }
-    acc[dateKey].push(post);
-    return acc;
-  },
-  {} as Record<string, typeof posts>,
-);
+      year: "numeric",
+    }),
+    posts: dayPosts,
+  };
+});
 ---
 
-<Layout title="Todas las Noticias | Weyalu Series">
+<Layout title={`All News - Page ${currentPage} | Weyalu Series`}>
   <Style />
   <Header />
 
+
   <main style="max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem;">
+    {/* Encabezado Principal */}
     <div style="margin-bottom: 2rem;">
       <h1
         style="color: #fff; font-size: 2rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;"
@@ -51,35 +86,42 @@ const groupedPosts = posts.reduce(
       </h1>
     </div>
 
-    <!-- Sección de Artículos Agrupados por Fecha -->
-    <div class="posts-grouped">
-      {
-        Object.entries(groupedPosts).map(
-          ([date, postsInDate]: [string, any]) => (
-            <section style="margin-bottom: 3rem;">
-              {/* Título de la fecha */}
-              <h2 style="color: #00d2ff; font-size: 1.2rem; font-weight: 700; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.5rem; margin-bottom: 1.25rem; text-transform: capitalize;">
-                {date}
-              </h2>
+    {/* Iteración de los 3 Días de la Página Actual */}
+    {
+      groupedPostsByDay.length > 0 ? (
+        groupedPostsByDay.map(({ formattedDayTitle, posts }) => (
+          <section style="margin-bottom: 3.5rem;">
+            {/* Título de la fecha en color azul */}
+            <h2 style="color: #00d2ff; font-size: 1.25rem; font-weight: 700; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
+              {formattedDayTitle}
+            </h2>
 
-              {/* Grilla de noticias publicadas ese día */}
-              <div class="card-grid">
-                {postsInDate.map((post: any) => (
+            {/* Grilla de noticias publicadas en este día */}
+            <div class="card-grid">
+              {posts.map((post: any) => {
+                const category = post.categories?.[0]
+                  ? post.categories[0].toLowerCase()
+                  : "default";
+
+                return (
                   <article class="card">
+                    {/* Imagen de la noticia */}
                     {post.imageUrl && (
                       <div class="card-img">
                         <img src={post.imageUrl} alt={post.title} />
                       </div>
                     )}
 
+                    {/* Contenedor del Badge con márgenes inline forzados */}
                     {post.categories && post.categories[0] && (
-                      <span
-                        class={`badge badge-${post.categories[0].toLowerCase()}`}
-                      >
-                        {post.categories[0]}
-                      </span>
+                      <div style="margin-top: 14px; margin-bottom: 10px; display: block;">
+                        <span class={`badge-category bg-${category}`}>
+                          {post.categories[0]}
+                        </span>
+                      </div>
                     )}
 
+                    {/* Título */}
                     <h3 class="card-title">
                       <a
                         href={`/${post.slug}`}
@@ -89,25 +131,61 @@ const groupedPosts = posts.reduce(
                       </a>
                     </h3>
 
+                    {/* Resumen */}
                     {post.summary && <p class="card-excerpt">{post.summary}</p>}
 
+                    {/* Pie de la tarjeta */}
                     <div style="margin-top: auto; display: flex; justify-content: space-between; font-size: 0.8rem; color: #8b949e; padding-top: 10px;">
-                      <span>
-                        {new Date(post.date).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </span>
+                      <span>{formatOrdinalDate(post.date)}</span>
+                      <span>{post.readTime || "3 min"} read</span>
                     </div>
                   </article>
-                ))}
-              </div>
-            </section>
-          ),
+                );
+              })}
+            </div>
+          </section>
+        ))
+      ) : (
+        <p style="color: #8b949e;">
+          No news available for this page. Please check the previous pages or come back later for more updates.
+        </p>
+      )
+    }
+
+    {/* Botones para pasar de página */}
+    <nav
+      style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1);"
+    >
+      {
+        currentPage > 1 ? (
+          <a
+            href={`?page=${currentPage - 1}`}
+            style="color: #00d2ff; text-decoration: none; font-weight: 600; font-size: 0.95rem;"
+          >
+            ← Latest news
+          </a>
+        ) : (
+          <div />
         )
       }
-    </div>
+
+      <span style="color: #8b949e; font-size: 0.9rem;">
+        Page {currentPage} of {totalPages}
+      </span>
+
+      {
+        currentPage < totalPages ? (
+          <a
+            href={`?page=${currentPage + 1}`}
+            style="color: #00d2ff; text-decoration: none; font-weight: 600; font-size: 0.95rem;"
+          >
+            Older news →
+          </a>
+        ) : (
+          <div />
+        )
+      }
+    </nav>
   </main>
 
   <Footer />
